@@ -22,6 +22,7 @@ Extract the core details and compile them into a simplified plain-language struc
 
 You must output a single JSON object matching this exact schema:
 {
+  "raw_text": "verbatim OCR transcription text of the original document, preserving line breaks, names, dates and key legal citations",
   "summary": "A clean, simplified summary of what the notice is about, written for a 10th-grade reading level. Do not use complex legalese.",
   "document_type": "The classified category of the legal document (e.g., Landlord Tenant Notice, Court Summons, Bank Loan Default Notice).",
   "extracted_dates": [
@@ -61,16 +62,32 @@ async def upload_and_analyze_document(
         if not mime_type:
             mime_type = "application/pdf" if file.filename.endswith(".pdf") else "image/png"
 
-        # 2. Extract raw text preview for fallback index caching
-        raw_text_preview = content.decode("utf-8", errors="ignore")[:5000]
-        if not raw_text_preview.strip():
-            raw_text_preview = f"[Multimodal PDF/Image Binary File: {file.filename}]"
+        # Determine default raw text preview from decode (fallback only)
+        raw_text_preview = ""
+        if mime_type.startswith("text/") or file.filename.endswith(".txt"):
+            try:
+                raw_text_preview = content.decode("utf-8")
+            except Exception:
+                raw_text_preview = "[Binary notice file content]"
+        else:
+            raw_text_preview = f"[Multimodal PDF/Image Notice Binary File: {file.filename}]"
 
         # 3. Call Gemini Multimodal API or load mock fallback if key is missing
         if not GEMINI_API_KEY:
             logger.warning("GEMINI_API_KEY not set. Loading mock analysis data for local testing.")
             # Local mock fallback
             analysis_data = {
+                "raw_text": (
+                    "EVICTION NOTICE\n\n"
+                    "TO: Mr. Hansh, Apartment 4B, Greenwood Residencies, Hyderabad.\n"
+                    "DATE: July 26, 2026\n\n"
+                    "You are hereby notified that you are in default of your lease agreement dated June 1, 2024. "
+                    "Specifically, you have failed to pay the rent due for July 2026 in the amount of INR 25,000.\n\n"
+                    "Pursuant to Section 106 of the Transfer of Property Act, you are required to cure this default "
+                    "or vacate the premises within fifteen (15) days from the receipt of this notice, failing which "
+                    "legal proceedings will be initiated against you.\n\n"
+                    "SENDER: Greenwood Property Management Ltd."
+                ),
                 "summary": "Your landlord, Greenwood Management, claims you default on July rent of INR 25,000.",
                 "document_type": notice_type if notice_type else "Tenant Lease Notice",
                 "extracted_dates": [
@@ -100,7 +117,7 @@ async def upload_and_analyze_document(
         db_doc = models.Document(
             filename=file.filename,
             doc_type=analysis_data.get("document_type", "Unknown Notice"),
-            raw_text=raw_text_preview,
+            raw_text=analysis_data.get("raw_text", raw_text_preview),
             summary_explanation=analysis_data.get("summary", ""),
             extracted_dates_json=json.dumps(analysis_data.get("extracted_dates", [])),
             legal_references_json=json.dumps(analysis_data.get("legal_references", [])),
