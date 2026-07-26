@@ -1,4 +1,31 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
+
+interface Milestone {
+  title: string;
+  date: string;
+  urgency: string;
+}
+
+interface LegalReference {
+  section: string;
+  description: string;
+}
+
+interface AnalysisData {
+  summary: string;
+  extracted_dates: Milestone[];
+  legal_references: LegalReference[];
+  checklist: string[];
+  response_template: string;
+}
+
+interface UploadResponse {
+  document_id: number;
+  filename: string;
+  doc_type: string;
+  uploaded_at: string;
+  analysis: AnalysisData;
+}
 
 export default function App() {
   const [fileUploaded, setFileUploaded] = useState(false);
@@ -6,13 +33,94 @@ export default function App() {
   const [language, setLanguage] = useState('english');
   const [isPlayingVoice, setIsPlayingVoice] = useState(false);
 
-  const handleMockUpload = () => {
-    setFileUploaded(true);
+  // Full-stack state hooks
+  const [file, setFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [documentId, setDocumentId] = useState<number | null>(null);
+  const [analysis, setAnalysis] = useState<AnalysisData | null>(null);
+  const [docType, setDocType] = useState<string>('');
+  const [error, setError] = useState<string | null>(null);
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Handle file trigger click
+  const handleUploadClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
   };
 
+  // Perform file upload and call backend API
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = event.target.files?.[0];
+    if (!selectedFile) return;
+    await uploadFile(selectedFile);
+  };
+
+  const uploadFile = async (selectedFile: File) => {
+    setFile(selectedFile);
+    setIsUploading(true);
+    setError(null);
+
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+
+    try {
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error(`Upload failed with status code ${response.status}`);
+      }
+
+      const data: UploadResponse = await response.json();
+      
+      setDocumentId(data.document_id);
+      setDocType(data.doc_type);
+      setAnalysis(data.analysis);
+      setFileUploaded(true);
+    } catch (err: any) {
+      setError(err.message || "Something went wrong during file analysis.");
+      setFile(null);
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  // Reset uploader state
   const handleReset = () => {
+    setFile(null);
     setFileUploaded(false);
+    setDocumentId(null);
+    setAnalysis(null);
+    setDocType('');
+    setError(null);
     setActiveTab('summary');
+    setIsPlayingVoice(false);
+  };
+
+  // Drag and drop events handlers
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = async (e: React.DragEvent) => {
+    e.preventDefault();
+    const droppedFile = e.dataTransfer.files?.[0];
+    if (droppedFile) {
+      await uploadFile(droppedFile);
+    }
+  };
+
+  // Calculate countdown warning days dynamically
+  const getRemainingDays = (dateStr: string) => {
+    const targetDate = new Date(dateStr);
+    const today = new Date();
+    const diffTime = targetDate.getTime() - today.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
   };
 
   return (
@@ -94,25 +202,50 @@ export default function App() {
             1. Document Ingestion
           </h2>
 
+          <input 
+            type="file" 
+            ref={fileInputRef} 
+            onChange={handleFileChange} 
+            accept="image/*,application/pdf"
+            style={{ display: 'none' }}
+          />
+
           {!fileUploaded ? (
-            <div style={{ 
-              flex: 1, 
-              border: '2px dashed var(--color-border)', 
-              borderRadius: '8px', 
-              display: 'flex', 
-              flexDirection: 'column', 
-              justifyContent: 'center', 
-              alignItems: 'center',
-              padding: '24px',
-              cursor: 'pointer'
-            }} onClick={handleMockUpload}>
-              <span style={{ fontSize: '48px', marginBottom: '16px' }}>📄</span>
-              <p style={{ margin: '0 0 8px 0', fontWeight: '600' }}>Drag & drop your notice file here</p>
-              <p style={{ margin: '0 0 24px 0', fontSize: '12px', color: 'var(--color-text-secondary)' }}>Supports PDF, PNG, JPEG up to 10MB</p>
-              <button className="glow-btn">Browse File (Demo Upload)</button>
+            <div 
+              style={{ 
+                flex: 1, 
+                border: '2px dashed var(--color-border)', 
+                borderRadius: '8px', 
+                display: 'flex', 
+                flexDirection: 'column', 
+                justifyContent: 'center', 
+                alignItems: 'center',
+                padding: '24px',
+                cursor: 'pointer',
+                background: isUploading ? 'rgba(255,255,255,0.01)' : 'none'
+              }} 
+              onClick={handleUploadClick}
+              onDragOver={handleDragOver}
+              onDrop={handleDrop}
+            >
+              {isUploading ? (
+                <>
+                  <span style={{ fontSize: '48px', marginBottom: '16px', animation: 'spin 1.5s linear infinite' }} className="loader-icon">⌛</span>
+                  <p style={{ margin: '0 0 8px 0', fontWeight: '600' }}>Analyzing legal document...</p>
+                  <p style={{ margin: '0 0 24px 0', fontSize: '12px', color: 'var(--color-text-secondary)' }}>Extracting text with Gemini AI</p>
+                </>
+              ) : (
+                <>
+                  <span style={{ fontSize: '48px', marginBottom: '16px' }}>📄</span>
+                  <p style={{ margin: '0 0 8px 0', fontWeight: '600' }}>Drag & drop your notice file here</p>
+                  <p style={{ margin: '0 0 24px 0', fontSize: '12px', color: 'var(--color-text-secondary)' }}>Supports PDF, PNG, JPEG up to 10MB</p>
+                  <button className="glow-btn">Browse File</button>
+                  {error && <p style={{ margin: '16px 0 0 0', color: 'var(--color-danger)', fontSize: '12px' }}>{error}</p>}
+                </>
+              )}
             </div>
           ) : (
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '16px', overflow: 'hidden' }}>
               <div style={{ 
                 display: 'flex', 
                 justifyContent: 'space-between', 
@@ -124,9 +257,13 @@ export default function App() {
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <span style={{ fontSize: '24px' }}>📄</span>
-                  <div>
-                    <p style={{ margin: 0, fontSize: '13px', fontWeight: '600' }}>mock_tenant_eviction_notice.pdf</p>
-                    <p style={{ margin: 0, fontSize: '11px', color: 'var(--color-text-secondary)' }}>1.2 MB | PDF File</p>
+                  <div style={{ overflow: 'hidden' }}>
+                    <p style={{ margin: 0, fontSize: '13px', fontWeight: '600', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>
+                      {file?.name || "uploaded_notice.pdf"}
+                    </p>
+                    <p style={{ margin: 0, fontSize: '11px', color: 'var(--color-text-secondary)' }}>
+                      {(file ? (file.size / 1024 / 1024).toFixed(1) : "1.2")} MB | {docType} | Database ID: #{documentId}
+                    </p>
                   </div>
                 </div>
                 <button 
@@ -137,24 +274,26 @@ export default function App() {
                 </button>
               </div>
 
-              {/* Document Image Mockup */}
+              {/* Document Image/Text Preview Box */}
               <div style={{ 
                 flex: 1, 
                 background: '#ffffff', 
-                color: '#000000', 
+                color: '#1e293b', 
                 borderRadius: '8px', 
                 padding: '24px', 
-                fontSize: '11px', 
+                fontSize: '12px', 
                 lineHeight: '1.6', 
                 overflowY: 'auto',
                 boxShadow: 'inset 0 0 10px rgba(0,0,0,0.1)'
               }}>
-                <h3 style={{ textAlign: 'center', fontWeight: 'bold', margin: '0 0 16px 0', fontSize: '14px' }}>EVICTION NOTICE</h3>
-                <p><strong>TO:</strong> Mr. Hansh, Apartment 4B, Greenwood Residencies, Hyderabad.</p>
-                <p><strong>DATE:</strong> July 26, 2026</p>
-                <p>You are hereby notified that you are in default of your lease agreement dated June 1, 2024. Specifically, you have failed to pay the rent due for July 2026 in the amount of INR 25,000.</p>
-                <p>Pursuant to Section 106 of the Transfer of Property Act, you are required to cure this default or vacate the premises within fifteen (15) days from the receipt of this notice, failing which legal proceedings will be initiated against you.</p>
-                <p style={{ textAlign: 'right', marginTop: '24px' }}><strong>SENDER:</strong> Greenwood Property Management Ltd.</p>
+                <h3 style={{ textAlign: 'center', fontWeight: 'bold', margin: '0 0 16px 0', fontSize: '14px', textTransform: 'uppercase' }}>
+                  {docType}
+                </h3>
+                <p style={{ whiteSpace: 'pre-wrap' }}>
+                  <strong>NOTICE FILE DETAIL PREVIEW:</strong><br />
+                  Uploaded Document: {file?.name}<br /><br />
+                  Gemini API successfully executed native multimodal OCR. The extracted core summary and deadlines are displayed in the workspace on the right. You can now toggle tabs to read citations, next steps, or ask follow-up questions.
+                </p>
               </div>
             </div>
           )}
@@ -162,7 +301,7 @@ export default function App() {
 
         {/* Right Pane: Analysis Workspace Panel */}
         <section className="glass-card" style={{ flex: 1.2, padding: '24px', display: 'flex', flexDirection: 'column', height: 'calc(100vh - 160px)' }}>
-          <div style={{ display: 'flex', justifycontent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
             <h2 style={{ margin: 0, fontSize: '16px', fontWeight: 'bold' }}>
               2. AI Analysis Workspace
             </h2>
@@ -237,91 +376,100 @@ export default function App() {
 
               {/* Tab Content Display */}
               <div style={{ flex: 1, overflowY: 'auto', paddingRight: '4px' }}>
-                {activeTab === 'summary' && (
+                {activeTab === 'summary' && analysis && (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                    <div style={{ 
-                      padding: '16px', 
-                      background: 'rgba(239, 68, 68, 0.1)', 
-                      borderLeft: '4px solid var(--color-danger)',
-                      borderRadius: '4px'
-                    }}>
-                      <h4 style={{ margin: '0 0 4px 0', fontSize: '13px', color: 'var(--color-danger)', fontWeight: 'bold' }}>
-                        ⚠️ Urgent Warning
-                      </h4>
-                      <p style={{ margin: 0, fontSize: '12px' }}>
-                        {language === 'english' 
-                          ? "You have 15 days from receiving this notice to cure the rent default or vacate the apartment. Failure to do so will result in eviction lawsuits."
-                          : "ఈ నోటీసు అందిన 15 రోజుల్లోగా మీరు అద్దె చెల్లించవలసి ఉంటుంది, లేనిపక్షంలో తొలగింపు చర్యలు ప్రారంభించబడతాయి."
-                        }
-                      </p>
-                    </div>
+                    {analysis.extracted_dates.some(d => d.urgency === 'High') && (
+                      <div style={{ 
+                        padding: '16px', 
+                        background: 'rgba(239, 68, 68, 0.1)', 
+                        borderLeft: '4px solid var(--color-danger)',
+                        borderRadius: '4px'
+                      }}>
+                        <h4 style={{ margin: '0 0 4px 0', fontSize: '13px', color: 'var(--color-danger)', fontWeight: 'bold' }}>
+                          ⚠️ Urgent Warning
+                        </h4>
+                        <p style={{ margin: 0, fontSize: '12px' }}>
+                          {language === 'english' 
+                            ? "This document contains high-urgency deadlines. Please review the timeline and checklists immediately."
+                            : "ఈ పత్రంలో అత్యవసర గడువులు ఉన్నాయి. దయచేసి గడువు తేదీలు మరియు తదుపరి చర్యలను వెంటనే పరిశీలించండి."
+                          }
+                        </p>
+                      </div>
+                    )}
 
                     <div>
                       <h3 style={{ margin: '0 0 8px 0', fontSize: '14px', fontWeight: 'bold' }}>Plain Language Explanation</h3>
                       <p style={{ margin: 0, fontSize: '13px', color: 'var(--color-text-secondary)', lineHeight: '1.6' }}>
                         {language === 'english'
-                          ? "Your landlord, Greenwood Property Management, is claiming that you did not pay rent for July 2026 (INR 25,000). They are giving you 15 days to pay this due. If you do not pay or explain, they have the legal right under Indian law to start eviction proceedings in court."
-                          : "మీ ల్యాండ్‌లార్డ్ గ్రీన్‌వుడ్ ప్రాపర్టీ మేనేజ్‌మెంట్ మీ జూలై 2026 నెలవారీ అద్దె (రూ. 25,000) చెల్లించలేదని నోటీసు పంపారు. దీనికి సంబంధించి 15 రోజుల సమయం ఇచ్చారు. ఈ గడువులోగా చెల్లించకపోతే, చట్టపరమైన తొలగింపు చర్యలు చేపడతారు."
+                          ? analysis.summary
+                          : `[తెలుగు అనువాదం] ${analysis.summary}`
                         }
                       </p>
                     </div>
                   </div>
                 )}
 
-                {activeTab === 'timeline' && (
+                {activeTab === 'timeline' && analysis && (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                     <h3 style={{ margin: 0, fontSize: '14px', fontWeight: 'bold' }}>Critical Milestones Timeline</h3>
                     <div style={{ position: 'relative', paddingLeft: '24px', borderLeft: '2px solid var(--color-border)', display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                      
-                      {/* Milestone 1 */}
-                      <div style={{ position: 'relative' }}>
-                        <div style={{ position: 'absolute', left: '-30px', top: '4px', width: '10px', height: '10px', borderRadius: '50%', background: 'var(--color-accent-indigo)' }} />
-                        <p style={{ margin: 0, fontSize: '11px', color: 'var(--color-text-secondary)' }}>July 26, 2026</p>
-                        <h4 style={{ margin: '2px 0 4px 0', fontSize: '13px', fontWeight: 'bold' }}>Notice Received</h4>
-                        <p style={{ margin: 0, fontSize: '12px', color: 'var(--color-text-secondary)' }}>Eviction notice served to Greenwood Greenwood Apartment.</p>
-                      </div>
-
-                      {/* Milestone 2 */}
-                      <div style={{ position: 'relative' }}>
-                        <div style={{ position: 'absolute', left: '-30px', top: '4px', width: '10px', height: '10px', borderRadius: '50%', background: 'var(--color-danger)' }} />
-                        <p style={{ margin: 0, fontSize: '11px', color: 'var(--color-danger)', fontWeight: 'bold' }}>August 10, 2026 (15 Days Remaining)</p>
-                        <h4 style={{ margin: '2px 0 4px 0', fontSize: '13px', fontWeight: 'bold', color: 'var(--color-danger)' }}>Cure Period Deadline</h4>
-                        <p style={{ margin: 0, fontSize: '12px', color: 'var(--color-text-secondary)' }}>Last day to submit rent payment due or present landlord dispute papers.</p>
-                      </div>
+                      {analysis.extracted_dates.map((m, idx) => {
+                        const daysLeft = getRemainingDays(m.date);
+                        const isHigh = m.urgency === 'High';
+                        
+                        return (
+                          <div style={{ position: 'relative' }} key={idx}>
+                            <div style={{ 
+                              position: 'absolute', 
+                              left: '-30px', 
+                              top: '4px', 
+                              width: '10px', 
+                              height: '10px', 
+                              borderRadius: '50%', 
+                              background: isHigh ? 'var(--color-danger)' : 'var(--color-accent-indigo)' 
+                            }} />
+                            <p style={{ margin: 0, fontSize: '11px', color: isHigh ? 'var(--color-danger)' : 'var(--color-text-secondary)', fontWeight: isHigh ? 'bold' : 'normal' }}>
+                              {m.date} ({daysLeft > 0 ? `${daysLeft} Days Remaining` : daysLeft === 0 ? "Today" : "Passed"})
+                            </p>
+                            <h4 style={{ margin: '2px 0 4px 0', fontSize: '13px', fontWeight: 'bold', color: isHigh ? 'var(--color-danger)' : 'var(--color-text-primary)' }}>
+                              {m.title}
+                            </h4>
+                            <p style={{ margin: 0, fontSize: '11px', color: 'var(--color-text-secondary)' }}>
+                              Urgency Level: {m.urgency}
+                            </p>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 )}
 
-                {activeTab === 'laws' && (
+                {activeTab === 'laws' && analysis && (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                     <h3 style={{ margin: 0, fontSize: '14px', fontWeight: 'bold' }}>Relevant Legal Citations</h3>
-                    <div className="glass-card" style={{ padding: '16px', borderLeft: '4px solid var(--color-accent-indigo)' }}>
-                      <h4 style={{ margin: '0 0 8px 0', fontSize: '13px', fontWeight: 'bold', color: 'var(--color-accent-indigo)' }}>
-                        Section 106 - Transfer of Property Act, 1882
-                      </h4>
-                      <p style={{ margin: 0, fontSize: '12px', color: 'var(--color-text-secondary)', lineHeight: '1.5' }}>
-                        States that a lease of immovable property from month to month can only be terminated by giving a 15-day notice in writing. If the landlord does not serve you a written notice 15 days in advance, the eviction proceeding can be dismissed in court.
-                      </p>
-                    </div>
+                    {analysis.legal_references.map((l, idx) => (
+                      <div className="glass-card" style={{ padding: '16px', borderLeft: '4px solid var(--color-accent-indigo)' }} key={idx}>
+                        <h4 style={{ margin: '0 0 8px 0', fontSize: '13px', fontWeight: 'bold', color: 'var(--color-accent-indigo)' }}>
+                          {l.section}
+                        </h4>
+                        <p style={{ margin: 0, fontSize: '12px', color: 'var(--color-text-secondary)', lineHeight: '1.5' }}>
+                          {l.description}
+                        </p>
+                      </div>
+                    ))}
                   </div>
                 )}
 
-                {activeTab === 'checklist' && (
+                {activeTab === 'checklist' && analysis && (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                     <h3 style={{ margin: 0, fontSize: '14px', fontWeight: 'bold' }}>Recommended Next Steps</h3>
                     <ul style={{ paddingLeft: '20px', margin: 0, display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '13px' }}>
-                      <li>
-                        <input type="checkbox" style={{ marginRight: '8px' }} />
-                        <strong>Verify Receipts:</strong> Check if Greenwood Apartment rent was debited from your bank.
-                      </li>
-                      <li>
-                        <input type="checkbox" style={{ marginRight: '8px' }} />
-                        <strong>Draft Dispute Reply:</strong> Prepare response stating payment timeline or proof.
-                      </li>
-                      <li>
-                        <input type="checkbox" style={{ marginRight: '8px' }} />
-                        <strong>Legal Aid Consulting:</strong> Speak to a legal adviser before signing agreements.
-                      </li>
+                      {analysis.checklist.map((step, idx) => (
+                        <li key={idx}>
+                          <input type="checkbox" style={{ marginRight: '8px' }} />
+                          {step}
+                        </li>
+                      ))}
                     </ul>
 
                     {/* Autogenerated Response Draft */}
@@ -329,10 +477,10 @@ export default function App() {
                       <h4 style={{ margin: '0 0 8px 0', fontSize: '13px', fontWeight: 'bold' }}>Autogenerated Response Template</h4>
                       <textarea 
                         readOnly 
-                        value="To: Greenwood Property Management Ltd.\nSubject: Reply to Eviction Notice dated July 26, 2026\n\nDear Sir/Madam,\nI am writing in response to your notice dated July 26, 2026. I dispute the claim of rent default. [Insert Payment Transaction ID or Dispute Context here]..."
+                        value={analysis.response_template}
                         style={{
                           width: '95%',
-                          height: '80px',
+                          height: '110px',
                           background: 'rgba(255,255,255,0.03)',
                           border: '1px solid var(--color-border)',
                           borderRadius: '8px',
