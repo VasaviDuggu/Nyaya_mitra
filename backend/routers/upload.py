@@ -117,6 +117,7 @@ async def upload_and_analyze_document(
             "document_id": db_doc.id,
             "filename": db_doc.filename,
             "doc_type": db_doc.doc_type,
+            "raw_text": db_doc.raw_text,
             "uploaded_at": db_doc.uploaded_at,
             "analysis": {
                 "summary": db_doc.summary_explanation,
