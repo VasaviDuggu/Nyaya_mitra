@@ -1,4 +1,59 @@
 {
-  "notice_types": {},
-  "legal_sections": {}
+  "laws": [
+    {
+      "id": "sec_106_property_act",
+      "act": "Section 106 of the Transfer of Property Act, 1882",
+      "keywords": ["lease", "rent", "tenant", "eviction", "landlord", "tenancy", "vacate", "premises", "apartment", " Greenwood"],
+      "summary": "Mandates that a month-to-month lease termination notice must be in writing and serve a minimum of 15 days in advance. Failure to give a full 15-day notice can dismiss the eviction in court.",
+      "remedies": [
+        "Verify if notice is served 15 days prior to lease termination date.",
+        "Check if notice is signed by the landlord or authorized representative.",
+        "Collect bank statements or payment receipts proving timely rent payments."
+      ]
+    },
+    {
+      "id": "sec_138_negotiable_instruments",
+      "act": "Section 138 of the Negotiable Instruments Act, 1881",
+      "keywords": ["cheque", "dishonor", "bounce", "bank", "insufficient", "debt", "payment", "repayment", "drawer"],
+      "summary": "Deals with the criminal offense of cheque dishonor due to insufficient funds. The payee must send a written demand notice within 30 days of bounce, and the drawer gets 15 days to pay before a complaint can be filed.",
+      "remedies": [
+        "Verify if the bounce notice was sent within 30 days of the dishonor memo.",
+        "Settle the cheque amount within 15 days of receiving the notice to avoid criminal liability.",
+        "Draft a formal reply stating transaction proof or disputing liability."
+      ]
+    },
+    {
+      "id": "sec_56_electricity_act",
+      "act": "Section 56 of the Electricity Act, 2003",
+      "keywords": ["electricity", "power", "disconnection", "utility", "bill", "dues", "arrears", "meter"],
+      "summary": "Mandates that an electricity distribution company must serve a written notice of at least 15 clear days before disconnecting supply. Consumers can dispute the dues in court or consumer forums.",
+      "remedies": [
+        "Check if 15 clear days notice was given in writing before power cut.",
+        "Verify electricity bill calculation errors or payment receipts.",
+        "File an appeal with the Consumer Grievance Redressal Forum (CGRF)."
+      ]
+    },
+    {
+      "id": "sec_19_debts_recovery",
+      "act": "Section 19 of the Recovery of Debts and Bankruptcy Act, 1993",
+      "keywords": ["loan", "recovery", "default", "bank", "credit", "debt", "collateral", "mortgage", "drt", "finance"],
+      "summary": "Governs applications filed by banks or financial institutions in the Debts Recovery Tribunal (DRT) to recover outstanding dues from default borrowers.",
+      "remedies": [
+        "Verify the statement of account and calculation of interest rates.",
+        "File a written reply statement disputing calculations or terms within 30 days.",
+        "Approach the bank for a One-Time Settlement (OTS) option."
+      ]
+    },
+    {
+      "id": "sec_499_ipc_defamation",
+      "act": "Section 499 of the Indian Penal Code (IPC) / BNS Equivalent",
+      "keywords": ["defamation", "slander", "libel", "reputation", "repute", "damage", "notice", "lawsuit", "statement"],
+      "summary": "Deals with criminal defamation where a person makes false spoken or written imputations intending to harm a citizen's reputation.",
+      "remedies": [
+        "Check if the statement made is true and for public good (truth is a defense).",
+        "Reply denying malicious intent or proving the statements represent fair comment.",
+        "Draft legal response requesting withdrawal of demand notice."
+      ]
+    }
+  ]
 }

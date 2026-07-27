@@ -7,6 +7,7 @@ from typing import Optional
 from database import get_db
 import models
 from services.gemini_client import analyze_notice_document
+from services.rag_retriever import retrieve_matching_laws
 from config import GEMINI_API_KEY
 
 # Configure logging
@@ -72,42 +73,65 @@ async def upload_and_analyze_document(
         else:
             raw_text_preview = f"[Multimodal PDF/Image Notice Binary File: {file.filename}]"
 
+        # 2. Retrieve matched laws from the local database (RAG Grounding)
+        matched_laws = retrieve_matching_laws(file.filename + " " + raw_text_preview)
+        matched_laws_json = json.dumps(matched_laws, indent=2)
+
         # 3. Call Gemini Multimodal API or load mock fallback if key is missing
         if not GEMINI_API_KEY:
             logger.warning("GEMINI_API_KEY not set. Loading mock analysis data for local testing.")
-            # Local mock fallback
+            
+            # Formulate mock analysis containing RAG matched laws
+            mock_dates = [
+                {"title": "Eviction Notice Deadline", "date": "2026-08-10", "urgency": "High"},
+                {"title": "Summons Hearing Date", "date": "2026-08-25", "urgency": "Medium"}
+            ]
+            
+            # Map database laws to mock analysis citations
+            mock_citations = []
+            mock_checklist = []
+            for law in matched_laws:
+                mock_citations.append({
+                    "section": law.get("act", "General Legal Guidance"),
+                    "description": law.get("summary", "Verify service requirements.")
+                })
+                for remedy in law.get("remedies", []):
+                    mock_checklist.append(remedy)
+            
+            if not mock_checklist:
+                mock_checklist = ["Locate original agreement.", "Draft formal dispute response."]
+                
             analysis_data = {
                 "raw_text": (
-                    "EVICTION NOTICE\n\n"
-                    "TO: Mr. Hansh, Apartment 4B, Greenwood Residencies, Hyderabad.\n"
-                    "DATE: July 26, 2026\n\n"
-                    "You are hereby notified that you are in default of your lease agreement dated June 1, 2024. "
-                    "Specifically, you have failed to pay the rent due for July 2026 in the amount of INR 25,000.\n\n"
-                    "Pursuant to Section 106 of the Transfer of Property Act, you are required to cure this default "
-                    "or vacate the premises within fifteen (15) days from the receipt of this notice, failing which "
-                    "legal proceedings will be initiated against you.\n\n"
-                    "SENDER: Greenwood Property Management Ltd."
+                    f"EVICTION NOTICE\n\n"
+                    f"TO: Mr. Hansh, Apartment 4B, Greenwood Residencies, Hyderabad.\n"
+                    f"DATE: July 26, 2026\n\n"
+                    f"You are hereby notified that you are in default of your lease agreement. "
+                    f"Specifically, you have failed to pay the rent due for July 2026 in the amount of INR 25,000.\n\n"
+                    f"Pursuant to the matched legal acts, you are required to cure this default "
+                    f"or vacate the premises within fifteen (15) days from the receipt of this notice.\n\n"
+                    f"SENDER: Greenwood Property Management Ltd."
                 ),
-                "summary": "Your landlord, Greenwood Management, claims you default on July rent of INR 25,000.",
+                "summary": f"Your landlord, Greenwood Management, claims you defaulted on July rent of INR 25,000. Matched Law: {matched_laws[0].get('act') if matched_laws else 'General Landlord/Tenant Laws'}",
                 "document_type": notice_type if notice_type else "Tenant Lease Notice",
-                "extracted_dates": [
-                    {"title": "Eviction Notice Deadline", "date": "2026-08-10", "urgency": "High"},
-                    {"title": "Summons Hearing Date", "date": "2026-08-25", "urgency": "Medium"}
-                ],
-                "legal_references": [
-                    {"section": "Section 106 of the Transfer of Property Act, 1882", "description": "Requires a minimum 15-day prior written notice for lease terminations."}
-                ],
-                "checklist": [
-                    "Locate rent payment receipts.",
-                    "Draft an eviction dispute reply letter.",
-                    "Register to attend court hearing."
-                ],
+                "extracted_dates": mock_dates,
+                "legal_references": mock_citations,
+                "checklist": mock_checklist,
                 "response_template": "To: Greenwood Management\nSubject: Eviction Notice Response\n\nI am writing in response to the notice..."
             }
         else:
+            # Build RAG-grounded prompt template
+            rag_prompt = f"""
+{PROMPT_TEMPLATE}
+
+GROUNDING LEGAL CITATIONS (RAG CONTEXT):
+The following laws are matched from our database as highly relevant to this document.
+You MUST ground your legal references, plain description, and recommended checklist steps in these exact acts where applicable.
+{matched_laws_json}
+"""
             # Execute actual Gemini multimodal OCR & analysis call
-            logger.info(f"Sending file {file.filename} ({mime_type}) to Gemini API...")
-            gemini_response = analyze_notice_document(content, mime_type, PROMPT_TEMPLATE)
+            logger.info(f"Sending file {file.filename} ({mime_type}) to Gemini API with RAG context...")
+            gemini_response = analyze_notice_document(content, mime_type, rag_prompt)
             logger.info("Successfully received response from Gemini API.")
             
             # Parse the JSON output returned from Gemini

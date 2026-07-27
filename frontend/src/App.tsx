@@ -60,7 +60,8 @@ const UI_TRANSLATIONS: Record<string, Record<string, string>> = {
     passedText: "Passed",
     todayText: "Today",
     urgencyText: "Urgency Level",
-    warningText: "This document contains high-urgency deadlines. Please review the timeline and checklists immediately."
+    warningText: "This document contains high-urgency deadlines. Please review the timeline and checklists immediately.",
+    downloadCal: "Download Invite (.ics)"
   },
   telugu: {
     ingestionTitle: "1. పత్రం అప్‌లోడ్",
@@ -87,9 +88,39 @@ const UI_TRANSLATIONS: Record<string, Record<string, string>> = {
     passedText: "గడువు ముగిసింది",
     todayText: "ఈరోజు",
     urgencyText: "అత్యవసర స్థాయి",
-    warningText: "ఈ పత్రంలో అత్యవసర గడువులు ఉన్నాయి. దయచేసి గడువు తేదీలు మరియు చర్యలను వెంటనే పరిశీలించండి."
+    warningText: "ఈ పత్రంలో అత్యవసర గడువులు ఉన్నాయి. దయచేసి గడువు తేదీలు మరియు చర్యలను వెంటనే పరిశీలించండి.",
+    downloadCal: "క్యాలెండర్ గుర్తు (.ics)"
   }
 };
+
+// Static Legal Database to render inside "Laws Library" view
+const LAWS_LIBRARY_DATA = [
+  {
+    act: "Section 106 of the Transfer of Property Act, 1882",
+    scope: "Month-to-Month Rental Leases",
+    details: "Provides that a tenancy of immovable property from month to month can only be terminated by giving a 15-day written notice. If the notice is not served 15 days prior, any eviction lawsuit is legally invalid."
+  },
+  {
+    act: "Section 138 of the Negotiable Instruments Act, 1881",
+    scope: "Cheque Dishonor & Bounces",
+    details: "Establishes criminal liability for bounced cheques due to insufficient funds. Payees must send a demand letter within 30 days of dishonor, and drawers get 15 days to settle the payment."
+  },
+  {
+    act: "Section 56 of the Electricity Act, 2003",
+    scope: "Power Cuts & Arrears",
+    details: "Prohibits utility companies from disconnecting electricity supply without giving a clear, written 15-day warning notice to clear default dues."
+  },
+  {
+    act: "Section 19 of the Recovery of Debts and Bankruptcy Act, 1993",
+    scope: "Bank Loans & Recovery Tribunals",
+    details: "Specifies procedures for financial banks to sue default borrowers in Debts Recovery Tribunals (DRT). Borrowers can file dispute responses within 30 days."
+  },
+  {
+    act: "Section 499 of the Indian Penal Code (IPC) / BNS 356",
+    scope: "Criminal Defamation Cases",
+    details: "Governs criminal charges against false written or spoken allegations damaging a citizen's reputation. Truth and public benefit constitute solid defenses."
+  }
+];
 
 export default function App() {
   const [fileUploaded, setFileUploaded] = useState(false);
@@ -119,7 +150,9 @@ export default function App() {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Translate helper function utilizing static UI translations
+  // Speech synthesis reference
+  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+
   const t = (key: string) => {
     return UI_TRANSLATIONS[language]?.[key] || UI_TRANSLATIONS['english'][key] || key;
   };
@@ -137,6 +170,58 @@ export default function App() {
       setTranslatedAnalysis(null);
     }
   }, [language, analysis]);
+
+  // Speech Synthesis player controls
+  useEffect(() => {
+    return () => {
+      // Stop speech when component unmounts
+      window.speechSynthesis.cancel();
+    };
+  }, []);
+
+  const handleVoiceToggle = () => {
+    const summaryText = displayAnalysis?.summary;
+    if (!summaryText) return;
+
+    if (isPlayingVoice) {
+      window.speechSynthesis.pause();
+      setIsPlayingVoice(false);
+    } else {
+      // If already paused, resume
+      if (window.speechSynthesis.paused) {
+        window.speechSynthesis.resume();
+        setIsPlayingVoice(true);
+      } else {
+        // Start new speech utterance
+        window.speechSynthesis.cancel();
+        
+        const utterance = new SpeechSynthesisUtterance(summaryText);
+        utteranceRef.current = utterance;
+        
+        // Find language voice
+        const voices = window.speechSynthesis.getVoices();
+        if (language === 'telugu') {
+          const telVoice = voices.find(v => v.lang.includes('te') || v.lang.includes('IN'));
+          if (telVoice) utterance.voice = telVoice;
+          utterance.lang = 'te-IN';
+        } else {
+          const engVoice = voices.find(v => v.lang.includes('en'));
+          if (engVoice) utterance.voice = engVoice;
+          utterance.lang = 'en-US';
+        }
+
+        utterance.onend = () => {
+          setIsPlayingVoice(false);
+        };
+        utterance.onerror = () => {
+          setIsPlayingVoice(false);
+        };
+
+        window.speechSynthesis.speak(utterance);
+        setIsPlayingVoice(true);
+      }
+    }
+  };
 
   const triggerTranslation = async () => {
     if (!analysis) return;
@@ -259,7 +344,7 @@ export default function App() {
       });
 
       if (!response.ok) {
-        throw new Error("Chat api failed to respond.");
+        throw new Error("Chat API failed to respond.");
       }
 
       const data = await response.json();
@@ -271,7 +356,30 @@ export default function App() {
     }
   };
 
+  // Download .ics file directly in browser
+  const handleCalendarDownload = async (dateStr: string, titleStr: string) => {
+    try {
+      const url = `/api/calendar?date=${dateStr}&title=${encodeURIComponent(titleStr)}`;
+      const response = await fetch(url);
+      const data = await response.json();
+      
+      if (data.ics_file_content) {
+        const element = document.createElement("a");
+        const file = new Blob([data.ics_file_content], { type: 'text/calendar' });
+        element.href = URL.createObjectURL(file);
+        element.download = `${titleStr.toLowerCase().replace(/ /g, '_')}_reminder.ics`;
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+      }
+    } catch (err) {
+      console.error("Calendar generator error:", err);
+    }
+  };
+
   const handleReset = () => {
+    // Stop speech synthesis on reset
+    window.speechSynthesis.cancel();
     setFile(null);
     setFileUploaded(false);
     setDocumentId(null);
@@ -410,7 +518,7 @@ export default function App() {
         }}>
           <div>
             <h2 style={{ margin: 0, fontSize: '16px', color: 'var(--color-text-primary)', textTransform: 'capitalize' }}>
-              {activeNav}
+              {activeNav === 'dashboard' ? (language === 'english' ? 'dashboard' : 'డాష్‌బోర్డ్') : activeNav === 'library' ? (language === 'english' ? 'laws library' : 'చట్టాల గ్రంథాలయం') : (language === 'english' ? 'Milestones' : 'గడువుల పట్టిక')}
             </h2>
           </div>
 
@@ -461,7 +569,7 @@ export default function App() {
           </div>
         </header>
 
-        {/* Main Workspace Layout */}
+        {/* 3. Main Workspace Layout */}
         {activeNav === 'dashboard' ? (
           <main style={{ flex: 1, display: 'flex', padding: '32px 40px', gap: '32px', overflow: 'hidden' }}>
             
@@ -543,7 +651,7 @@ export default function App() {
                     </button>
                   </div>
 
-                  {/* 2. OCR Preview Box with strict word-wrap fixes */}
+                  {/* OCR Preview Box with strict word-wrap fixes */}
                   <div style={{ 
                     flex: 1, 
                     background: '#ffffff', 
@@ -590,7 +698,7 @@ export default function App() {
                 {fileUploaded && activeTab !== 'chat' && (
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <button 
-                      onClick={() => setIsPlayingVoice(!isPlayingVoice)}
+                      onClick={handleVoiceToggle}
                       style={{
                         background: isPlayingVoice ? 'var(--color-accent-gold)' : 'rgba(255, 255, 255, 0.05)',
                         color: isPlayingVoice ? '#0f172a' : '#ffffff',
@@ -633,7 +741,7 @@ export default function App() {
                     marginBottom: '16px',
                     gap: '4px'
                   }}>
-                    {['summary', 'timeline', 'laws', 'checklist', 'chat'].map((tab) => (
+                    {['summary', 'laws', 'checklist', 'chat'].map((tab) => (
                       <button 
                         key={tab}
                         onClick={() => setActiveTab(tab)}
@@ -687,45 +795,7 @@ export default function App() {
                       </div>
                     )}
 
-                    {/* B. Timeline Tab */}
-                    {activeTab === 'timeline' && displayAnalysis && (
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                        <h3 style={{ margin: 0, fontSize: '14px', fontWeight: 'bold' }}>
-                          {t('milestoneTitle')}
-                        </h3>
-                        <div style={{ position: 'relative', paddingLeft: '24px', borderLeft: '2px solid var(--color-border)', display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                          {displayAnalysis.extracted_dates.map((m, idx) => {
-                            const daysLeft = getRemainingDays(m.date);
-                            const isHigh = m.urgency === 'High';
-                            
-                            return (
-                              <div style={{ position: 'relative' }} key={idx}>
-                                <div style={{ 
-                                  position: 'absolute', 
-                                  left: '-30px', 
-                                  top: '4px', 
-                                  width: '10px', 
-                                  height: '10px', 
-                                  borderRadius: '50%', 
-                                  background: isHigh ? 'var(--color-danger)' : 'var(--color-accent-indigo)' 
-                                }} />
-                                <p style={{ margin: 0, fontSize: '11px', color: isHigh ? 'var(--color-danger)' : 'var(--color-text-secondary)', fontWeight: isHigh ? 'bold' : 'normal' }}>
-                                  {m.date} ({daysLeft > 0 ? `${daysLeft} ${t('daysRemaining')}` : daysLeft === 0 ? t('todayText') : t('passedText')})
-                                </p>
-                                <h4 style={{ margin: '2px 0 4px 0', fontSize: '13px', fontWeight: 'bold', color: isHigh ? 'var(--color-danger)' : 'var(--color-text-primary)' }}>
-                                  {m.title}
-                                </h4>
-                                <p style={{ margin: 0, fontSize: '11px', color: 'var(--color-text-secondary)' }}>
-                                  {t('urgencyText')}: {m.urgency}
-                                </p>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* C. Laws Tab */}
+                    {/* B. Laws Tab */}
                     {activeTab === 'laws' && displayAnalysis && (
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                         <h3 style={{ margin: 0, fontSize: '14px', fontWeight: 'bold' }}>
@@ -744,7 +814,7 @@ export default function App() {
                       </div>
                     )}
 
-                    {/* D. Checklist Tab */}
+                    {/* C. Checklist Tab */}
                     {activeTab === 'checklist' && displayAnalysis && (
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                         <h3 style={{ margin: 0, fontSize: '14px', fontWeight: 'bold' }}>
@@ -784,7 +854,7 @@ export default function App() {
                       </div>
                     )}
 
-                    {/* E. Fully Functional Chat Assistant Panel (Tab E) */}
+                    {/* D. Fully Functional Chat Assistant Panel (Tab D) */}
                     {activeTab === 'chat' && (
                       <div style={{ display: 'flex', flexDirection: 'column', flex: 1, height: '100%', overflow: 'hidden' }}>
                         {/* Chat Bubble List */}
@@ -867,45 +937,138 @@ export default function App() {
                               color: '#ffffff',
                               fontSize: '13px',
                               outline: 'none'
-                        }}
-                      />
-                      <button 
-                        type="submit" 
-                        disabled={isSendingChat || !chatInput.trim()}
-                        style={{
-                          background: 'var(--color-accent-indigo)',
-                          color: '#ffffff',
-                          border: 'none',
-                          borderRadius: '20px',
-                          padding: '8px 20px',
-                          fontSize: '12.5px',
-                          fontWeight: '600',
-                          cursor: 'pointer',
-                          opacity: (isSendingChat || !chatInput.trim()) ? 0.5 : 1
-                        }}
-                      >
-                        {t('sendBtn')}
-                      </button>
-                    </form>
-                  </div>
-                )}
+                            }}
+                          />
+                          <button 
+                            type="submit" 
+                            disabled={isSendingChat || !chatInput.trim()}
+                            style={{
+                              background: 'var(--color-accent-indigo)',
+                              color: '#ffffff',
+                              border: 'none',
+                              borderRadius: '20px',
+                              padding: '8px 20px',
+                              fontSize: '12.5px',
+                              fontWeight: '600',
+                              cursor: 'pointer',
+                              opacity: (isSendingChat || !chatInput.trim()) ? 0.5 : 1
+                            }}
+                          >
+                            {t('sendBtn')}
+                          </button>
+                        </form>
+                      </div>
+                    )}
 
+                  </div>
+                </div>
+              )}
+            </section>
+          </main>
+        ) : activeNav === 'library' ? (
+          /* Laws Library Sub-portal View */
+          <main style={{ flex: 1, padding: '32px 40px', overflowY: 'auto' }}>
+            <div style={{ maxWidth: '800px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              <div style={{ marginBottom: '12px' }}>
+                <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 'bold' }}>
+                  {language === 'english' ? 'Indian Legal Statute Database' : 'భారతీయ చట్టపరమైన నిబంధనల డేటాబేస్'}
+                </h3>
+                <p style={{ margin: '4px 0 0 0', fontSize: '12px', color: 'var(--color-text-secondary)' }}>
+                  {language === 'english' 
+                    ? "Browse default statutory rules governing eviction notices, bank cheque defaults, utility codes and defamation claims."
+                    : "తొలగింపు నోటీసులు, బ్యాంకు చెక్కు బౌన్స్, విద్యుత్ కట్ మరియు మాననష్టం క్లెయిమ్‌లను నియంత్రించే చట్టాలను బ్రౌజ్ చేయండి."
+                  }
+                </p>
               </div>
+
+              {LAWS_LIBRARY_DATA.map((law, idx) => (
+                <div key={idx} className="glass-card" style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+                    <h4 style={{ margin: 0, fontSize: '14px', fontWeight: 'bold', color: 'var(--color-accent-gold)' }}>
+                      {law.act}
+                    </h4>
+                    <span style={{ 
+                      fontSize: '11px', 
+                      background: 'rgba(99, 102, 241, 0.1)', 
+                      color: 'var(--color-accent-indigo)', 
+                      padding: '2px 8px', 
+                      borderRadius: '12px', 
+                      fontWeight: 'bold' 
+                    }}>
+                      {law.scope}
+                    </span>
+                  </div>
+                  <p style={{ margin: '8px 0 0 0', fontSize: '12.5px', color: 'var(--color-text-secondary)', lineHeight: '1.6' }}>
+                    {law.details}
+                  </p>
+                </div>
+              ))}
             </div>
-          )}
-        </section>
-      </main>
-      ) : (
-        /* Empty pages for placeholder navigation options */
-        <main style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'var(--color-text-secondary)' }}>
-          <div style={{ textAlign: 'center' }}>
-            <span style={{ fontSize: '48px' }}>📚</span>
-            <p style={{ marginTop: '16px', textTransform: 'uppercase', letterSpacing: '1px', fontSize: '12px' }}>
-              {activeNav} Portal is under active development. Keep utilizing Dashboard.
-            </p>
-          </div>
-        </main>
-      )}
+          </main>
+        ) : (
+          /* Milestones Timeline Calendar View */
+          <main style={{ flex: 1, padding: '32px 40px', overflowY: 'auto' }}>
+            <div style={{ maxWidth: '800px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              <div style={{ marginBottom: '12px' }}>
+                <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 'bold' }}>
+                  {language === 'english' ? 'Notice Critical Deadlines & Milestone Schedules' : 'నోటీసు గడువు తేదీలు & షెడ్యూల్ పట్టిక'}
+                </h3>
+                <p style={{ margin: '4px 0 0 0', fontSize: '12px', color: 'var(--color-text-secondary)' }}>
+                  {language === 'english' 
+                    ? "Generate downloadable calendar invites (.ics) to synchronize with Google Calendar or MS Outlook."
+                    : "గడువులను గూగుల్ క్యాలెండర్ లేదా ఔట్‌లుక్‌తో సమకాలీకరించడానికి క్యాలెండర్ ఫైల్‌లను (.ics) డౌన్‌లోడ్ చేసుకోండి."
+                  }
+                </p>
+              </div>
+
+              {displayAnalysis && displayAnalysis.extracted_dates.length > 0 ? (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                  {displayAnalysis.extracted_dates.map((m, idx) => {
+                    const daysLeft = getRemainingDays(m.date);
+                    const isHigh = m.urgency === 'High';
+                    
+                    return (
+                      <div key={idx} className="glass-card" style={{ padding: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div>
+                          <span style={{ 
+                            fontSize: '10px', 
+                            background: isHigh ? 'rgba(239, 68, 68, 0.1)' : 'rgba(251, 191, 36, 0.1)', 
+                            color: isHigh ? 'var(--color-danger)' : 'var(--color-accent-gold)', 
+                            padding: '2px 8px', 
+                            borderRadius: '12px', 
+                            fontWeight: 'bold',
+                            display: 'inline-block',
+                            marginBottom: '8px'
+                          }}>
+                            {m.urgency} Urgency
+                          </span>
+                          <h4 style={{ margin: '0 0 4px 0', fontSize: '14px', fontWeight: 'bold' }}>
+                            {m.title}
+                          </h4>
+                          <p style={{ margin: 0, fontSize: '12px', color: 'var(--color-text-secondary)' }}>
+                            Scheduled Date: <strong>{m.date}</strong> ({daysLeft > 0 ? `${daysLeft} ${t('daysRemaining')}` : daysLeft === 0 ? t('todayText') : t('passedText')})
+                          </p>
+                        </div>
+                        <button 
+                          onClick={() => handleCalendarDownload(m.date, m.title)}
+                          className="glow-btn"
+                          style={{ fontSize: '12px', padding: '8px 16px' }}
+                        >
+                          {t('downloadCal')}
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="glass-card" style={{ padding: '40px', textAlign: 'center', color: 'var(--color-text-secondary)' }}>
+                  <span style={{ fontSize: '48px', display: 'block', marginBottom: '16px' }}>📅</span>
+                  <p>No active notice uploaded. Upload a document in the Dashboard to view deadlines schedule.</p>
+                </div>
+              )}
+            </div>
+          </main>
+        )}
       </div>
     </div>
   );
