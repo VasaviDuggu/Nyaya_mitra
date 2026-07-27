@@ -132,6 +132,10 @@ export default function App() {
   const [activeNav, setActiveNav] = useState('dashboard'); 
   const [sidebarOpen, setSidebarOpen] = useState(true); // Default open for premium look
   const [isDarkMode, setIsDarkMode] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [pendingCalendar, setPendingCalendar] = useState<{date: string, title: string} | null>(null);
+  const [toastText, setToastText] = useState('Copied to clipboard!');
 
   // Full-stack states
   const [file, setFile] = useState<File | null>(null);
@@ -340,6 +344,11 @@ export default function App() {
   };
 
   const handleCalendarDownload = async (dateStr: string, titleStr: string) => {
+    if (!isLoggedIn) {
+      setPendingCalendar({ date: dateStr, title: titleStr });
+      setShowLoginModal(true);
+      return;
+    }
     try {
       const url = `/api/calendar?date=${dateStr}&title=${encodeURIComponent(titleStr)}`;
       const response = await fetch(url);
@@ -361,6 +370,7 @@ export default function App() {
 
   const handleCopyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
+    setToastText(language === 'english' ? 'Copied to clipboard!' : 'క్లిప్‌బోర్డ్‌కి కాపీ చేయబడింది!');
     setShowCopyToast(true);
     setTimeout(() => {
       setShowCopyToast(false);
@@ -414,7 +424,7 @@ export default function App() {
           top: '24px',
           right: '24px',
           background: 'var(--color-success)',
-          color: '#030712',
+          color: '#ffffff',
           padding: '14px 28px',
           borderRadius: '12px',
           fontWeight: '800',
@@ -424,7 +434,7 @@ export default function App() {
           animation: 'fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
           fontFamily: 'var(--font-header)'
         }}>
-          ✨ {t('copiedToast')}
+          ✨ {toastText}
         </div>
       )}
 
@@ -606,6 +616,40 @@ export default function App() {
             >
               <span>{isDarkMode ? '☀️' : '🌙'}</span>
               <span>{isDarkMode ? (language === 'english' ? 'LIGHT' : 'లైట్') : (language === 'english' ? 'DARK' : 'డార్క్')}</span>
+            </button>
+
+            {/* User Profile Login/Logout Button */}
+            <button 
+              onClick={() => {
+                if (isLoggedIn) {
+                  setIsLoggedIn(false);
+                } else {
+                  setShowLoginModal(true);
+                }
+              }}
+              style={{
+                background: isLoggedIn ? 'rgba(16, 185, 129, 0.08)' : 'rgba(255, 255, 255, 0.02)',
+                border: `1px solid ${isLoggedIn ? 'var(--color-success)' : 'var(--color-border)'}`,
+                borderRadius: '30px',
+                padding: '8px 18px',
+                color: isLoggedIn ? 'var(--color-success)' : 'var(--color-text-primary)',
+                fontSize: '11px',
+                fontWeight: '800',
+                fontFamily: 'var(--font-header)',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                outline: 'none',
+                transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
+              }}
+            >
+              <span>👤</span>
+              <span>
+                {isLoggedIn 
+                  ? (language === 'english' ? 'LOGOUT' : 'లాగ్ అవుట్') 
+                  : (language === 'english' ? 'SIGN IN' : 'లాగిన్')}
+              </span>
             </button>
 
             <a href="https://github.com/hanshikavelaga/Nyaya_mitra" target="_blank" rel="noreferrer" style={{ color: 'var(--color-text-secondary)', textDecoration: 'none', fontSize: '13px', fontWeight: '600', fontFamily: 'var(--font-header)', letterSpacing: '0.5px' }}>
@@ -1201,6 +1245,150 @@ export default function App() {
           </main>
         )}
       </div>
+
+      {/* 5. Glassmorphic Login Modal */}
+      {showLoginModal && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          background: 'rgba(3, 7, 18, 0.6)',
+          backdropFilter: 'blur(16px)',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          zIndex: 9999,
+          animation: 'fadeIn 0.25s ease-out'
+        }}>
+          <div className="glass-card" style={{
+            width: '420px',
+            padding: '40px',
+            position: 'relative',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '24px',
+            border: '1px solid rgba(255, 255, 255, 0.1)'
+          }}>
+            <button 
+              onClick={() => setShowLoginModal(false)}
+              style={{
+                position: 'absolute',
+                top: '20px',
+                right: '20px',
+                background: 'none',
+                border: 'none',
+                color: 'var(--color-text-secondary)',
+                fontSize: '18px',
+                cursor: 'pointer',
+                outline: 'none'
+              }}
+            >
+              ✕
+            </button>
+            <div style={{ textAlign: 'center' }}>
+              <span style={{ fontSize: '36px' }}>🔒</span>
+              <h2 style={{ margin: '12px 0 6px 0', fontSize: '22px', fontWeight: '800', color: 'var(--color-text-primary)', fontFamily: 'var(--font-header)' }}>
+                {language === 'english' ? 'Sign In Required' : 'లాగిన్ అవసరం'}
+              </h2>
+              <p style={{ margin: 0, fontSize: '13px', color: 'var(--color-text-secondary)' }}>
+                {language === 'english' ? 'Please log in to export notice milestones to your personal calendar.' : 'మీ వ్యక్తిగత క్యాలెండర్‌కు మైలురాళ్లను సమకాలీకరించడానికి దయచేసి లాగిన్ చేయండి.'}
+              </p>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div>
+                <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', marginBottom: '8px', color: 'var(--color-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                  {language === 'english' ? 'Email Address' : 'ఈమెయిల్ చిరునామా'}
+                </label>
+                <input 
+                  type="text" 
+                  placeholder="hansh@nyayamitra.ai" 
+                  style={{
+                    width: '100%',
+                    padding: '12px 16px',
+                    borderRadius: '12px',
+                    fontSize: '14px',
+                    boxSizing: 'border-box'
+                  }}
+                />
+              </div>
+              <div>
+                <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', marginBottom: '8px', color: 'var(--color-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                  {language === 'english' ? 'Password' : 'పాస్‌వర్డ్'}
+                </label>
+                <input 
+                  type="password" 
+                  placeholder="••••••••" 
+                  style={{
+                    width: '100%',
+                    padding: '12px 16px',
+                    borderRadius: '12px',
+                    background: 'rgba(255, 255, 255, 0.03)',
+                    border: '1px solid rgba(255, 255, 255, 0.08)',
+                    color: 'var(--color-text-primary)',
+                    fontSize: '14px',
+                    boxSizing: 'border-box'
+                  }}
+                />
+              </div>
+            </div>
+
+            <button 
+              onClick={() => {
+                setIsLoggedIn(true);
+                setShowLoginModal(false);
+                setToastText(language === 'english' ? 'Logged in successfully! Exporting calendar...' : 'విజయవంతంగా లాగిన్ అయ్యారు! క్యాలెండర్ ఎగుమతి అవుతోంది...');
+                setShowCopyToast(true);
+                setTimeout(() => {
+                  setShowCopyToast(false);
+                }, 2500);
+
+                if (pendingCalendar) {
+                  // Direct download with isLoggedIn = true
+                  const fetchAndDownload = async () => {
+                    try {
+                      const url = `/api/calendar?date=${pendingCalendar.date}&title=${encodeURIComponent(pendingCalendar.title)}`;
+                      const response = await fetch(url);
+                      const data = await response.json();
+                      
+                      if (data.ics_file_content) {
+                        const element = document.createElement("a");
+                        const file = new Blob([data.ics_file_content], { type: 'text/calendar' });
+                        element.href = URL.createObjectURL(file);
+                        element.download = `${pendingCalendar.title.toLowerCase().replace(/ /g, '_')}_reminder.ics`;
+                        document.body.appendChild(element);
+                        element.click();
+                        document.body.removeChild(element);
+                      }
+                    } catch (err) {
+                      console.error(err);
+                    }
+                  };
+                  fetchAndDownload();
+                  setPendingCalendar(null);
+                }
+              }}
+              className="glow-btn"
+              style={{
+                width: '100%',
+                justifyContent: 'center',
+                padding: '14px'
+              }}
+            >
+              {language === 'english' ? 'Sign In & Sync' : 'లాగిన్ & సమకాలీకరణ'}
+            </button>
+            
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', margin: '8px 0 0 0', fontSize: '12px', color: 'var(--color-text-secondary)' }}>
+              <span>{language === 'english' ? "Don't have an account?" : "ఖాతా లేదా?"}</span>
+              <a href="#" style={{ color: 'var(--color-accent-indigo)', fontWeight: '600', textDecoration: 'none' }}>
+                {language === 'english' ? 'Sign Up' : 'నమోదు చేయండి'}
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

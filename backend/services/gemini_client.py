@@ -1,7 +1,9 @@
 import os
+import io
 import base64
 import httpx
 import logging
+import pypdf
 import google.generativeai as genai
 from config import GEMINI_API_KEY, OPENROUTER_API_KEY, OPENROUTER_MODEL
 
@@ -10,6 +12,24 @@ logger = logging.getLogger(__name__)
 # Configure standard Gemini if key is present
 if GEMINI_API_KEY:
     genai.configure(api_key=GEMINI_API_KEY)
+
+def extract_text_from_pdf_bytes(pdf_bytes: bytes) -> str:
+    """
+    Extracts plain text from raw PDF bytes locally using pypdf to avoid sending
+    file payloads over network aggregators.
+    """
+    try:
+        pdf_file = io.BytesIO(pdf_bytes)
+        reader = pypdf.PdfReader(pdf_file)
+        text_list = []
+        for page in reader.pages:
+            t = page.extract_text()
+            if t:
+                text_list.append(t)
+        return "\n".join(text_list)
+    except Exception as e:
+        logger.error(f"Local PDF text extraction failed: {str(e)}")
+        return ""
 
 def analyze_notice_document(file_bytes: bytes, mime_type: str, prompt: str) -> str:
     """
@@ -20,23 +40,36 @@ def analyze_notice_document(file_bytes: bytes, mime_type: str, prompt: str) -> s
     # A. Use OpenRouter Gateway if OPENROUTER_API_KEY is present
     if OPENROUTER_API_KEY:
         logger.info(f"OpenRouter Gateway Active. Sending payload to model: {OPENROUTER_MODEL}")
-        base64_str = base64.b64encode(file_bytes).decode("utf-8")
-        file_data_url = f"data:{mime_type};base64,{base64_str}"
-
-        # Setup messages content structure based on type
         is_pdf = "pdf" in mime_type.lower()
+        
+        # If it is a PDF document, extract the text locally using pypdf.
+        # This bypasses OpenRouter's $0.50 minimum balance policy for file attachments!
         if is_pdf:
-            message_content = [
-                {"type": "text", "text": prompt},
-                {
-                    "type": "file",
-                    "file": {
-                        "filename": "notice_document.pdf",
-                        "file_data": file_data_url
+            local_text = extract_text_from_pdf_bytes(file_bytes)
+            if local_text.strip():
+                logger.info("PDF text extracted locally. Sending as standard text query to bypass OpenRouter $0.50 file restrictions.")
+                full_prompt = f"{prompt}\n\nDOCUMENT RAW TEXT EXTRACTED LOCALLY:\n{local_text}"
+                message_content = [
+                    {"type": "text", "text": full_prompt}
+                ]
+            else:
+                logger.warning("Local PDF extraction returned empty. Falling back to base64 PDF upload.")
+                base64_str = base64.b64encode(file_bytes).decode("utf-8")
+                file_data_url = f"data:{mime_type};base64,{base64_str}"
+                message_content = [
+                    {"type": "text", "text": prompt},
+                    {
+                        "type": "file",
+                        "file": {
+                            "filename": "notice_document.pdf",
+                            "file_data": file_data_url
+                        }
                     }
-                }
-            ]
+                ]
         else:
+            # Handle images as standard image_url base64 blocks (exempt from $0.50 file policy)
+            base64_str = base64.b64encode(file_bytes).decode("utf-8")
+            file_data_url = f"data:{mime_type};base64,{base64_str}"
             message_content = [
                 {"type": "text", "text": prompt},
                 {
