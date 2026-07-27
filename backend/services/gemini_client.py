@@ -7,7 +7,7 @@ from config import GEMINI_API_KEY, OPENROUTER_API_KEY, OPENROUTER_MODEL
 
 logger = logging.getLogger(__name__)
 
-# Configure standard Gemini if key is set
+# Configure standard Gemini if key is present
 if GEMINI_API_KEY:
     genai.configure(api_key=GEMINI_API_KEY)
 
@@ -54,6 +54,7 @@ def analyze_notice_document(file_bytes: bytes, mime_type: str, prompt: str) -> s
             "Content-Type": "application/json"
         }
 
+        # Set max_tokens to bypass low credit token limitations (affording under 14k tokens)
         payload = {
             "model": OPENROUTER_MODEL,
             "messages": [
@@ -62,7 +63,8 @@ def analyze_notice_document(file_bytes: bytes, mime_type: str, prompt: str) -> s
                     "content": message_content
                 }
             ],
-            "response_format": {"type": "json_object"}
+            "response_format": {"type": "json_object"},
+            "max_tokens": 4000
         }
 
         try:
@@ -131,9 +133,11 @@ def generate_text_completion(system_prompt: str, user_prompt: str, history_messa
             "Content-Type": "application/json"
         }
 
+        # Include max_tokens limit of 1500 to prevent balance exhaustion errors
         payload = {
             "model": OPENROUTER_MODEL,
-            "messages": messages
+            "messages": messages,
+            "max_tokens": 1500
         }
 
         try:
