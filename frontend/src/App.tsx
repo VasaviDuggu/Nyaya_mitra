@@ -33,7 +33,6 @@ interface ChatMessage {
   content: string;
 }
 
-// Global Static Translation Dictionary for UI Labels
 const UI_TRANSLATIONS: Record<string, Record<string, string>> = {
   english: {
     ingestionTitle: "1. Document Ingestion",
@@ -61,7 +60,9 @@ const UI_TRANSLATIONS: Record<string, Record<string, string>> = {
     todayText: "Today",
     urgencyText: "Urgency Level",
     warningText: "This document contains high-urgency deadlines. Please review the timeline and checklists immediately.",
-    downloadCal: "Download Invite (.ics)"
+    downloadCal: "Download Invite (.ics)",
+    copyBtn: "Copy Draft",
+    copiedToast: "Draft Copied to Clipboard!"
   },
   telugu: {
     ingestionTitle: "1. పత్రం అప్‌లోడ్",
@@ -89,11 +90,12 @@ const UI_TRANSLATIONS: Record<string, Record<string, string>> = {
     todayText: "ఈరోజు",
     urgencyText: "అత్యవసర స్థాయి",
     warningText: "ఈ పత్రంలో అత్యవసర గడువులు ఉన్నాయి. దయచేసి గడువు తేదీలు మరియు చర్యలను వెంటనే పరిశీలించండి.",
-    downloadCal: "క్యాలెండర్ గుర్తు (.ics)"
+    downloadCal: "క్యాలెండర్ గుర్తు (.ics)",
+    copyBtn: "కాపీ చేయండి",
+    copiedToast: "ప్రత్యుత్తర నమూనా కాపీ చేయబడింది!"
   }
 };
 
-// Static Legal Database to render inside "Laws Library" view
 const LAWS_LIBRARY_DATA = [
   {
     act: "Section 106 of the Transfer of Property Act, 1882",
@@ -127,12 +129,10 @@ export default function App() {
   const [activeTab, setActiveTab] = useState('summary');
   const [language, setLanguage] = useState('english');
   const [isPlayingVoice, setIsPlayingVoice] = useState(false);
-  
-  // Navigation Sidebar States
   const [activeNav, setActiveNav] = useState('dashboard'); 
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  // Full-stack state hooks
+  // Full-stack states
   const [file, setFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [documentId, setDocumentId] = useState<number | null>(null);
@@ -142,6 +142,9 @@ export default function App() {
   const [docType, setDocType] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
 
+  // Copy success toast state
+  const [showCopyToast, setShowCopyToast] = useState(false);
+
   // Chat interface states
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [chatInput, setChatInput] = useState('');
@@ -149,20 +152,16 @@ export default function App() {
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  // Speech synthesis reference
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
   const t = (key: string) => {
     return UI_TRANSLATIONS[language]?.[key] || UI_TRANSLATIONS['english'][key] || key;
   };
 
-  // Scroll chat to bottom when message arrives
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [chatMessages, activeTab]);
 
-  // Translate document contents dynamically via backend when Telugu is clicked
   useEffect(() => {
     if (language === 'telugu' && analysis) {
       triggerTranslation();
@@ -171,10 +170,8 @@ export default function App() {
     }
   }, [language, analysis]);
 
-  // Speech Synthesis player controls
   useEffect(() => {
     return () => {
-      // Stop speech when component unmounts
       window.speechSynthesis.cancel();
     };
   }, []);
@@ -187,18 +184,14 @@ export default function App() {
       window.speechSynthesis.pause();
       setIsPlayingVoice(false);
     } else {
-      // If already paused, resume
       if (window.speechSynthesis.paused) {
         window.speechSynthesis.resume();
         setIsPlayingVoice(true);
       } else {
-        // Start new speech utterance
         window.speechSynthesis.cancel();
-        
         const utterance = new SpeechSynthesisUtterance(summaryText);
         utteranceRef.current = utterance;
         
-        // Find language voice
         const voices = window.speechSynthesis.getVoices();
         if (language === 'telugu') {
           const telVoice = voices.find(v => v.lang.includes('te') || v.lang.includes('IN'));
@@ -210,12 +203,8 @@ export default function App() {
           utterance.lang = 'en-US';
         }
 
-        utterance.onend = () => {
-          setIsPlayingVoice(false);
-        };
-        utterance.onerror = () => {
-          setIsPlayingVoice(false);
-        };
+        utterance.onend = () => setIsPlayingVoice(false);
+        utterance.onerror = () => setIsPlayingVoice(false);
 
         window.speechSynthesis.speak(utterance);
         setIsPlayingVoice(true);
@@ -227,25 +216,21 @@ export default function App() {
     if (!analysis) return;
     try {
       const summaryRes = await translateText(analysis.summary, 'telugu');
-      
       const translatedMilestones = await Promise.all(
         analysis.extracted_dates.map(async (m) => ({
           ...m,
           title: await translateText(m.title, 'telugu')
         }))
       );
-
       const translatedLaws = await Promise.all(
         analysis.legal_references.map(async (l) => ({
           section: l.section,
           description: await translateText(l.description, 'telugu')
         }))
       );
-
       const translatedChecklist = await Promise.all(
         analysis.checklist.map(async (step) => await translateText(step, 'telugu'))
       );
-
       const translatedTemplate = await translateText(analysis.response_template, 'telugu');
 
       setTranslatedAnalysis({
@@ -256,7 +241,7 @@ export default function App() {
         response_template: translatedTemplate
       });
     } catch (err) {
-      console.error("Translation API failure:", err);
+      console.error("Translation error:", err);
       setTranslatedAnalysis(null);
     }
   };
@@ -302,21 +287,18 @@ export default function App() {
       });
 
       if (!response.ok) {
-        throw new Error(`Upload failed with status code ${response.status}`);
+        throw new Error(`Upload failed with status ${response.status}`);
       }
 
       const data: UploadResponse = await response.json();
-      
       setDocumentId(data.document_id);
       setDocType(data.doc_type);
       setRawText(data.raw_text || '');
       setAnalysis(data.analysis);
-      setChatMessages([
-        { role: 'assistant', content: t('chatGreeting') }
-      ]);
+      setChatMessages([{ role: 'assistant', content: t('chatGreeting') }]);
       setFileUploaded(true);
     } catch (err: any) {
-      setError(err.message || "Something went wrong during file analysis.");
+      setError(err.message || "Failed to process document.");
       setFile(null);
     } finally {
       setIsUploading(false);
@@ -344,19 +326,18 @@ export default function App() {
       });
 
       if (!response.ok) {
-        throw new Error("Chat API failed to respond.");
+        throw new Error("Chat failed.");
       }
 
       const data = await response.json();
       setChatMessages((prev) => [...prev, { role: 'assistant', content: data.reply }]);
     } catch (err: any) {
-      setChatMessages((prev) => [...prev, { role: 'assistant', content: `Sorry: ${err.message}` }]);
+      setChatMessages((prev) => [...prev, { role: 'assistant', content: `Error: ${err.message}` }]);
     } finally {
       setIsSendingChat(false);
     }
   };
 
-  // Download .ics file directly in browser
   const handleCalendarDownload = async (dateStr: string, titleStr: string) => {
     try {
       const url = `/api/calendar?date=${dateStr}&title=${encodeURIComponent(titleStr)}`;
@@ -373,12 +354,19 @@ export default function App() {
         document.body.removeChild(element);
       }
     } catch (err) {
-      console.error("Calendar generator error:", err);
+      console.error(err);
     }
   };
 
+  const handleCopyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    setShowCopyToast(true);
+    setTimeout(() => {
+      setShowCopyToast(false);
+    }, 2500);
+  };
+
   const handleReset = () => {
-    // Stop speech synthesis on reset
     window.speechSynthesis.cancel();
     setFile(null);
     setFileUploaded(false);
@@ -393,6 +381,14 @@ export default function App() {
     setChatMessages([]);
   };
 
+  const getRemainingDays = (dateStr: string) => {
+    const targetDate = new Date(dateStr);
+    const today = new Date();
+    const diffTime = targetDate.getTime() - today.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+  };
+
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
   };
@@ -405,31 +401,42 @@ export default function App() {
     }
   };
 
-  const getRemainingDays = (dateStr: string) => {
-    const targetDate = new Date(dateStr);
-    const today = new Date();
-    const diffTime = targetDate.getTime() - today.getTime();
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays;
-  };
-
   const displayAnalysis = language === 'telugu' && translatedAnalysis ? translatedAnalysis : analysis;
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', background: 'var(--color-bg)' }}>
       
+      {/* Toast Alert Notification */}
+      {showCopyToast && (
+        <div style={{
+          position: 'fixed',
+          top: '24px',
+          right: '24px',
+          background: 'rgba(52, 211, 153, 0.95)',
+          color: '#0f172a',
+          padding: '12px 24px',
+          borderRadius: '8px',
+          fontWeight: 'bold',
+          boxShadow: '0 10px 25px rgba(52, 211, 153, 0.3)',
+          zIndex: 1000,
+          animation: 'fadeIn 0.2s ease'
+        }}>
+          ✅ {t('copiedToast')}
+        </div>
+      )}
+
       {/* 1. Left Collapsible Navigation Sidebar */}
       <aside style={{ 
-        width: sidebarOpen ? '240px' : '68px', 
-        background: 'rgba(15, 23, 42, 0.95)',
+        width: sidebarOpen ? '260px' : '72px', 
+        background: 'rgba(11, 15, 25, 0.95)',
         borderRight: '1px solid var(--color-border)',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        padding: '16px 0',
-        transition: 'width 0.3s ease',
+        padding: '24px 0',
+        transition: 'width 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
         zIndex: 100,
-        position: 'relative'
+        boxShadow: '4px 0 25px rgba(0,0,0,0.5)'
       }}>
         {/* Toggle Hamburger Button */}
         <button 
@@ -441,31 +448,31 @@ export default function App() {
             fontSize: '24px',
             cursor: 'pointer',
             padding: '8px',
-            marginBottom: '24px',
+            marginBottom: '32px',
             width: '100%',
             textAlign: 'center',
-            outline: 'none'
+            outline: 'none',
+            transition: 'transform 0.3s'
           }}
-          title={sidebarOpen ? "Collapse Menu" : "Expand Menu"}
+          className="logo-pulse"
         >
           ☰
         </button>
 
-        {/* Sidebar Logo / Branding */}
         {sidebarOpen && (
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '32px', textAlign: 'center', padding: '0 12px' }}>
-            <span style={{ fontSize: '32px', marginBottom: '8px' }}>⚖️</span>
-            <h1 style={{ margin: 0, fontSize: '16px', fontWeight: 'bold', color: 'var(--color-text-primary)' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '40px', textAlign: 'center', padding: '0 16px' }}>
+            <span style={{ fontSize: '36px', marginBottom: '12px' }}>⚖️</span>
+            <h1 style={{ margin: 0, fontSize: '18px', fontWeight: '800', letterSpacing: '0.5px', color: '#ffffff' }}>
               NyayaMitra AI
             </h1>
-            <p style={{ margin: 0, fontSize: '9px', color: 'var(--color-accent-gold)', letterSpacing: '1px' }}>
+            <p style={{ margin: '4px 0 0 0', fontSize: '9px', color: 'var(--color-accent-gold)', letterSpacing: '2px', fontWeight: 'bold' }}>
               UNDERSTAND BEFORE YOU ACT
             </p>
           </div>
         )}
 
-        {/* Navigation items */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '100%', padding: '0 8px' }}>
+        {/* Navigation links */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '100%', padding: '0 12px', boxSizing: 'border-box' }}>
           {[
             { id: 'dashboard', label: language === 'english' ? 'Dashboard' : 'డాష్‌బోర్డ్', icon: '📊' },
             { id: 'library', label: language === 'english' ? 'Laws Library' : 'చట్టాల గ్రంథాలయం', icon: '📚' },
@@ -479,19 +486,20 @@ export default function App() {
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '12px',
-                  padding: '12px',
-                  background: isActive ? 'var(--color-accent-indigo)' : 'none',
+                  gap: '14px',
+                  padding: '14px 18px',
+                  background: isActive ? 'linear-gradient(135deg, var(--color-accent-indigo) 0%, #4f46e5 100%)' : 'none',
                   border: 'none',
-                  borderRadius: '8px',
+                  borderRadius: '12px',
                   color: isActive ? '#ffffff' : 'var(--color-text-secondary)',
                   cursor: 'pointer',
                   width: '100%',
                   textAlign: 'left',
-                  fontSize: '13px',
+                  fontSize: '13.5px',
                   fontWeight: '600',
-                  transition: 'background 0.2s',
+                  transition: 'all 0.2s',
                   outline: 'none',
+                  boxShadow: isActive ? '0 4px 15px rgba(99, 102, 241, 0.3)' : 'none',
                   justifyContent: sidebarOpen ? 'flex-start' : 'center'
                 }}
               >
@@ -503,32 +511,32 @@ export default function App() {
         </div>
       </aside>
 
-      {/* 2. Right Main Layout Wrapper */}
+      {/* 2. Main Portal Panel */}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         
-        {/* Header Bar */}
+        {/* Top Header bar */}
         <header style={{ 
           display: 'flex', 
           justifyContent: 'space-between', 
           alignItems: 'center', 
-          padding: '16px 40px',
+          padding: '20px 48px',
           borderBottom: '1px solid var(--color-border)',
-          background: 'rgba(15, 23, 42, 0.8)',
-          backdropFilter: 'blur(8px)'
+          background: 'rgba(11, 15, 25, 0.6)',
+          backdropFilter: 'blur(12px)'
         }}>
           <div>
-            <h2 style={{ margin: 0, fontSize: '16px', color: 'var(--color-text-primary)', textTransform: 'capitalize' }}>
-              {activeNav === 'dashboard' ? (language === 'english' ? 'dashboard' : 'డాష్‌బోర్డ్') : activeNav === 'library' ? (language === 'english' ? 'laws library' : 'చట్టాల గ్రంథాలయం') : (language === 'english' ? 'Milestones' : 'గడువుల పట్టిక')}
+            <h2 style={{ margin: 0, fontSize: '18px', fontWeight: '800', color: '#ffffff', textTransform: 'capitalize', letterSpacing: '0.5px' }}>
+              {activeNav === 'dashboard' ? (language === 'english' ? 'Dashboard Portal' : 'డాష్‌బోర్డ్ పోర్టల్') : activeNav === 'library' ? (language === 'english' ? 'Laws Statute Library' : 'చట్టాల విజ్ఞాన గ్రంథాలయం') : (language === 'english' ? 'Case Milestones Schedule' : 'గడువుల షెడ్యూల్')}
             </h2>
           </div>
 
-          <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-            {/* Language Selector Toggle */}
+          <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+            {/* Language switch */}
             <div style={{ 
               display: 'flex', 
-              background: 'var(--color-accent-navy)', 
+              background: 'rgba(255,255,255,0.03)', 
               padding: '4px', 
-              borderRadius: '20px', 
+              borderRadius: '24px', 
               border: '1px solid var(--color-border)' 
             }}>
               <button 
@@ -537,11 +545,12 @@ export default function App() {
                   background: language === 'english' ? 'var(--color-accent-indigo)' : 'none',
                   color: '#ffffff',
                   border: 'none',
-                  padding: '4px 12px',
-                  borderRadius: '16px',
+                  padding: '6px 16px',
+                  borderRadius: '20px',
                   fontSize: '11px',
-                  fontWeight: '600',
-                  cursor: 'pointer'
+                  fontWeight: '700',
+                  cursor: 'pointer',
+                  transition: 'background 0.2s'
                 }}
               >
                 English
@@ -552,30 +561,31 @@ export default function App() {
                   background: language === 'telugu' ? 'var(--color-accent-indigo)' : 'none',
                   color: '#ffffff',
                   border: 'none',
-                  padding: '4px 12px',
-                  borderRadius: '16px',
+                  padding: '6px 16px',
+                  borderRadius: '20px',
                   fontSize: '11px',
-                  fontWeight: '600',
-                  cursor: 'pointer'
+                  fontWeight: '700',
+                  cursor: 'pointer',
+                  transition: 'background 0.2s'
                 }}
               >
                 తెలుగు
               </button>
             </div>
 
-            <a href="https://github.com/hanshikavelaga/Nyaya_mitra" target="_blank" rel="noreferrer" style={{ color: 'var(--color-text-secondary)', textDecoration: 'none', fontSize: '13px' }}>
+            <a href="https://github.com/hanshikavelaga/Nyaya_mitra" target="_blank" rel="noreferrer" style={{ color: 'var(--color-text-secondary)', textDecoration: 'none', fontSize: '13px', fontWeight: '500' }}>
               GitHub
             </a>
           </div>
         </header>
 
-        {/* 3. Main Workspace Layout */}
+        {/* 3. Render Navigation Views */}
         {activeNav === 'dashboard' ? (
-          <main style={{ flex: 1, display: 'flex', padding: '32px 40px', gap: '32px', overflow: 'hidden' }}>
+          <main style={{ flex: 1, display: 'flex', padding: '32px 48px', gap: '32px', overflow: 'hidden' }}>
             
-            {/* Left Pane: Ingest / Upload Zone */}
-            <section className="glass-card" style={{ flex: 1, padding: '24px', display: 'flex', flexDirection: 'column', height: 'calc(100vh - 160px)', overflow: 'hidden' }}>
-              <h2 style={{ margin: '0 0 16px 0', fontSize: '15px', fontWeight: 'bold' }}>
+            {/* Left Pane: Ingest */}
+            <section className="glass-card" style={{ flex: 1, padding: '28px', display: 'flex', flexDirection: 'column', height: 'calc(100vh - 168px)', overflow: 'hidden' }}>
+              <h2 style={{ margin: '0 0 20px 0', fontSize: '15px', fontWeight: '800', letterSpacing: '0.5px', color: 'var(--color-text-primary)' }}>
                 {t('ingestionTitle')}
               </h2>
 
@@ -592,14 +602,15 @@ export default function App() {
                   style={{ 
                     flex: 1, 
                     border: '2px dashed var(--color-border)', 
-                    borderRadius: '8px', 
+                    borderRadius: '12px', 
                     display: 'flex', 
                     flexDirection: 'column', 
                     justifyContent: 'center', 
                     alignItems: 'center',
-                    padding: '24px',
+                    padding: '32px',
                     cursor: 'pointer',
-                    background: isUploading ? 'rgba(255,255,255,0.01)' : 'none'
+                    background: isUploading ? 'rgba(255,255,255,0.01)' : 'none',
+                    transition: 'border-color 0.2s, background-color 0.2s'
                   }} 
                   onClick={handleUploadClick}
                   onDragOver={handleDragOver}
@@ -607,78 +618,80 @@ export default function App() {
                 >
                   {isUploading ? (
                     <>
-                      <span style={{ fontSize: '48px', marginBottom: '16px', animation: 'spin 1.5s linear infinite' }} className="loader-icon">⌛</span>
-                      <p style={{ margin: '0 0 8px 0', fontWeight: '600' }}>{t('analyzingText')}</p>
+                      <span style={{ fontSize: '56px', marginBottom: '20px', display: 'inline-block', animation: 'spin 1.5s linear infinite' }}>⌛</span>
+                      <p style={{ margin: '0 0 8px 0', fontWeight: '700', color: '#ffffff' }}>{t('analyzingText')}</p>
                       <p style={{ margin: '0 0 24px 0', fontSize: '12px', color: 'var(--color-text-secondary)' }}>{t('extractingText')}</p>
                     </>
                   ) : (
                     <>
-                      <span style={{ fontSize: '48px', marginBottom: '16px' }}>📄</span>
-                      <p style={{ margin: '0 0 8px 0', fontWeight: '600' }}>{t('dragDropText')}</p>
-                      <p style={{ margin: '0 0 24px 0', fontSize: '12px', color: 'var(--color-text-secondary)' }}>{t('supportText')}</p>
+                      <span style={{ fontSize: '56px', marginBottom: '20px' }}>📄</span>
+                      <p style={{ margin: '0 0 8px 0', fontWeight: '700', color: '#ffffff' }}>{t('dragDropText')}</p>
+                      <p style={{ margin: '0 0 28px 0', fontSize: '12px', color: 'var(--color-text-secondary)' }}>{t('supportText')}</p>
                       <button className="glow-btn">{t('browseBtn')}</button>
-                      {error && <p style={{ margin: '16px 0 0 0', color: 'var(--color-danger)', fontSize: '12px' }}>{error}</p>}
+                      {error && <p style={{ margin: '16px 0 0 0', color: 'var(--color-danger)', fontSize: '12px', fontWeight: '600' }}>{error}</p>}
                     </>
                   )}
                 </div>
               ) : (
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '16px', overflow: 'hidden' }}>
+                  
+                  {/* File status card */}
                   <div style={{ 
                     display: 'flex', 
                     justifyContent: 'space-between', 
                     alignItems: 'center', 
-                    padding: '12px', 
-                    background: 'rgba(255,255,255,0.03)',
-                    borderRadius: '8px',
+                    padding: '16px', 
+                    background: 'rgba(255,255,255,0.02)',
+                    borderRadius: '12px',
                     border: '1px solid var(--color-border)'
                   }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', overflow: 'hidden' }}>
-                      <span style={{ fontSize: '24px' }}>📄</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px', overflow: 'hidden' }}>
+                      <span style={{ fontSize: '28px' }}>📄</span>
                       <div style={{ overflow: 'hidden' }}>
-                        <p style={{ margin: 0, fontSize: '13px', fontWeight: '600', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>
+                        <p style={{ margin: 0, fontSize: '13.5px', fontWeight: '700', color: '#ffffff', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>
                           {file?.name || "uploaded_notice.pdf"}
                         </p>
-                        <p style={{ margin: 0, fontSize: '11px', color: 'var(--color-text-secondary)' }}>
-                          {(file ? (file.size / 1024 / 1024).toFixed(1) : "1.2")} MB | {docType} | Database ID: #{documentId}
+                        <p style={{ margin: '2px 0 0 0', fontSize: '11px', color: 'var(--color-text-secondary)', fontWeight: '500' }}>
+                          {(file ? (file.size / 1024 / 1024).toFixed(1) : "1.2")} MB | {docType} | ID: #{documentId}
                         </p>
                       </div>
                     </div>
                     <button 
                       onClick={handleReset}
-                      style={{ background: 'none', border: 'none', color: 'var(--color-danger)', cursor: 'pointer', fontSize: '12px' }}
+                      style={{ background: 'none', border: 'none', color: 'var(--color-danger)', cursor: 'pointer', fontSize: '12.5px', fontWeight: '700', outline: 'none' }}
                     >
                       {t('removeBtn')}
                     </button>
                   </div>
 
-                  {/* OCR Preview Box with strict word-wrap fixes */}
+                  {/* OCR Preview Container */}
                   <div style={{ 
                     flex: 1, 
-                    background: '#ffffff', 
-                    color: '#1e293b', 
-                    borderRadius: '8px', 
+                    background: '#0d111a', 
+                    color: '#e2e8f0', 
+                    borderRadius: '12px', 
                     padding: '24px', 
-                    fontSize: '12px', 
-                    lineHeight: '1.6', 
+                    fontSize: '12.5px', 
+                    lineHeight: '1.7', 
                     overflowY: 'auto',
-                    boxShadow: 'inset 0 0 10px rgba(0,0,0,0.1)',
-                    width: '100%',
+                    border: '1px solid var(--color-border)',
                     boxSizing: 'border-box'
                   }}>
-                    <h3 style={{ textAlign: 'center', fontWeight: 'bold', margin: '0 0 16px 0', fontSize: '14px', textTransform: 'uppercase', color: 'var(--color-accent-navy)' }}>
+                    <h3 style={{ textAlign: 'center', fontWeight: '800', margin: '0 0 16px 0', fontSize: '13px', textTransform: 'uppercase', color: 'var(--color-accent-gold)', letterSpacing: '1px' }}>
                       {t('previewTitle')}
                     </h3>
                     <p style={{ 
                       whiteSpace: 'pre-wrap', 
-                      fontFamily: 'monospace', 
+                      fontFamily: 'Consolas, Courier, monospace', 
                       fontSize: '11px', 
-                      background: '#f8fafc', 
-                      padding: '12px', 
-                      borderRadius: '6px', 
-                      border: '1px solid #e2e8f0',
+                      background: 'rgba(0,0,0,0.3)', 
+                      padding: '16px', 
+                      borderRadius: '8px', 
+                      border: '1px solid rgba(255, 255, 255, 0.04)',
                       wordBreak: 'break-all',
                       overflowWrap: 'break-word',
-                      margin: 0
+                      margin: 0,
+                      color: '#a7f3d0'
                     }}>
                       {rawText || "Reading document bytes..."}
                     </p>
@@ -687,30 +700,43 @@ export default function App() {
               )}
             </section>
 
-            {/* Right Pane: Analysis Workspace Panel */}
-            <section className="glass-card" style={{ flex: 1.2, padding: '24px', display: 'flex', flexDirection: 'column', height: 'calc(100vh - 160px)', overflow: 'hidden' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                <h2 style={{ margin: 0, fontSize: '15px', fontWeight: 'bold' }}>
+            {/* Right Pane: Workspace */}
+            <section className="glass-card" style={{ flex: 1.25, padding: '28px', display: 'flex', flexDirection: 'column', height: 'calc(100vh - 168px)', overflow: 'hidden' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                <h2 style={{ margin: 0, fontSize: '15px', fontWeight: '800', letterSpacing: '0.5px', color: 'var(--color-text-primary)' }}>
                   {t('workspaceTitle')}
                 </h2>
                 
-                {/* Audio Synthesis Mock Buttons */}
+                {/* Visualizer wave TTS button */}
                 {fileUploaded && activeTab !== 'chat' && (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    
+                    {/* Bouncing Audio Wave Bars */}
+                    {isPlayingVoice && (
+                      <div style={{ display: 'flex', alignItems: 'flex-end', gap: '3px', height: '16px' }}>
+                        <div className="audio-wave-bar" />
+                        <div className="audio-wave-bar" />
+                        <div className="audio-wave-bar" />
+                        <div className="audio-wave-bar" />
+                      </div>
+                    )}
+
                     <button 
                       onClick={handleVoiceToggle}
                       style={{
-                        background: isPlayingVoice ? 'var(--color-accent-gold)' : 'rgba(255, 255, 255, 0.05)',
-                        color: isPlayingVoice ? '#0f172a' : '#ffffff',
-                        border: '1px solid var(--color-border)',
-                        borderRadius: '20px',
-                        padding: '4px 12px',
+                        background: isPlayingVoice ? 'rgba(251, 191, 36, 0.15)' : 'rgba(255, 255, 255, 0.04)',
+                        color: isPlayingVoice ? 'var(--color-accent-gold)' : '#ffffff',
+                        border: isPlayingVoice ? '1px solid rgba(251, 191, 36, 0.3)' : '1px solid var(--color-border)',
+                        borderRadius: '24px',
+                        padding: '6px 16px',
                         fontSize: '11px',
                         cursor: 'pointer',
                         fontWeight: 'bold',
-                        display: 'flex',
+                        display: 'inline-flex',
                         alignItems: 'center',
-                        gap: '4px'
+                        gap: '6px',
+                        outline: 'none',
+                        transition: 'all 0.2s'
                       }}
                     >
                       <span>{isPlayingVoice ? '⏸️' : '🔊'}</span>
@@ -729,17 +755,17 @@ export default function App() {
                   alignItems: 'center', 
                   color: 'var(--color-text-secondary)'
                 }}>
-                  <span style={{ fontSize: '48px', marginBottom: '16px' }}>⚖️</span>
-                  <p>Upload a notice document on the left to start analysis.</p>
+                  <span style={{ fontSize: '56px', marginBottom: '20px' }}>⚖️</span>
+                  <p style={{ fontWeight: '500' }}>Upload a notice document on the left to start analysis.</p>
                 </div>
               ) : (
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-                  {/* Tab Navigation header */}
+                  {/* Tab menu */}
                   <div style={{ 
                     display: 'flex', 
                     borderBottom: '1px solid var(--color-border)',
-                    marginBottom: '16px',
-                    gap: '4px'
+                    marginBottom: '20px',
+                    gap: '6px'
                   }}>
                     {['summary', 'laws', 'checklist', 'chat'].map((tab) => (
                       <button 
@@ -748,13 +774,15 @@ export default function App() {
                         style={{
                           background: 'none',
                           border: 'none',
-                          borderBottom: activeTab === tab ? '2px solid var(--color-accent-indigo)' : 'none',
+                          borderBottom: activeTab === tab ? '2.5px solid var(--color-accent-indigo)' : 'none',
                           color: activeTab === tab ? 'var(--color-text-primary)' : 'var(--color-text-secondary)',
-                          padding: '8px 14px',
+                          padding: '10px 16px',
                           cursor: 'pointer',
-                          fontSize: '13px',
-                          fontWeight: '600',
-                          textTransform: 'capitalize'
+                          fontSize: '13.5px',
+                          fontWeight: '700',
+                          textTransform: 'capitalize',
+                          outline: 'none',
+                          transition: 'all 0.2s'
                         }}
                       >
                         {tab === 'chat' ? (language === 'english' ? '💬 Nyaya Chat' : '💬 న్యాయ చాట్') : (language === 'english' ? tab : t(tab + 'Title') || tab)}
@@ -762,51 +790,53 @@ export default function App() {
                     ))}
                   </div>
 
-                  {/* Tab Content Display */}
-                  <div style={{ flex: 1, overflowY: 'auto', paddingRight: '4px', display: 'flex', flexDirection: 'column' }}>
+                  {/* Render tabs content */}
+                  <div style={{ flex: 1, overflowY: 'auto', paddingRight: '6px', display: 'flex', flexDirection: 'column' }}>
                     
-                    {/* A. Summary Tab */}
+                    {/* Summary Tab */}
                     {activeTab === 'summary' && displayAnalysis && (
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                         {analysis?.extracted_dates.some(d => d.urgency === 'High') && (
                           <div style={{ 
                             padding: '16px', 
-                            background: 'rgba(239, 68, 68, 0.1)', 
+                            background: 'rgba(248, 113, 113, 0.08)', 
                             borderLeft: '4px solid var(--color-danger)',
-                            borderRadius: '4px'
+                            borderRadius: '8px',
+                            border: '1px solid rgba(248, 113, 113, 0.15)',
+                            borderLeftWidth: '4px'
                           }}>
-                            <h4 style={{ margin: '0 0 4px 0', fontSize: '13px', color: 'var(--color-danger)', fontWeight: 'bold' }}>
+                            <h4 style={{ margin: '0 0 6px 0', fontSize: '13px', color: 'var(--color-danger)', fontWeight: 'bold' }}>
                               ⚠️ {language === 'english' ? 'Urgent Warning' : 'అత్యవసర హెచ్చరిక'}
                             </h4>
-                            <p style={{ margin: 0, fontSize: '12px' }}>
+                            <p style={{ margin: 0, fontSize: '12px', lineHeight: '1.6', color: '#fca5a5' }}>
                               {t('warningText')}
                             </p>
                           </div>
                         )}
 
-                        <div>
-                          <h3 style={{ margin: '0 0 8px 0', fontSize: '14px', fontWeight: 'bold' }}>
+                        <div className="glass-card" style={{ padding: '24px', background: 'rgba(255,255,255,0.01)' }}>
+                          <h3 style={{ margin: '0 0 12px 0', fontSize: '14px', fontWeight: '800', color: 'var(--color-accent-indigo)', letterSpacing: '0.5px' }}>
                             {t('plainExTitle')}
                           </h3>
-                          <p style={{ margin: 0, fontSize: '13px', color: 'var(--color-text-secondary)', lineHeight: '1.6' }}>
+                          <p style={{ margin: 0, fontSize: '13px', color: 'var(--color-text-secondary)', lineHeight: '1.7' }}>
                             {displayAnalysis.summary}
                           </p>
                         </div>
                       </div>
                     )}
 
-                    {/* B. Laws Tab */}
+                    {/* Laws Tab */}
                     {activeTab === 'laws' && displayAnalysis && (
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                        <h3 style={{ margin: 0, fontSize: '14px', fontWeight: 'bold' }}>
+                        <h3 style={{ margin: 0, fontSize: '14px', fontWeight: '800', color: '#ffffff', letterSpacing: '0.5px' }}>
                           {t('legalCitations')}
                         </h3>
                         {displayAnalysis.legal_references.map((l, idx) => (
-                          <div className="glass-card" style={{ padding: '16px', borderLeft: '4px solid var(--color-accent-indigo)' }} key={idx}>
-                            <h4 style={{ margin: '0 0 8px 0', fontSize: '13px', fontWeight: 'bold', color: 'var(--color-accent-indigo)' }}>
+                          <div className="glass-card" style={{ padding: '20px', borderLeft: '4px solid var(--color-accent-indigo)', background: 'rgba(99, 102, 241, 0.02)' }} key={idx}>
+                            <h4 style={{ margin: '0 0 8px 0', fontSize: '13.5px', fontWeight: '700', color: 'var(--color-accent-gold)' }}>
                               {l.section}
                             </h4>
-                            <p style={{ margin: 0, fontSize: '12px', color: 'var(--color-text-secondary)', lineHeight: '1.5' }}>
+                            <p style={{ margin: 0, fontSize: '12.5px', color: 'var(--color-text-secondary)', lineHeight: '1.6' }}>
                               {l.description}
                             </p>
                           </div>
@@ -814,57 +844,71 @@ export default function App() {
                       </div>
                     )}
 
-                    {/* C. Checklist Tab */}
+                    {/* Checklist Tab */}
                     {activeTab === 'checklist' && displayAnalysis && (
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                        <h3 style={{ margin: 0, fontSize: '14px', fontWeight: 'bold' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                        <h3 style={{ margin: 0, fontSize: '14px', fontWeight: '800', color: '#ffffff' }}>
                           {t('checklistTitle')}
                         </h3>
-                        <ul style={{ paddingLeft: '20px', margin: 0, display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '13px' }}>
-                          {displayAnalysis.checklist.map((step, idx) => (
-                            <li key={idx}>
-                              <input type="checkbox" style={{ marginRight: '8px' }} />
-                              {step}
-                            </li>
-                          ))}
-                        </ul>
+                        
+                        <div className="glass-card" style={{ padding: '24px', background: 'rgba(255,255,255,0.01)' }}>
+                          <ul style={{ paddingLeft: '0', listStyle: 'none', margin: 0, display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                            {displayAnalysis.checklist.map((step, idx) => (
+                              <li key={idx} style={{ display: 'flex', alignItems: 'flex-start', fontSize: '13px', color: 'var(--color-text-secondary)' }}>
+                                <input type="checkbox" />
+                                <span style={{ marginTop: '2px', lineHeight: '1.5' }}>{step}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
 
-                        {/* Autogenerated Response Draft */}
-                        <div style={{ marginTop: '16px' }}>
-                          <h4 style={{ margin: '0 0 8px 0', fontSize: '13px', fontWeight: 'bold' }}>
-                            {t('responseDraftTitle')}
-                          </h4>
+                        {/* Autogenerated Response Draft with copy option */}
+                        <div style={{ marginTop: '8px' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                            <h4 style={{ margin: 0, fontSize: '13px', fontWeight: '800', color: '#ffffff' }}>
+                              {t('responseDraftTitle')}
+                            </h4>
+                            <button 
+                              onClick={() => handleCopyToClipboard(displayAnalysis.response_template)}
+                              className="glow-btn"
+                              style={{ fontSize: '11px', padding: '6px 14px', borderRadius: '14px' }}
+                            >
+                              📋 {t('copyBtn')}
+                            </button>
+                          </div>
                           <textarea 
                             readOnly 
                             value={displayAnalysis.response_template}
                             style={{
-                              width: '95%',
+                              width: '100%',
                               height: '110px',
-                              background: 'rgba(255,255,255,0.03)',
+                              background: '#0d111a',
                               border: '1px solid var(--color-border)',
-                              borderRadius: '8px',
-                              padding: '12px',
-                              color: 'var(--color-text-primary)',
-                              fontFamily: 'monospace',
+                              borderRadius: '12px',
+                              padding: '16px',
+                              color: '#a7f3d0',
+                              fontFamily: 'Consolas, monospace',
                               fontSize: '11px',
-                              resize: 'none'
+                              resize: 'none',
+                              outline: 'none',
+                              boxSizing: 'border-box'
                             }}
                           />
                         </div>
                       </div>
                     )}
 
-                    {/* D. Fully Functional Chat Assistant Panel (Tab D) */}
+                    {/* Chat Tab */}
                     {activeTab === 'chat' && (
                       <div style={{ display: 'flex', flexDirection: 'column', flex: 1, height: '100%', overflow: 'hidden' }}>
-                        {/* Chat Bubble List */}
+                        {/* Chat history list */}
                         <div style={{ 
                           flex: 1, 
                           overflowY: 'auto', 
                           display: 'flex', 
                           flexDirection: 'column', 
-                          gap: '12px', 
-                          paddingBottom: '16px',
+                          gap: '16px', 
+                          paddingBottom: '20px',
                           maxHeight: 'calc(100vh - 340px)'
                         }}>
                           {chatMessages.map((msg, idx) => {
@@ -875,34 +919,49 @@ export default function App() {
                                 style={{ 
                                   display: 'flex', 
                                   justifyContent: isUser ? 'flex-end' : 'flex-start',
-                                  width: '100%' 
+                                  width: '100%',
+                                  gap: '10px'
                                 }}
                               >
+                                {!isUser && (
+                                  <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'var(--color-accent-gold)', display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: '16px' }}>
+                                    🤖
+                                  </div>
+                                )}
                                 <div style={{ 
-                                  maxWidth: '80%', 
-                                  background: isUser ? 'var(--color-accent-indigo)' : 'rgba(255, 255, 255, 0.05)',
+                                  maxWidth: '75%', 
+                                  background: isUser ? 'linear-gradient(135deg, var(--color-accent-indigo) 0%, #4f46e5 100%)' : 'rgba(255, 255, 255, 0.04)',
                                   color: '#ffffff',
-                                  padding: '10px 14px',
-                                  borderRadius: isUser ? '12px 12px 0 12px' : '12px 12px 12px 0',
+                                  padding: '12px 16px',
+                                  borderRadius: isUser ? '16px 16px 0 16px' : '16px 16px 16px 0',
                                   border: isUser ? 'none' : '1px solid var(--color-border)',
                                   fontSize: '12.5px',
-                                  lineHeight: '1.5',
-                                  whiteSpace: 'pre-wrap'
+                                  lineHeight: '1.6',
+                                  whiteSpace: 'pre-wrap',
+                                  boxShadow: isUser ? '0 4px 15px rgba(99, 102, 241, 0.2)' : 'none'
                                 }}>
                                   {msg.content}
                                 </div>
+                                {isUser && (
+                                  <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'var(--color-accent-indigo)', display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: '11px', fontWeight: 'bold', color: '#ffffff' }}>
+                                    HM
+                                  </div>
+                                )}
                               </div>
                             );
                           })}
                           {isSendingChat && (
-                            <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+                            <div style={{ display: 'flex', justifyContent: 'flex-start', gap: '10px' }}>
+                              <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'var(--color-accent-gold)', display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: '16px' }}>
+                                🤖
+                              </div>
                               <div style={{ 
                                 background: 'rgba(255, 255, 255, 0.02)',
                                 color: 'var(--color-text-secondary)',
-                                padding: '10px 14px',
-                                borderRadius: '12px 12px 12px 0',
+                                padding: '12px 16px',
+                                borderRadius: '16px 16px 16px 0',
                                 border: '1px solid var(--color-border)',
-                                fontSize: '12px'
+                                fontSize: '12.5px'
                               }}>
                                 {t('thinkingText')}
                               </div>
@@ -911,13 +970,13 @@ export default function App() {
                           <div ref={chatEndRef} />
                         </div>
 
-                        {/* Chat Input form */}
+                        {/* Chat input box */}
                         <form 
                           onSubmit={handleSendChat}
                           style={{ 
                             display: 'flex', 
-                            gap: '8px', 
-                            padding: '8px 0', 
+                            gap: '10px', 
+                            padding: '12px 0 0 0', 
                             borderTop: '1px solid var(--color-border)',
                             marginTop: 'auto'
                           }}
@@ -932,27 +991,19 @@ export default function App() {
                               flex: 1,
                               background: 'rgba(255,255,255,0.03)',
                               border: '1px solid var(--color-border)',
-                              borderRadius: '20px',
-                              padding: '10px 18px',
+                              borderRadius: '24px',
+                              padding: '12px 20px',
                               color: '#ffffff',
                               fontSize: '13px',
-                              outline: 'none'
+                              outline: 'none',
+                              transition: 'border-color 0.2s'
                             }}
                           />
                           <button 
                             type="submit" 
                             disabled={isSendingChat || !chatInput.trim()}
-                            style={{
-                              background: 'var(--color-accent-indigo)',
-                              color: '#ffffff',
-                              border: 'none',
-                              borderRadius: '20px',
-                              padding: '8px 20px',
-                              fontSize: '12.5px',
-                              fontWeight: '600',
-                              cursor: 'pointer',
-                              opacity: (isSendingChat || !chatInput.trim()) ? 0.5 : 1
-                            }}
+                            className="glow-btn"
+                            style={{ padding: '8px 24px', opacity: (isSendingChat || !chatInput.trim()) ? 0.5 : 1 }}
                           >
                             {t('sendBtn')}
                           </button>
@@ -966,14 +1017,14 @@ export default function App() {
             </section>
           </main>
         ) : activeNav === 'library' ? (
-          /* Laws Library Sub-portal View */
-          <main style={{ flex: 1, padding: '32px 40px', overflowY: 'auto' }}>
+          /* Laws Library portal */
+          <main style={{ flex: 1, padding: '32px 48px', overflowY: 'auto' }}>
             <div style={{ maxWidth: '800px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-              <div style={{ marginBottom: '12px' }}>
-                <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 'bold' }}>
+              <div style={{ marginBottom: '16px' }}>
+                <h3 style={{ margin: 0, fontSize: '20px', fontWeight: '800', color: '#ffffff' }}>
                   {language === 'english' ? 'Indian Legal Statute Database' : 'భారతీయ చట్టపరమైన నిబంధనల డేటాబేస్'}
                 </h3>
-                <p style={{ margin: '4px 0 0 0', fontSize: '12px', color: 'var(--color-text-secondary)' }}>
+                <p style={{ margin: '6px 0 0 0', fontSize: '12.5px', color: 'var(--color-text-secondary)' }}>
                   {language === 'english' 
                     ? "Browse default statutory rules governing eviction notices, bank cheque defaults, utility codes and defamation claims."
                     : "తొలగింపు నోటీసులు, బ్యాంకు చెక్కు బౌన్స్, విద్యుత్ కట్ మరియు మాననష్టం క్లెయిమ్‌లను నియంత్రించే చట్టాలను బ్రౌజ్ చేయండి."
@@ -982,23 +1033,24 @@ export default function App() {
               </div>
 
               {LAWS_LIBRARY_DATA.map((law, idx) => (
-                <div key={idx} className="glass-card" style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <div key={idx} className="glass-card" style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
-                    <h4 style={{ margin: 0, fontSize: '14px', fontWeight: 'bold', color: 'var(--color-accent-gold)' }}>
+                    <h4 style={{ margin: 0, fontSize: '14.5px', fontWeight: '800', color: 'var(--color-accent-gold)' }}>
                       {law.act}
                     </h4>
                     <span style={{ 
                       fontSize: '11px', 
                       background: 'rgba(99, 102, 241, 0.1)', 
-                      color: 'var(--color-accent-indigo)', 
-                      padding: '2px 8px', 
-                      borderRadius: '12px', 
-                      fontWeight: 'bold' 
+                      color: '#a5b4fc', 
+                      padding: '4px 12px', 
+                      borderRadius: '16px', 
+                      fontWeight: 'bold',
+                      border: '1px solid rgba(99, 102, 241, 0.2)'
                     }}>
                       {law.scope}
                     </span>
                   </div>
-                  <p style={{ margin: '8px 0 0 0', fontSize: '12.5px', color: 'var(--color-text-secondary)', lineHeight: '1.6' }}>
+                  <p style={{ margin: '8px 0 0 0', fontSize: '13px', color: 'var(--color-text-secondary)', lineHeight: '1.7' }}>
                     {law.details}
                   </p>
                 </div>
@@ -1006,14 +1058,14 @@ export default function App() {
             </div>
           </main>
         ) : (
-          /* Milestones Timeline Calendar View */
-          <main style={{ flex: 1, padding: '32px 40px', overflowY: 'auto' }}>
+          /* Milestones calendar view */
+          <main style={{ flex: 1, padding: '32px 48px', overflowY: 'auto' }}>
             <div style={{ maxWidth: '800px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-              <div style={{ marginBottom: '12px' }}>
-                <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 'bold' }}>
+              <div style={{ marginBottom: '16px' }}>
+                <h3 style={{ margin: 0, fontSize: '20px', fontWeight: '800', color: '#ffffff' }}>
                   {language === 'english' ? 'Notice Critical Deadlines & Milestone Schedules' : 'నోటీసు గడువు తేదీలు & షెడ్యూల్ పట్టిక'}
                 </h3>
-                <p style={{ margin: '4px 0 0 0', fontSize: '12px', color: 'var(--color-text-secondary)' }}>
+                <p style={{ margin: '6px 0 0 0', fontSize: '12.5px', color: 'var(--color-text-secondary)' }}>
                   {language === 'english' 
                     ? "Generate downloadable calendar invites (.ics) to synchronize with Google Calendar or MS Outlook."
                     : "గడువులను గూగుల్ క్యాలెండర్ లేదా ఔట్‌లుక్‌తో సమకాలీకరించడానికి క్యాలెండర్ ఫైల్‌లను (.ics) డౌన్‌లోడ్ చేసుకోండి."
@@ -1028,41 +1080,42 @@ export default function App() {
                     const isHigh = m.urgency === 'High';
                     
                     return (
-                      <div key={idx} className="glass-card" style={{ padding: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <div key={idx} className="glass-card" style={{ padding: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <div>
                           <span style={{ 
                             fontSize: '10px', 
-                            background: isHigh ? 'rgba(239, 68, 68, 0.1)' : 'rgba(251, 191, 36, 0.1)', 
+                            background: isHigh ? 'rgba(248, 113, 113, 0.15)' : 'rgba(251, 191, 36, 0.15)', 
                             color: isHigh ? 'var(--color-danger)' : 'var(--color-accent-gold)', 
-                            padding: '2px 8px', 
-                            borderRadius: '12px', 
+                            padding: '4px 12px', 
+                            borderRadius: '16px', 
                             fontWeight: 'bold',
                             display: 'inline-block',
-                            marginBottom: '8px'
+                            marginBottom: '10px',
+                            border: isHigh ? '1px solid rgba(248, 113, 113, 0.3)' : '1px solid rgba(251, 191, 36, 0.3)'
                           }}>
                             {m.urgency} Urgency
                           </span>
-                          <h4 style={{ margin: '0 0 4px 0', fontSize: '14px', fontWeight: 'bold' }}>
+                          <h4 style={{ margin: '0 0 6px 0', fontSize: '15px', fontWeight: '800', color: '#ffffff' }}>
                             {m.title}
                           </h4>
-                          <p style={{ margin: 0, fontSize: '12px', color: 'var(--color-text-secondary)' }}>
+                          <p style={{ margin: 0, fontSize: '12.5px', color: 'var(--color-text-secondary)' }}>
                             Scheduled Date: <strong>{m.date}</strong> ({daysLeft > 0 ? `${daysLeft} ${t('daysRemaining')}` : daysLeft === 0 ? t('todayText') : t('passedText')})
                           </p>
                         </div>
                         <button 
                           onClick={() => handleCalendarDownload(m.date, m.title)}
                           className="glow-btn"
-                          style={{ fontSize: '12px', padding: '8px 16px' }}
+                          style={{ fontSize: '12px', padding: '10px 20px' }}
                         >
-                          {t('downloadCal')}
+                          📅 {t('downloadCal')}
                         </button>
                       </div>
                     );
                   })}
                 </div>
               ) : (
-                <div className="glass-card" style={{ padding: '40px', textAlign: 'center', color: 'var(--color-text-secondary)' }}>
-                  <span style={{ fontSize: '48px', display: 'block', marginBottom: '16px' }}>📅</span>
+                <div className="glass-card" style={{ padding: '48px', textAlign: 'center', color: 'var(--color-text-secondary)' }}>
+                  <span style={{ fontSize: '56px', display: 'block', marginBottom: '20px' }}>📅</span>
                   <p>No active notice uploaded. Upload a document in the Dashboard to view deadlines schedule.</p>
                 </div>
               )}
