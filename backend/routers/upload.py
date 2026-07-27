@@ -8,7 +8,7 @@ from database import get_db
 import models
 from services.gemini_client import analyze_notice_document
 from services.rag_retriever import retrieve_matching_laws
-from config import GEMINI_API_KEY
+from config import GEMINI_API_KEY, OPENROUTER_API_KEY
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -77,9 +77,9 @@ async def upload_and_analyze_document(
         matched_laws = retrieve_matching_laws(file.filename + " " + raw_text_preview)
         matched_laws_json = json.dumps(matched_laws, indent=2)
 
-        # 3. Call Gemini Multimodal API or load mock fallback if key is missing
-        if not GEMINI_API_KEY:
-            logger.warning("GEMINI_API_KEY not set. Loading dynamic mock analysis data based on filename.")
+        # 3. Call LLM API (OpenRouter or direct Gemini) or load mock fallback if keys are missing
+        if not GEMINI_API_KEY and not OPENROUTER_API_KEY:
+            logger.warning("No API keys set. Loading dynamic mock analysis data based on filename.")
             
             fn_lower = file.filename.lower()
             
@@ -232,12 +232,12 @@ The following laws are matched from our database as highly relevant to this docu
 You MUST ground your legal references, plain description, and recommended checklist steps in these exact acts where applicable.
 {matched_laws_json}
 """
-            # Execute actual Gemini multimodal OCR & analysis call
-            logger.info(f"Sending file {file.filename} ({mime_type}) to Gemini API with RAG context...")
+            # Execute actual Gemini multimodal OCR & analysis call (which routes to OpenRouter or Gemini!)
+            logger.info("Sending file to LLM analyze_notice_document service...")
             gemini_response = analyze_notice_document(content, mime_type, rag_prompt)
-            logger.info("Successfully received response from Gemini API.")
+            logger.info("Successfully received response from LLM service.")
             
-            # Parse the JSON output returned from Gemini
+            # Parse the JSON output returned
             analysis_data = json.loads(gemini_response)
 
         # 4. Save analysis results to the SQLite Database
@@ -273,7 +273,7 @@ You MUST ground your legal references, plain description, and recommended checkl
         }
 
     except json.JSONDecodeError as je:
-        logger.error(f"Failed to parse Gemini JSON output: {str(je)}")
+        logger.error(f"Failed to parse LLM JSON output: {str(je)}")
         raise HTTPException(status_code=502, detail="AI engine did not return valid JSON. Please try again.")
     except Exception as e:
         db.rollback()

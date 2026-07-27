@@ -131,6 +131,7 @@ export default function App() {
   const [isPlayingVoice, setIsPlayingVoice] = useState(false);
   const [activeNav, setActiveNav] = useState('dashboard'); 
   const [sidebarOpen, setSidebarOpen] = useState(true); // Default open for premium look
+  const [isDarkMode, setIsDarkMode] = useState(true);
 
   // Full-stack states
   const [file, setFile] = useState<File | null>(null);
@@ -404,7 +405,7 @@ export default function App() {
   const displayAnalysis = language === 'telugu' && translatedAnalysis ? translatedAnalysis : analysis;
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', background: 'var(--color-bg)' }}>
+    <div className={isDarkMode ? "" : "light-theme"} style={{ minHeight: '100vh', display: 'flex', background: 'var(--color-bg)', transition: 'background-color 0.3s ease, color 0.3s ease' }}>
       
       {/* Toast Alert Notification */}
       {showCopyToast && (
@@ -582,6 +583,30 @@ export default function App() {
                 తెలుగు
               </button>
             </div>
+
+            {/* Dark/Light Theme Switch Button */}
+            <button 
+              onClick={() => setIsDarkMode(!isDarkMode)}
+              style={{
+                background: 'rgba(255, 255, 255, 0.02)',
+                border: '1px solid var(--color-border)',
+                borderRadius: '30px',
+                padding: '8px 18px',
+                color: 'var(--color-text-primary)',
+                fontSize: '11px',
+                fontWeight: '800',
+                fontFamily: 'var(--font-header)',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                outline: 'none',
+                transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
+              }}
+            >
+              <span>{isDarkMode ? '☀️' : '🌙'}</span>
+              <span>{isDarkMode ? (language === 'english' ? 'LIGHT' : 'లైట్') : (language === 'english' ? 'DARK' : 'డార్క్')}</span>
+            </button>
 
             <a href="https://github.com/hanshikavelaga/Nyaya_mitra" target="_blank" rel="noreferrer" style={{ color: 'var(--color-text-secondary)', textDecoration: 'none', fontSize: '13px', fontWeight: '600', fontFamily: 'var(--font-header)', letterSpacing: '0.5px' }}>
               GITHUB CODEBASE
