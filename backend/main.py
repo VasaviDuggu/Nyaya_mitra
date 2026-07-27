@@ -14,13 +14,14 @@ import models
 # Import API Routers
 from routers.upload import router as upload_router
 from services.rag_retriever import retrieve_matching_laws
-from config import GEMINI_API_KEY
+from services.gemini_client import generate_text_completion
+from config import GEMINI_API_KEY, OPENROUTER_API_KEY
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Configure Gemini
+# Configure standard Gemini if key is present
 if GEMINI_API_KEY:
     genai.configure(api_key=GEMINI_API_KEY)
 
@@ -32,7 +33,7 @@ app = FastAPI(title="NyayaMitra AI API", version="1.0.0")
 # Enable CORS for frontend cross-origin requests
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # In production, specify frontend domain
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -73,17 +74,16 @@ async def chat_interaction(request: ChatRequest, db: Session = Depends(get_db)):
         user_log = models.ChatLog(document_id=doc_id, role="user", content=user_query)
         db.add(user_log)
 
-        # 3. Retrieve matched laws dynamically based on active question + document context (RAG)
+        # 3. Retrieve matched laws dynamically (RAG)
         search_query = f"{doc.filename} {doc.raw_text} {user_query}"
         matched_laws = retrieve_matching_laws(search_query)
         laws_context_str = json.dumps(matched_laws, indent=2)
 
-        # 4. Generate grounded reply (Gemini or Mock Fallback)
+        # 4. Generate grounded reply (OpenRouter, Gemini, or Mock Fallback)
         disclaimer = "\n\n---\n*Disclaimer: NyayaMitra provides simplified legal translations based on matched public statutes. This is not formal legal advice. Please consult an advocate before filing appeals.*"
         
-        if not GEMINI_API_KEY:
-            logger.warning("GEMINI_API_KEY not set. Loading matched mock RAG response.")
-            # Local smart fallback using matched RAG laws
+        if not GEMINI_API_KEY and not OPENROUTER_API_KEY:
+            logger.warning("No API keys configured. Loading matched mock RAG response.")
             matched_law_name = matched_laws[0].get("act") if matched_laws else "General Civil Code"
             matched_law_summary = matched_laws[0].get("summary") if matched_laws else "Verify notices in writing."
             
@@ -96,14 +96,8 @@ async def chat_interaction(request: ChatRequest, db: Session = Depends(get_db)):
                 f"{disclaimer}"
             )
         else:
-            # Build history string
-            history_lines = []
-            for msg in request.history:
-                history_lines.append(f"{msg.role.upper()}: {msg.content}")
-            history_str = "\n".join(history_lines)
-
-            # RAG prompt structure
-            chat_prompt = f"""
+            # Build grounded RAG chat prompt
+            system_prompt = f"""
 You are NyayaMitra AI, a citizen-friendly legal translation assistant.
 You are helping a citizen understand a legal notice they uploaded.
 Provide a simple, clear, and reassuring reply to their question.
@@ -116,20 +110,29 @@ Raw text: {doc.raw_text}
 GROUNDING LAWS CONTEXT (RAG):
 {laws_context_str}
 
-CONVERSATION HISTORY:
-{history_str}
-
-USER QUERY:
-"{user_query}"
-
 Instructions:
 1. Settle their queries clearly, avoiding complex legalese.
 2. Ground your facts solely in the provided document context and matched laws. Do not make up external legal proceedings.
 3. Keep it brief (under 150 words).
 """
-            model = genai.GenerativeModel("gemini-1.5-flash")
-            response = model.generate_content(chat_prompt)
-            assistant_reply = response.text + disclaimer
+            # Format history for prompt wrapper
+            history_list = []
+            for msg in request.history:
+                history_list.append({
+                    "role": "user" if msg.role == "user" else "assistant",
+                    "content": msg.content
+                })
+
+            try:
+                reply = generate_text_completion(
+                    system_prompt=system_prompt,
+                    user_prompt=user_query,
+                    history_messages=history_list
+                )
+                assistant_reply = reply + disclaimer
+            except Exception as e:
+                logger.error(f"Chat completion call failed: {str(e)}")
+                assistant_reply = f"I apologize, I encountered a communication error with our AI engine. Fallback Act match: {matched_laws[0].get('act') if matched_laws else 'General Civil Code'}" + disclaimer
         
         # 5. Write Assistant Message to Database logs
         assistant_log = models.ChatLog(document_id=doc_id, role="assistant", content=assistant_reply)
@@ -152,7 +155,7 @@ async def translate_text(request: TranslateRequest):
     text_to_translate = request.text
     lang = request.target_language.lower()
     
-    if not GEMINI_API_KEY:
+    if not GEMINI_API_KEY and not OPENROUTER_API_KEY:
         # Static English-to-Telugu translation dictionary for demo fallback
         telugu_dictionary = {
             "1. Document Ingestion": "1. పత్రం అప్‌లోడ్",
@@ -171,20 +174,18 @@ async def translate_text(request: TranslateRequest):
             "Relevant Legal Citations": "సంబంధిత చట్టపరమైన ఆధారాలు",
             "Recommended Next Steps": "సిఫార్సు చేయబడిన తదుపరి చర్యలు",
             "Autogenerated Response Template": "స్వయంచాలక ప్రత్యుత్తర నమూనా",
-            "Your landlord, Greenwood Management, claims you default on July rent of INR 25,000.": "మీ యజమాని గ్రీన్‌వుడ్ మేనేజ్‌మెంట్ మీరు రూ. 25,000 అద్దె చెల్లించలేదని నోటీసు పంపారు.",
+            "Your landlord, Greenwood Management, claims you defaulted on July rent of INR 25,000.": "మీ యజమాని గ్రీన్‌వుడ్ మేనేజ్‌మెంట్ మీరు రూ. 25,000 అద్దె చెల్లించలేదని నోటీసు పంపారు.",
             "Verify receipts.": "రశీదులను సరిచూసుకోండి.",
             "Draft legal dispute reply.": "ప్రత్యుత్తర లేఖను సిద్ధం చేయండి."
         }
-        
-        # Search dictionary or append translation tag
         translated = telugu_dictionary.get(text_to_translate, f"[తెలుగు అనువాదం] {text_to_translate}")
     else:
         try:
-            # Call Gemini to translate cleanly
-            model = genai.GenerativeModel("gemini-1.5-flash")
             translation_prompt = f"Translate the following legal notice text into clear, citizen-friendly Telugu. Preserve spacing, punctuation, names, and key numbers. Only output the translated text:\n\n{text_to_translate}"
-            response = model.generate_content(translation_prompt)
-            translated = response.text
+            translated = generate_text_completion(
+                system_prompt="You are a legal translator translating technical English notices to clear, citizen-friendly Telugu.",
+                user_prompt=translation_prompt
+            )
         except Exception:
             translated = f"[తెలుగు అనువాదం] {text_to_translate}"
             
@@ -196,7 +197,6 @@ async def translate_text(request: TranslateRequest):
 
 @app.get("/api/calendar")
 async def generate_calendar_event(date: str, title: str):
-    # Generates a basic ICS calendar string
     ics_content = (
         "BEGIN:VCALENDAR\n"
         "VERSION:2.0\n"
