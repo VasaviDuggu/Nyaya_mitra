@@ -120,6 +120,13 @@ const UserIcon = ({ size = 16, color = 'currentColor' }) => (
   </svg>
 );
 
+const SettingsIcon = ({ size = 20, color = 'currentColor' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="3" />
+    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+  </svg>
+);
+
 const TrashIcon = ({ size = 14, color = 'currentColor' }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <polyline points="3 6 5 6 21 6" />
@@ -338,6 +345,11 @@ export default function App() {
   const [lawsList, setLawsList] = useState<any[]>([]);
   const [expandedLawId, setExpandedLawId] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
+
+  // Settings profile states (persisted locally to prevent database conflicts)
+  const [userName, setUserName] = useState<string>(() => localStorage.getItem('nyayamitra_user_name') || 'Hanshika Velaga');
+  const [userEmail, setUserEmail] = useState<string>(() => localStorage.getItem('nyayamitra_user_email') || 'hansh@nyayamitra.ai');
+  const [userPhone, setUserPhone] = useState<string>(() => localStorage.getItem('nyayamitra_user_phone') || '+91 98765 43210');
 
   // Fetch unique categories on load
   useEffect(() => {
@@ -740,7 +752,8 @@ export default function App() {
           {[
             { id: 'dashboard', label: language === 'english' ? 'Dashboard Portal' : 'డాష్‌బోర్డ్ పోర్టల్', icon: <DashboardIcon color={activeNav === 'dashboard' ? '#ffffff' : 'var(--color-text-secondary)'} /> },
             { id: 'library', label: language === 'english' ? 'Laws Database' : 'చట్టాల గ్రంథాలయం', icon: <LibraryIcon color={activeNav === 'library' ? '#ffffff' : 'var(--color-text-secondary)'} /> },
-            { id: 'schedule', label: language === 'english' ? 'Milestone Track' : 'గడువుల పట్టిక', icon: <ScheduleIcon color={activeNav === 'schedule' ? '#ffffff' : 'var(--color-text-secondary)'} /> }
+            { id: 'schedule', label: language === 'english' ? 'Milestone Track' : 'గడువుల పట్టిక', icon: <ScheduleIcon color={activeNav === 'schedule' ? '#ffffff' : 'var(--color-text-secondary)'} /> },
+            { id: 'settings', label: language === 'english' ? 'Settings & Profile' : 'సెట్టింగులు & ప్రొఫైల్', icon: <SettingsIcon color={activeNav === 'settings' ? '#ffffff' : 'var(--color-text-secondary)'} /> }
           ].map((item) => {
             const isActive = activeNav === item.id;
             return (
@@ -902,10 +915,13 @@ export default function App() {
 
         {/* 3. Render Navigation Views */}
         {activeNav === 'dashboard' ? (
-          <main style={{ flex: 1, display: 'flex', padding: '36px 56px', gap: '36px', overflow: 'hidden' }}>
+          <main style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '36px 56px', gap: '28px', overflowY: 'auto' }}>
             
-            {/* Left Column: Document Ingestion */}
-            <section className="glass-card" style={{ flex: 1.05, padding: '32px', display: 'flex', flexDirection: 'column', height: 'calc(100vh - 176px)', overflow: 'hidden' }}>
+            {/* Upper Grid: Ingestion and AI Workspace Side-by-Side */}
+            <div style={{ display: 'flex', gap: '36px', flexWrap: 'wrap' }}>
+              
+              {/* Left Column: Document Ingestion */}
+              <section className="glass-card" style={{ flex: 1, minWidth: '400px', padding: '32px', display: 'flex', flexDirection: 'column', height: '640px', overflow: 'hidden' }}>
               <h2 style={{ margin: '0 0 24px 0', fontSize: '16px', fontWeight: '800', letterSpacing: '-0.01em', color: 'var(--color-text-primary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <span style={{ display: 'flex', alignItems: 'center' }}><FolderIcon color="var(--color-accent-indigo)" /></span> {t('ingestionTitle')}
               </h2>
@@ -1054,7 +1070,7 @@ export default function App() {
             </section>
 
             {/* Right Column: AI Analysis Workspace */}
-            <section className="glass-card" style={{ flex: 1.3, padding: '32px', display: 'flex', flexDirection: 'column', height: 'calc(100vh - 176px)', overflow: 'hidden' }}>
+            <section className="glass-card" style={{ flex: 1.3, minWidth: '450px', padding: '32px', display: 'flex', flexDirection: 'column', height: '640px', overflow: 'hidden' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
                 <h2 style={{ margin: 0, fontSize: '16px', fontWeight: '800', letterSpacing: '-0.01em', color: 'var(--color-text-primary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <span style={{ display: 'flex', alignItems: 'center' }}><BoltIcon color="var(--color-accent-indigo)" /></span> {t('workspaceTitle')}
@@ -1395,8 +1411,87 @@ export default function App() {
                 </div>
               )}
             </section>
-          </main>
-        ) : activeNav === 'library' ? (
+          </div> {/* Closing upper grid wrapper */}
+
+          {/* Bottom Row: Metrics/Stats Row */}
+          <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap', marginTop: '8px' }}>
+            
+            {/* Stat 1: Total Documents */}
+            <div className="stat-card">
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontSize: '11px', fontWeight: '800', color: 'var(--color-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                  Total Documents
+                </span>
+                <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(99, 102, 241, 0.08)', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                  <FileIcon size={16} color="var(--color-accent-indigo)" />
+                </div>
+              </div>
+              <h3 style={{ margin: '4px 0', fontSize: '24px', fontWeight: '800', color: 'var(--color-text-primary)' }}>
+                {fileUploaded ? 19 : 18}
+              </h3>
+              <span style={{ fontSize: '11.5px', color: 'var(--color-success)', fontWeight: '700' }}>
+                ↑ 12% from last month
+              </span>
+            </div>
+
+            {/* Stat 2: Active Cases */}
+            <div className="stat-card">
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontSize: '11px', fontWeight: '800', color: 'var(--color-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                  Active Cases
+                </span>
+                <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(16, 185, 129, 0.08)', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                  <ScaleIcon size={16} color="var(--color-success)" />
+                </div>
+              </div>
+              <h3 style={{ margin: '4px 0', fontSize: '24px', fontWeight: '800', color: 'var(--color-text-primary)' }}>
+                7
+              </h3>
+              <span style={{ fontSize: '11.5px', color: 'var(--color-success)', fontWeight: '700' }}>
+                ↑ 8% from last month
+              </span>
+            </div>
+
+            {/* Stat 3: Urgent Alerts */}
+            <div className="stat-card">
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontSize: '11px', fontWeight: '800', color: 'var(--color-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                  Urgent Alerts
+                </span>
+                <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(239, 68, 68, 0.08)', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                  <BoltIcon size={16} color="var(--color-danger)" />
+                </div>
+              </div>
+              <h3 style={{ margin: '4px 0', fontSize: '24px', fontWeight: '800', color: 'var(--color-text-primary)' }}>
+                {fileUploaded && analysis?.extracted_dates.some(d => d.urgency === 'High') ? 4 : 3}
+              </h3>
+              <span style={{ fontSize: '11.5px', color: 'var(--color-danger)', fontWeight: '700' }}>
+                ↑ 20% from last month
+              </span>
+            </div>
+
+            {/* Stat 4: Completed Analyses */}
+            <div className="stat-card">
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontSize: '11px', fontWeight: '800', color: 'var(--color-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                  Analyses Run
+                </span>
+                <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(168, 85, 247, 0.08)', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                  <LibraryIcon size={16} color="var(--color-accent-purple)" />
+                </div>
+              </div>
+              <h3 style={{ margin: '4px 0', fontSize: '24px', fontWeight: '800', color: 'var(--color-text-primary)' }}>
+                {fileUploaded ? 25 : 24}
+              </h3>
+              <span style={{ fontSize: '11.5px', color: 'var(--color-success)', fontWeight: '700' }}>
+                ↑ 15% from last month
+              </span>
+            </div>
+
+          </div>
+
+        </main>
+      ) : activeNav === 'library' ? (
           /* Laws Library portal */
           <main style={{ flex: 1, padding: '36px 56px', overflowY: 'auto', animation: 'fadeIn 0.3s' }}>
             <div style={{ maxWidth: '850px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '24px' }}>
@@ -1603,7 +1698,7 @@ export default function App() {
               )}
             </div>
           </main>
-        ) : (
+        ) : activeNav === 'schedule' ? (
           /* Milestones calendar view */
           <main style={{ flex: 1, padding: '36px 56px', overflowY: 'auto', animation: 'fadeIn 0.3s' }}>
             <div style={{ maxWidth: '850px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '24px' }}>
@@ -1668,6 +1763,117 @@ export default function App() {
                   <p style={{ fontSize: '12.5px', maxWidth: '320px', margin: '8px auto 0 auto', lineHeight: '1.6' }}>Upload a legal document in the Dashboard to automatically populate and download calendar invite triggers.</p>
                 </div>
               )}
+            </div>
+          </main>
+        ) : (
+          /* Settings & Profile view */
+          <main style={{ flex: 1, padding: '36px 56px', overflowY: 'auto', animation: 'fadeIn 0.3s' }}>
+            <div style={{ maxWidth: '650px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+              <div style={{ marginBottom: '16px' }}>
+                <h3 style={{ margin: 0, fontSize: '22px', fontWeight: '800', color: '#ffffff', letterSpacing: '-0.02em', fontFamily: 'var(--font-header)' }}>
+                  {language === 'english' ? 'Settings & Personal Profile' : 'సెట్టింగులు & ప్రొఫైల్'}
+                </h3>
+                <p style={{ margin: '8px 0 0 0', fontSize: '13px', color: 'var(--color-text-secondary)', lineHeight: '1.7' }}>
+                  {language === 'english' 
+                    ? "Manage your default contact information, interface language, and display theme settings."
+                    : "మీ సాధారణ సంప్రదింపు సమాచారం, భాష మరియు ప్రదర్శన థీమ్ సెట్టింగ్‌లను నిర్వహించండి."
+                  }
+                </p>
+              </div>
+
+              <div className="glass-card" style={{ padding: '36px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                
+                {/* Form Group: Name */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <label style={{ fontSize: '12px', fontWeight: '800', color: 'var(--color-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                    {language === 'english' ? 'Full Name' : 'పూర్తి పేరు'}
+                  </label>
+                  <input 
+                    type="text" 
+                    value={userName} 
+                    onChange={(e) => {
+                      setUserName(e.target.value);
+                      localStorage.setItem('nyayamitra_user_name', e.target.value);
+                    }}
+                    style={{
+                      background: 'rgba(255,255,255,0.03)',
+                      border: '1px solid var(--color-border)',
+                      borderRadius: '12px',
+                      padding: '14px 20px',
+                      color: '#ffffff',
+                      fontSize: '13.5px',
+                      outline: 'none',
+                      transition: 'all 0.3s'
+                    }}
+                  />
+                </div>
+
+                {/* Form Group: Email */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <label style={{ fontSize: '12px', fontWeight: '800', color: 'var(--color-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                    {language === 'english' ? 'Email Address' : 'ఈమెయిల్ చిరునామా'}
+                  </label>
+                  <input 
+                    type="email" 
+                    value={userEmail} 
+                    onChange={(e) => {
+                      setUserEmail(e.target.value);
+                      localStorage.setItem('nyayamitra_user_email', e.target.value);
+                    }}
+                    style={{
+                      background: 'rgba(255,255,255,0.03)',
+                      border: '1px solid var(--color-border)',
+                      borderRadius: '12px',
+                      padding: '14px 20px',
+                      color: '#ffffff',
+                      fontSize: '13.5px',
+                      outline: 'none',
+                      transition: 'all 0.3s'
+                    }}
+                  />
+                </div>
+
+                {/* Form Group: Phone Number */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <label style={{ fontSize: '12px', fontWeight: '800', color: 'var(--color-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                    {language === 'english' ? 'Phone Number' : 'ఫోన్ నంబర్'}
+                  </label>
+                  <input 
+                    type="text" 
+                    value={userPhone} 
+                    onChange={(e) => {
+                      setUserPhone(e.target.value);
+                      localStorage.setItem('nyayamitra_user_phone', e.target.value);
+                    }}
+                    style={{
+                      background: 'rgba(255,255,255,0.03)',
+                      border: '1px solid var(--color-border)',
+                      borderRadius: '12px',
+                      padding: '14px 20px',
+                      color: '#ffffff',
+                      fontSize: '13.5px',
+                      outline: 'none',
+                      transition: 'all 0.3s'
+                    }}
+                  />
+                </div>
+
+                {/* Settings Actions / Save Confirmation */}
+                <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '12px' }}>
+                  <button 
+                    onClick={() => {
+                      setToastText(language === 'english' ? 'Profile details saved locally!' : 'ప్రొఫైల్ వివరాలు సేవ్ చేయబడ్డాయి!');
+                      setShowCopyToast(true);
+                      setTimeout(() => setShowCopyToast(false), 2500);
+                    }}
+                    className="glow-btn"
+                    style={{ padding: '12px 36px' }}
+                  >
+                    {language === 'english' ? 'Save Changes' : 'మార్పులను సేవ్ చేయి'}
+                  </button>
+                </div>
+
+              </div>
             </div>
           </main>
         )}
