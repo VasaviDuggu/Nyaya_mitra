@@ -1,58 +1,1354 @@
 {
   "laws": [
     {
-      "id": "sec_106_property_act",
-      "act": "Section 106 of the Transfer of Property Act, 1882",
-      "keywords": ["lease", "rent", "tenant", "eviction", "landlord", "tenancy", "vacate", "premises", "apartment", " Greenwood"],
-      "summary": "Mandates that a month-to-month lease termination notice must be in writing and serve a minimum of 15 days in advance. Failure to give a full 15-day notice can dismiss the eviction in court.",
-      "remedies": [
-        "Verify if notice is served 15 days prior to lease termination date.",
-        "Check if notice is signed by the landlord or authorized representative.",
-        "Collect bank statements or payment receipts proving timely rent payments."
-      ]
-    },
-    {
-      "id": "sec_138_negotiable_instruments",
       "act": "Section 138 of the Negotiable Instruments Act, 1881",
-      "keywords": ["cheque", "dishonor", "bounce", "bank", "insufficient", "debt", "payment", "repayment", "drawer"],
-      "summary": "Deals with the criminal offense of cheque dishonor due to insufficient funds. The payee must send a written demand notice within 30 days of bounce, and the drawer gets 15 days to pay before a complaint can be filed.",
+      "category": "Bank Statements & Finance",
+      "scope": "Cheque Dishonor & Bounces",
+      "summary": "Imposes criminal liability and up to 2 years prison for cheque bounces due to insufficient funds.",
+      "details": "Payee must send a demand notice within 30 days of dishonor. The drawer gets 15 days from notice receipt to pay the amount. Failure to pay within 15 days allows filing a criminal lawsuit within 30 days.",
       "remedies": [
-        "Verify if the bounce notice was sent within 30 days of the dishonor memo.",
-        "Settle the cheque amount within 15 days of receiving the notice to avoid criminal liability.",
-        "Draft a formal reply stating transaction proof or disputing liability."
+        "Settle the bounced cheque amount within 15 days of notice receipt.",
+        "Verify if the bank return memo matches account records.",
+        "Engage legal counsel to draft a response if cheque was given as security."
+      ],
+      "keywords": [
+        "cheque bounce",
+        "insufficient funds",
+        "criminal liability",
+        "dishonor notice"
       ]
     },
     {
-      "id": "sec_56_electricity_act",
-      "act": "Section 56 of the Electricity Act, 2003",
-      "keywords": ["electricity", "power", "disconnection", "utility", "bill", "dues", "arrears", "meter"],
-      "summary": "Mandates that an electricity distribution company must serve a written notice of at least 15 clear days before disconnecting supply. Consumers can dispute the dues in court or consumer forums.",
+      "act": "Section 139 of the Negotiable Instruments Act, 1881",
+      "category": "Bank Statements & Finance",
+      "scope": "Presumption in Favor of Holder",
+      "summary": "Presumes that a bounced cheque was issued to discharge a legally enforceable debt.",
+      "details": "It shall be presumed, unless the contrary is proved, that the holder of a cheque received the cheque for the discharge, in whole or in part, of any debt or other liability.",
       "remedies": [
-        "Check if 15 clear days notice was given in writing before power cut.",
-        "Verify electricity bill calculation errors or payment receipts.",
-        "File an appeal with the Consumer Grievance Redressal Forum (CGRF)."
+        "Gather clear documentation proving the debt was already discharged.",
+        "Submit agreements proving the cheque was security and not for active debt."
+      ],
+      "keywords": [
+        "presumption of liability",
+        "debt discharge",
+        "holder in due course",
+        "security cheque"
       ]
     },
     {
-      "id": "sec_19_debts_recovery",
+      "act": "Section 13 of the SARFAESI Act, 2002",
+      "category": "Bank Statements & Finance",
+      "scope": "Enforcement of Security Interest",
+      "summary": "Allows banks to issue 60-day demand notices to default borrowers to clear secured debts.",
+      "details": "Enables secured creditors (banks) to enforce security interests without court intervention. Banks issue a 60-day demand notice (Sec 13(2)) to the default borrower. If ignored, the bank can take possession.",
+      "remedies": [
+        "Submit formal written objections/representations (Sec 13(3A)) within 15 days.",
+        "Pay the overdue balance within 60 days to prevent property possession.",
+        "Verify if the asset classification (NPA) matches RBI guidelines."
+      ],
+      "keywords": [
+        "sarfaesi notice",
+        "secured debt",
+        "property possession",
+        "bank default"
+      ]
+    },
+    {
+      "act": "Section 14 of the SARFAESI Act, 2002",
+      "category": "Bank Statements & Finance",
+      "scope": "Magistrate Assistance for Physical Possession",
+      "summary": "Empowers banks to request Magistrate assistance to take physical control of default properties.",
+      "details": "Where the possession of any secured asset is required to be taken by the bank, they may request the Chief Metropolitan Magistrate (CMM) or District Magistrate (DM) to take possession.",
+      "remedies": [
+        "Verify if the bank filed a valid affidavit confirming loan terms.",
+        "Check if magistrate notice was served to occupants.",
+        "File an urgent appeal to stay physical dispossession."
+      ],
+      "keywords": [
+        "district magistrate",
+        "physical possession",
+        "cmm order",
+        "property sealing"
+      ]
+    },
+    {
+      "act": "Section 17 of the SARFAESI Act, 2002",
+      "category": "Bank Statements & Finance",
+      "scope": "Right to Appeal in Debts Recovery Tribunal",
+      "summary": "Entitles borrowers to appeal bank enforcement actions within 45 days in the DRT.",
+      "details": "Any person (including the borrower) aggrieved by bank measures under Section 13(4) may make an application to the Debts Recovery Tribunal (DRT) within forty-five days.",
+      "remedies": [
+        "File a Securitisation Application (SA) in the DRT within 45 days.",
+        "Challenge procedural errors in the possession notice.",
+        "Obtain an interim stay on property auctions by depositing a fraction of the debt."
+      ],
+      "keywords": [
+        "drt appeal",
+        "securitisation application",
+        "auction stay",
+        "sarfaesi appeal"
+      ]
+    },
+    {
       "act": "Section 19 of the Recovery of Debts and Bankruptcy Act, 1993",
-      "keywords": ["loan", "recovery", "default", "bank", "credit", "debt", "collateral", "mortgage", "drt", "finance"],
-      "summary": "Governs applications filed by banks or financial institutions in the Debts Recovery Tribunal (DRT) to recover outstanding dues from default borrowers.",
+      "category": "Bank Statements & Finance",
+      "scope": "DRT Recovery Lawsuits",
+      "summary": "Governs formal recovery lawsuits filed by banks in the DRT and defendant reply timelines.",
+      "details": "Specifies procedures for financial banks to file applications in the Debts Recovery Tribunal (DRT) for debt recovery. The defendant receives summons and must file a Written Statement of defense within 30 days.",
       "remedies": [
-        "Verify the statement of account and calculation of interest rates.",
-        "File a written reply statement disputing calculations or terms within 30 days.",
-        "Approach the bank for a One-Time Settlement (OTS) option."
+        "File a detailed Written Reply Statement within 30 days of receiving summons.",
+        "Verify interest calculations, compoundings, and penal charges.",
+        "File counter-claims if the bank caused monetary losses to your business."
+      ],
+      "keywords": [
+        "drt summons",
+        "written statement",
+        "debt recovery tribunal",
+        "bank recovery suit"
       ]
     },
     {
-      "id": "sec_499_ipc_defamation",
-      "act": "Section 499 of the Indian Penal Code (IPC) / BNS Equivalent",
-      "keywords": ["defamation", "slander", "libel", "reputation", "repute", "damage", "notice", "lawsuit", "statement"],
-      "summary": "Deals with criminal defamation where a person makes false spoken or written imputations intending to harm a citizen's reputation.",
+      "act": "Section 20 of the Recovery of Debts and Bankruptcy Act, 1993",
+      "category": "Bank Statements & Finance",
+      "scope": "Appeals to Debts Recovery Appellate Tribunal",
+      "summary": "Allows appealing DRT orders to the Appellate Tribunal (DRAT) within 30 days.",
+      "details": "Any person aggrieved by an order made by the DRT may prefer an appeal to the Debts Recovery Appellate Tribunal (DRAT) within thirty days from the date of receipt of the order.",
       "remedies": [
-        "Check if the statement made is true and for public good (truth is a defense).",
-        "Reply denying malicious intent or proving the statements represent fair comment.",
-        "Draft legal response requesting withdrawal of demand notice."
+        "File a formal appeal petition to the DRAT within 30 days.",
+        "Submit certified copies of the DRT order.",
+        "Deposit the mandatory pre-deposit amount to let the appeal proceed."
+      ],
+      "keywords": [
+        "drat appeal",
+        "appellate tribunal",
+        "drt order",
+        "debt appeal"
+      ]
+    },
+    {
+      "act": "Section 21 of the Recovery of Debts and Bankruptcy Act, 1993",
+      "category": "Bank Statements & Finance",
+      "scope": "Deposit of Debt Amount for Appeal",
+      "summary": "Mandates pre-depositing 50% of the debt before the DRAT will hear the appeal.",
+      "details": "No appeal by a debtor shall be entertained by the DRAT unless the debtor deposits fifty percent of the debt amount determined by the DRT. The DRAT may reduce this to not less than twenty-five percent.",
+      "remedies": [
+        "Request a waiver of pre-deposit down to 25% by filing an application.",
+        "Pay the pre-deposit amount via demand draft to the DRAT Registry.",
+        "Submit arguments of financial hardship to justify a reduced deposit."
+      ],
+      "keywords": [
+        "pre-deposit waiver",
+        "drat deposit",
+        "appeal waiver",
+        "drt debt amount"
+      ]
+    },
+    {
+      "act": "Section 25 of the Recovery of Debts and Bankruptcy Act, 1993",
+      "category": "Bank Statements & Finance",
+      "scope": "Modes of Debt Recovery",
+      "summary": "Details methods Recovery Officers use to recover dues, including selling property or arrest.",
+      "details": "Allows Recovery Officers to recover the debt specified in the certificate by attachment and sale of movable/immovable property, arrest of the defendant, and appointing a receiver.",
+      "remedies": [
+        "Dispute the attachment of personal properties not mortgaged.",
+        "Request installment options to pay off the certificate amount.",
+        "Apply to stay arrest warrants by showing cooperative asset disclosures."
+      ],
+      "keywords": [
+        "recovery officer",
+        "attachment warrant",
+        "asset sale",
+        "arrest warrant"
+      ]
+    },
+    {
+      "act": "Section 7 of the Insolvency and Bankruptcy Code (IBC), 2016",
+      "category": "Bank Statements & Finance",
+      "scope": "Insolvency Initiation by Financial Creditor",
+      "summary": "Allows banks to trigger corporate insolvency proceedings in NCLT for loan defaults.",
+      "details": "A financial creditor (bank/lender) may file an application for initiating corporate insolvency resolution process (CIRP) against a corporate debtor before the National Company Law Tribunal (NCLT) when a default has occurred.",
+      "remedies": [
+        "File a written response disputing the occurrence of default.",
+        "Check if the default amount meets the threshold limit (INR 1 Crore).",
+        "Settle the outstanding claim through settlement agreements before admission."
+      ],
+      "keywords": [
+        "ibc insolvency",
+        "financial creditor",
+        "nclt petition",
+        "corporate debtor"
+      ]
+    },
+    {
+      "act": "Section 9 of the Insolvency and Bankruptcy Code (IBC), 2016",
+      "category": "Bank Statements & Finance",
+      "scope": "Insolvency Initiation by Operational Creditor",
+      "summary": "Enables vendors/suppliers to initiate NCLT insolvency after serving a 10-day demand notice.",
+      "details": "After the expiry of ten days from the delivery of the demand notice under Section 8, if the operational creditor does not receive payment or notice of dispute, they may file an application in the NCLT.",
+      "remedies": [
+        "Serve a reply notice within 10 days highlighting pre-existing quality disputes.",
+        "Submit proof of payment transactions.",
+        "Settle vendor payments to prevent business insolvency admission."
+      ],
+      "keywords": [
+        "operational creditor",
+        "demand notice",
+        "pre-existing dispute",
+        "vendor default"
+      ]
+    },
+    {
+      "act": "Section 14 of the Insolvency and Bankruptcy Code (IBC), 2016",
+      "category": "Bank Statements & Finance",
+      "scope": "Moratorium Declaration",
+      "summary": "Declares a freeze on all lawsuits, recovery actions, and foreclosure measures during insolvency.",
+      "details": "Requires the Adjudicating Authority to declare a moratorium prohibiting: the institution or continuation of suits, enforcement of any security interest (SARFAESI), or recovery of any property.",
+      "remedies": [
+        "Apply to stay active civil court/DRT recovery trials.",
+        "Block bank possession notices (Sec 13(4)) while moratorium is active.",
+        "Continue operational business transactions under the Resolution Professional."
+      ],
+      "keywords": [
+        "moratorium freeze",
+        "nclt stay",
+        "bankruptcy freeze",
+        "insolvency protection"
+      ]
+    },
+    {
+      "act": "Section 31 of the Banking Regulation Act, 1949",
+      "category": "Bank Statements & Finance",
+      "scope": "Submission of Accounts and Balance Sheets",
+      "summary": "Requires banks to publish audited balance sheets, ensuring public transparency.",
+      "details": "Mandates that every banking company must prepare and submit audited accounts and balance sheets to the Reserve Bank of India (RBI) within three months.",
+      "remedies": [
+        "Request audited financial sheets for corporate loan matching.",
+        "Audit bank interest statements against published schedules.",
+        "File complaints with the banking ombudsman for illegal accounts manipulations."
+      ],
+      "keywords": [
+        "balance sheet audit",
+        "banking regulation",
+        "accounts submission",
+        "rbi compliance"
+      ]
+    },
+    {
+      "act": "Section 45ZA of the Banking Regulation Act, 1949",
+      "category": "Bank Statements & Finance",
+      "scope": "Nomination for Bank Accounts",
+      "summary": "Enables bank account holders to nominate individuals to receive deposits upon death.",
+      "details": "Provides that where a deposit is held by a banking company to the credit of one or more persons, the depositor or, as the case may be, all the depositors together, may nominate one person to whom the deposit may be returned.",
+      "remedies": [
+        "Ensure a nominee is registered for all active bank accounts.",
+        "Submit succession/nomination claims to clear deceased account balances.",
+        "Verify nominee details in annual bank statement reviews."
+      ],
+      "keywords": [
+        "nomination rules",
+        "bank account nominee",
+        "death deposit claim",
+        "account succession"
+      ]
+    },
+    {
+      "act": "Section 21A of the Banking Regulation Act, 1949",
+      "category": "Bank Statements & Finance",
+      "scope": "Interest Rates Exemption from Usury Laws",
+      "summary": "Exempts bank loan interest transactions from being reopened under state usury laws.",
+      "details": "Declares that a transaction between a banking company and its debtor shall not be reopened by any court on the ground that the rate of interest charged by the banking company in respect of such transaction is excessive.",
+      "remedies": [
+        "Verify that your loan interest is calculated using base RBI repo rates.",
+        "File grievances if interest rates exceed agreed contract terms.",
+        "Audit bank interest statement calculations periodically."
+      ],
+      "keywords": [
+        "interest rate exemption",
+        "loan usury",
+        "excessive interest",
+        "bank rate audit"
+      ]
+    },
+    {
+      "act": "Section 106 of the Transfer of Property Act, 1882",
+      "category": "Land Disputes",
+      "scope": "Month-to-Month Rental Leases",
+      "summary": "Mandates that a month-to-month lease termination notice must be served in writing with at least 15 days notice.",
+      "details": "Requires a minimum of 15 days notice for terminating a monthly tenancy of immovable property. The notice must be in writing, signed by the party, and served personally or by post. Failure to provide a full 15-day notice makes any subsequent eviction suit legally void.",
+      "remedies": [
+        "Check the date of service of the eviction notice.",
+        "Verify if a full 15 days is allowed before the vacate date.",
+        "Consult an advocate to draft a reply highlighting any timing defects."
+      ],
+      "keywords": [
+        "lease termination",
+        "eviction",
+        "15 days notice",
+        "tenant eviction",
+        "property notice"
+      ]
+    },
+    {
+      "act": "Section 108 of the Transfer of Property Act, 1882",
+      "category": "Land Disputes",
+      "scope": "Rights and Liabilities of Landlord and Tenant",
+      "summary": "Defines mutual rights and duties, including landlord's duty to maintain property and tenant's duty to pay rent.",
+      "details": "Details that in the absence of a contract to the contrary, the landlord is bound to disclose material defects in the property. The tenant is obligated to pay rent at proper times and maintain the property in good condition.",
+      "remedies": [
+        "Request repairs for material property defects.",
+        "Keep evidence of regular rent payment transactions.",
+        "Send a written notice if the landlord fails to make basic structure repairs."
+      ],
+      "keywords": [
+        "tenant rights",
+        "landlord liability",
+        "property maintenance",
+        "rent payment"
+      ]
+    },
+    {
+      "act": "Section 5 of the Specific Relief Act, 1963",
+      "category": "Land Disputes",
+      "scope": "Recovery of Specific Immovable Property",
+      "summary": "Allows a person entitled to the possession of specific property to recover it using the Civil Procedure Code (CPC).",
+      "details": "A person entitled to the possession of specific immovable property may recover it in the manner provided by the Code of Civil Procedure, 1908.",
+      "remedies": [
+        "File a civil suit for recovery of possession under CPC.",
+        "Provide registered sale deed as proof of title ownership.",
+        "Apply for interim protection orders to prevent construction by trespassers."
+      ],
+      "keywords": [
+        "property recovery",
+        "title possession",
+        "civil suit property",
+        "cpc recovery"
+      ]
+    },
+    {
+      "act": "Section 6 of the Specific Relief Act, 1963",
+      "category": "Land Disputes",
+      "scope": "Suit by Person Dispossessed of Immovable Property",
+      "summary": "Allows dispossessed persons to recover possession within 6 months without proving title.",
+      "details": "If any person is dispossessed without his consent of immovable property otherwise than in due course of law, he may, by suit, recover possession thereof, notwithstanding any other title that may be set up. Suit must be filed within 6 months.",
+      "remedies": [
+        "File a dispossession lawsuit within 6 months of being forced out.",
+        "Gather local police complaint copies proving illegal trespass.",
+        "Obtain tenant/neighbor witness statements to prove active possession."
+      ],
+      "keywords": [
+        "dispossession suit",
+        "6 months limitation",
+        "forcible eviction",
+        "property trespass"
+      ]
+    },
+    {
+      "act": "Section 7 of the Indian Easements Act, 1882",
+      "category": "Land Disputes",
+      "scope": "Restrictive Easements & Natural Rights",
+      "summary": "Protects a landowner's right to enjoy natural advantages of land without interference from neighbors.",
+      "details": "Each owner of land has the right to enjoy without disturbance by another, the natural advantages arising from its situation, including natural flow of water, light, and air.",
+      "remedies": [
+        "Object to neighbor constructions blocking essential light and air.",
+        "File civil injunctions to stop blocking of natural water runoffs.",
+        "Apply for structural inspections of shared boundary walls."
+      ],
+      "keywords": [
+        "easement rights",
+        "right to air",
+        "light blocking",
+        "natural water flow"
+      ]
+    },
+    {
+      "act": "Section 15 of the Indian Easements Act, 1882",
+      "category": "Land Disputes",
+      "scope": "Easements by Prescription",
+      "summary": "Grants permanent easement rights to access light, air, or way if enjoyed for 20 years without interruption.",
+      "details": "Where the access and use of light or air, or any way, has been peaceably enjoyed therewith, as an easement, without interruption, and for twenty years, the right becomes absolute.",
+      "remedies": [
+        "Collect evidence of 20 years continuous usage of the pathway.",
+        "Register prescriptive easement claims before property transfer.",
+        "Dispute neighbor's sudden blockage of historical access gates."
+      ],
+      "keywords": [
+        "prescription easement",
+        "20 years usage",
+        "right of way",
+        "pathway blockage"
+      ]
+    },
+    {
+      "act": "Section 54 of the Transfer of Property Act, 1882",
+      "category": "Land Disputes",
+      "scope": "Sale of Immovable Property",
+      "summary": "Defines sale of land and mandates registration for sales exceeding INR 100.",
+      "details": "Sale is a transfer of ownership in exchange for a price paid or promised. A transfer of tangible immovable property of the value of one hundred rupees and upwards can be made only by a registered instrument.",
+      "remedies": [
+        "Refuse land purchases based on oral/unregistered agreements.",
+        "Register the Sale Deed at the Sub-Registrar office immediately.",
+        "Verify non-encumbrance status before executing sale deeds."
+      ],
+      "keywords": [
+        "sale deed registration",
+        "property transfer",
+        "title deed",
+        "land sale contract"
+      ]
+    },
+    {
+      "act": "Section 53A of the Transfer of Property Act, 1882",
+      "category": "Land Disputes",
+      "scope": "Doctrine of Part Performance",
+      "summary": "Protects a buyer in possession under a written contract even if sale deed is unregistered.",
+      "details": "Where any person contracts to transfer for consideration any immovable property by writing, and the transferee has taken possession of the property, the transferor cannot evict him.",
+      "remedies": [
+        "Submit the written agreement to sell as defense in eviction suits.",
+        "Provide utility bills proving active possession since contract date.",
+        "File suits for specific performance to register the final sale deed."
+      ],
+      "keywords": [
+        "part performance",
+        "agreement to sell",
+        "possession defense",
+        "unregistered contract"
+      ]
+    },
+    {
+      "act": "Section 18 of the RERA Act, 2016",
+      "category": "Land Disputes",
+      "scope": "Return of Amount and Compensation for Delayed Possession",
+      "summary": "Entitles allottees to a full refund with interest if the promoter fails to give possession on time.",
+      "details": "Mandates that if the promoter fails to complete or is unable to give possession of an apartment in accordance with the agreement for sale, he shall be liable to return the amount received with interest.",
+      "remedies": [
+        "File a claim before the RERA Adjudicating Officer.",
+        "Demand refund of principal amount along with prescribed delay interest.",
+        "Apply for interest on delay even if you choose to remain in the project."
+      ],
+      "keywords": [
+        "rera delayed possession",
+        "builder refund",
+        "builder delay interest",
+        "real estate fraud"
+      ]
+    },
+    {
+      "act": "Section 31 of the RERA Act, 2016",
+      "category": "Land Disputes",
+      "scope": "Filing of Complaints to Authority",
+      "summary": "Allows any aggrieved person to file a complaint for RERA violations against builders or agents.",
+      "details": "Provides that any aggrieved person may file a complaint with the RERA Authority or the Adjudicating Officer for any violation or contravention.",
+      "remedies": [
+        "File Form M online on the state RERA portal.",
+        "Attach builder agreements and receipt vouchers.",
+        "Represent your case personally or via an advocate before the authority."
+      ],
+      "keywords": [
+        "rera complaint",
+        "builder violation",
+        "rera authority",
+        "estate agent fraud"
+      ]
+    },
+    {
+      "act": "Section 44 of the Transfer of Property Act, 1882",
+      "category": "Land Disputes",
+      "scope": "Transfer by Co-owner",
+      "summary": "Allows a co-owner to sell their share of property, but restricts buyer from occupying a family dwelling house.",
+      "details": "Where one co-owner of immovable property transfers his share, the transferee acquires the transferor's right. However, if the property is a joint family dwelling house, the buyer does not get joint possession.",
+      "remedies": [
+        "Challenge external buyers attempting to occupy ancestral family homes.",
+        "File a partition suit to separate the co-owner's share before transfer.",
+        "Obtain co-owner consensus agreements before property leasing."
+      ],
+      "keywords": [
+        "coowner sale",
+        "dwelling house exemption",
+        "joint family property",
+        "share transfer"
+      ]
+    },
+    {
+      "act": "Section 43 of the Land Acquisition Act, 2013",
+      "category": "Land Disputes",
+      "scope": "Rehabilitation & Resettlement Award",
+      "summary": "Mandates government to provide rehabilitation packages to families displaced by land acquisition.",
+      "details": "Requires the Collector to publish a detailed Rehabilitation and Resettlement Award for families whose land is acquired for public purposes, ensuring house and cash compensation.",
+      "remedies": [
+        "Review government acquisition compensation structures.",
+        "Submit rehabilitation claims before the land acquisition collector.",
+        "File appeals in the Land Acquisition Authority if award is inadequate."
+      ],
+      "keywords": [
+        "land acquisition",
+        "rerehabilitation award",
+        "displaced family",
+        "collector compensation"
+      ]
+    },
+    {
+      "act": "Section 64 of the Limitation Act, 1963",
+      "category": "Land Disputes",
+      "scope": "Limitation for Suit based on Possession",
+      "summary": "Sets a 12-year time limit to file lawsuits to recover possession of immovable property.",
+      "details": "A suit for possession of immovable property based on previous possession and not on title must be filed within twelve years from the date of dispossession.",
+      "remedies": [
+        "File property recovery suits within the 12-year window.",
+        "Track dates of encroachment or illegal occupancy carefully.",
+        "Send legal notices immediately on detecting property trespasses."
+      ],
+      "keywords": [
+        "limitation period",
+        "12 years recovery",
+        "adverse possession",
+        "property recovery limitation"
+      ]
+    },
+    {
+      "act": "Section 65 of the Limitation Act, 1963",
+      "category": "Land Disputes",
+      "scope": "Limitation for Suit based on Title",
+      "summary": "Sets a 12-year limit for recovering possession based on proprietary title.",
+      "details": "Limits the recovery of possession based on title to twelve years, running from the date the possession of the defendant becomes adverse to the plaintiff.",
+      "remedies": [
+        "Take legal action before a squatter completes 12 years of adverse possession.",
+        "Pay local property taxes regularly in your name to prove title.",
+        "Send warning notices to leaseholder occupants exceeding lease tenures."
+      ],
+      "keywords": [
+        "title recovery",
+        "adverse possession defense",
+        "squatter rights",
+        "12 years squatting"
+      ]
+    },
+    {
+      "act": "Section 105 of the Transfer of Property Act, 1882",
+      "category": "Land Disputes",
+      "scope": "Definition of Lease",
+      "summary": "Defines a lease as a transfer of right to enjoy property for a specified time in consideration of price/rent.",
+      "details": "Establishes that a lease of immovable property is a transfer of a right to enjoy such property, made for a certain time, express or implied.",
+      "remedies": [
+        "Ensure the lease document clearly specifies duration.",
+        "Verify rent and security deposit refund parameters.",
+        "Incorporate lock-in period terms to prevent premature eviction."
+      ],
+      "keywords": [
+        "lease definition",
+        "lease term",
+        "rent consideration",
+        "property enjoyment"
+      ]
+    },
+    {
+      "act": "Section 13 of the Hindu Marriage Act, 1955",
+      "category": "Family Law Matters",
+      "scope": "Divorce Grounds",
+      "summary": "Lists valid legal grounds for seeking divorce, including cruelty, desertion, conversion, and adultery.",
+      "details": "Specifies grounds upon which a marriage may be dissolved by a decree of divorce, such as: partner treated with cruelty, deserted for not less than two years, ceased to be Hindu by conversion, or had voluntary sexual intercourse with any other person.",
+      "remedies": [
+        "Document instances of cruelty with physical/digital proof.",
+        "Draft a comprehensive petition outlining specific matrimonial offenses.",
+        "Consult legal counsel to explore family mediation options first."
+      ],
+      "keywords": [
+        "divorce grounds",
+        "cruelty divorce",
+        "desertion",
+        "matrimonial dispute"
+      ]
+    },
+    {
+      "act": "Section 13B of the Hindu Marriage Act, 1955",
+      "category": "Family Law Matters",
+      "scope": "Divorce by Mutual Consent",
+      "summary": "Allows couples to seek divorce jointly if living separately for 1 year and unable to live together.",
+      "details": "Enables divorce by mutual consent. Both parties must file a joint petition stating they have lived separately for a period of one year or more, have not been able to live together, and have mutually agreed to dissolve the marriage.",
+      "remedies": [
+        "Draft a joint settlement agreement for custody and alimony.",
+        "File the first motion petition in the Family Court.",
+        "Appear for the second motion after the statutory 6-month cooling period (or request waiver)."
+      ],
+      "keywords": [
+        "mutual consent divorce",
+        "joint petition",
+        "cooling period",
+        "matrimonial settlement"
+      ]
+    },
+    {
+      "act": "Section 125 of the Code of Criminal Procedure, 1973 / Sec 144 BNSS",
+      "category": "Family Law Matters",
+      "scope": "Maintenance of Wives, Children, and Parents",
+      "summary": "Enables neglected wives, children, and parents to claim monthly maintenance from individuals with sufficient means.",
+      "details": "Allows a Magistrate of the first class to order a person who possesses sufficient means but neglects or refuses to maintain his wife, children, or parents, to make a monthly allowance for their maintenance.",
+      "remedies": [
+        "File an application for interim maintenance and litigation expenses.",
+        "Provide proof of the husband's/child's active income and assets.",
+        "Submit proof of your lack of independent income sources."
+      ],
+      "keywords": [
+        "maintenance claim",
+        "crpc 125",
+        "interim maintenance",
+        "wife alimony",
+        "child support"
+      ]
+    },
+    {
+      "act": "Section 24 of the Hindu Marriage Act, 1955",
+      "category": "Family Law Matters",
+      "scope": "Maintenance Pendente Lite & Litigation Expenses",
+      "summary": "Allows either spouse lacking independent income to claim maintenance and legal costs during divorce trials.",
+      "details": "Provides that if during matrimonial proceedings, either the wife or the husband has no independent income sufficient for support and expenses, the court may order the other party to pay monthly maintenance and litigation costs.",
+      "remedies": [
+        "File a Section 24 petition during the active divorce suit.",
+        "Submit statements of income and standard of living proofs.",
+        "Request order execution if spouse fails to pay legal fees."
+      ],
+      "keywords": [
+        "pendente lite",
+        "litigation expenses",
+        "court maintenance",
+        "divorce support"
+      ]
+    },
+    {
+      "act": "Section 25 of the Hindu Marriage Act, 1955",
+      "category": "Family Law Matters",
+      "scope": "Permanent Alimony and Maintenance",
+      "summary": "Empowers courts to grant permanent monthly or lump-sum alimony to either spouse at the time of decree.",
+      "details": "Allows the court, while passing any decree under this Act, to order that the respondent shall pay to the applicant for her or his maintenance a gross sum or monthly payment, taking into account income, assets, and conduct of parties.",
+      "remedies": [
+        "File a permanent alimony application along with income affidavits.",
+        "Propose a structured lump-sum alimony payment to avoid monthly collections.",
+        "Apply to modify the alimony amount if financial circumstances change later."
+      ],
+      "keywords": [
+        "permanent alimony",
+        "lump sum settlement",
+        "spousal support",
+        "alimony award"
+      ]
+    },
+    {
+      "act": "Section 9 of the Hindu Marriage Act, 1955",
+      "category": "Family Law Matters",
+      "scope": "Restitution of Conjugal Rights",
+      "summary": "Allows a spouse to petition the court to order the other partner to return if they withdrew without reason.",
+      "details": "When either the husband or the wife has, without reasonable excuse, withdrawn from the society of the other, the aggrieved party may apply, by petition to the District Court, for restitution of conjugal rights.",
+      "remedies": [
+        "File a restitution petition to legally express willingness to reconcile.",
+        "Submit proof that the partner left the matrimonial home without valid cause.",
+        "Draft defense replies showing partner's cruelty as justification for living apart."
+      ],
+      "keywords": [
+        "conjugal rights",
+        "restitution petition",
+        "matrimonial society",
+        "marital reconciliation"
+      ]
+    },
+    {
+      "act": "Section 12 of the Hindu Marriage Act, 1955",
+      "category": "Family Law Matters",
+      "scope": "Voidable Marriages",
+      "summary": "Lists grounds to annul voidable marriages, such as impotency, lack of consent by force/fraud, or pre-marriage pregnancy.",
+      "details": "A marriage may be annulled by a decree of nullity on grounds: that the marriage has not been consummated owing to impotency, that consent was obtained by force or fraud, or that the respondent was pregnant by some other person.",
+      "remedies": [
+        "File an annulment petition within one year of marriage if force/fraud is discovered.",
+        "Collect medical certifications for impotency claims.",
+        "Cease cohabitation immediately after discovering fraud to protect the annulment suit."
+      ],
+      "keywords": [
+        "marriage annulment",
+        "voidable marriage",
+        "nullity decree",
+        "marriage fraud"
+      ]
+    },
+    {
+      "act": "Section 26 of the Hindu Marriage Act, 1955",
+      "category": "Family Law Matters",
+      "scope": "Custody of Children",
+      "summary": "Empowers courts to pass interim and permanent orders for custody, maintenance, and education of minor children.",
+      "details": "In any proceeding under this Act, the court may pass from time to time interim orders and make provisions in the decree as it may deem just with respect to the custody, maintenance, and education of minor children.",
+      "remedies": [
+        "File an interim child custody and visitation rights petition.",
+        "Present proof of child's best welfare interests (schooling, lifestyle).",
+        "Apply for court-supervised visitation schedules in family centers."
+      ],
+      "keywords": [
+        "child custody",
+        "visitation rights",
+        "minor guardianship",
+        "child welfare"
+      ]
+    },
+    {
+      "act": "Section 7 of the Guardians and Wards Act, 1890",
+      "category": "Family Law Matters",
+      "scope": "Appointment of Guardian by Court",
+      "summary": "Authorizes courts to appoint guardians for minor's person or property if it is for the minor's welfare.",
+      "details": "Where the court is satisfied that it is for the welfare of a minor that an order should be made appointing a guardian of his person or property, the court may make an order accordingly.",
+      "remedies": [
+        "File a guardianship petition in the District Court.",
+        "Document the minor's property assets requiring administration.",
+        "Provide affidavits showing family support systems for child care."
+      ],
+      "keywords": [
+        "guardian appointment",
+        "ward guardianship",
+        "minor property protection",
+        "ward welfare"
+      ]
+    },
+    {
+      "act": "Section 12 of the Protection of Women from Domestic Violence Act, 2005",
+      "category": "Family Law Matters",
+      "scope": "Application to Magistrate for Reliefs",
+      "summary": "Enables domestic violence victims to apply to Magistrates for protection, residence, and monetary orders.",
+      "details": "An aggrieved person or a Protection Officer may present an application to the Magistrate seeking reliefs: protection orders (Sec 18), residence orders (Sec 19), monetary relief (Sec 20), or compensation (Sec 22).",
+      "remedies": [
+        "File a DV application detailing instances of domestic abuse.",
+        "Request immediate ex-parte interim protection orders from the Magistrate.",
+        "Provide proof of shared household residency and income status."
+      ],
+      "keywords": [
+        "domestic violence",
+        "protection order",
+        "residence order",
+        "dv complaint"
+      ]
+    },
+    {
+      "act": "Section 18 of the Protection of Women from Domestic Violence Act, 2005",
+      "category": "Family Law Matters",
+      "scope": "Protection Orders",
+      "summary": "Allows Magistrates to prohibit the respondent from committing acts of violence or entering the victim's workplace.",
+      "details": "The Magistrate may, after giving the respondent an opportunity of being heard, pass a protection order prohibiting the respondent from committing any act of domestic violence, entering the school/workplace of the victim, or communicating with her.",
+      "remedies": [
+        "Request a restraining order preventing respondent contact.",
+        "Submit police complaint receipts showing past domestic threats.",
+        "Report breach of protection orders immediately (constitutes a non-bailable offense)."
+      ],
+      "keywords": [
+        "restraining order",
+        "domestic violence protection",
+        "victim safety",
+        "restraint notice"
+      ]
+    },
+    {
+      "act": "Section 19 of the Protection of Women from Domestic Violence Act, 2005",
+      "category": "Family Law Matters",
+      "scope": "Residence Orders",
+      "summary": "Protects a victim's right to reside in the shared household and prevents eviction by the partner.",
+      "details": "Empowers the Magistrate to pass residence orders directing the respondent to: secure alternate accommodation for the victim, remove himself from the shared household, or prohibit him from selling the household.",
+      "remedies": [
+        "Request orders protecting your right to stay in the matrimonial house.",
+        "Seek court directions forcing the husband to pay rent for alternate housing.",
+        "File objections if the husband attempts to lock you out of the house."
+      ],
+      "keywords": [
+        "shared household",
+        "right to reside",
+        "eviction ban",
+        "matrimonial accommodation"
+      ]
+    },
+    {
+      "act": "Section 20 of the Protection of Women from Domestic Violence Act, 2005",
+      "category": "Family Law Matters",
+      "scope": "Monetary Reliefs",
+      "summary": "Entitles victims to claim medical expenses, loss of earnings, and monthly maintenance under DV Act.",
+      "details": "While disposing of an application under section 12, the Magistrate may direct the respondent to pay monetary relief to meet expenses incurred and losses suffered by the victim due to domestic violence, including medical bills and maintenance.",
+      "remedies": [
+        "Submit bills for medical treatments caused by physical abuse.",
+        "Provide calculation sheets for monthly household and grocery expenses.",
+        "Claim compensation for damage/theft of personal belongings."
+      ],
+      "keywords": [
+        "monetary relief",
+        "medical compensation",
+        "abusive damage",
+        "financial maintenance"
+      ]
+    },
+    {
+      "act": "Section 22 of the Protection of Women from Domestic Violence Act, 2005",
+      "category": "Family Law Matters",
+      "scope": "Compensation Orders",
+      "summary": "Allows Magistrates to order respondents to pay damages for mental torture and emotional distress.",
+      "details": "The Magistrate may, on an application made by the aggrieved person, pass an order directing the respondent to pay compensation and damages for injuries, including mental torture and emotional distress, caused by domestic violence.",
+      "remedies": [
+        "Claim specific damages for mental harassment during matrimonial stay.",
+        "Submit psychologist certificates or treatment records if applicable.",
+        "Draft statements detailing emotional abuse and constant threats."
+      ],
+      "keywords": [
+        "compensation order",
+        "mental torture damages",
+        "emotional distress",
+        "harassment compensation"
+      ]
+    },
+    {
+      "act": "Section 18 of the Hindu Adoptions and Maintenance Act, 1956",
+      "category": "Family Law Matters",
+      "scope": "Maintenance of Wife",
+      "summary": "Entitles a Hindu wife to be maintained by her husband during her lifetime, even if living separately on valid grounds.",
+      "details": "A Hindu wife shall be entitled to be maintained by her husband during her life. She is entitled to live separately without forfeiting her claim if the husband is guilty of desertion, cruelty, bigamy, or keeps a concubine.",
+      "remedies": [
+        "File separate maintenance petitions under HAMA.",
+        "Establish valid grounds (cruelty/abandonment) for living separately in court.",
+        "Submit proof of the husband's family business shares or ancestral earnings."
+      ],
+      "keywords": [
+        "hama maintenance",
+        "wife maintenance",
+        "separate living",
+        "spousal allowance"
+      ]
+    },
+    {
+      "act": "Section 33C of the Industrial Disputes Act, 1947",
+      "category": "Employee Disputes",
+      "scope": "Recovery of Money Due from Employer",
+      "summary": "Allows employees to file claims before the Labor Court to recover unpaid salary, bonus, or gratuity.",
+      "details": "Provides that where any money is due to a workman from an employer under a settlement or award, the workman may make an application to the Labor Court for recovery of the amount.",
+      "remedies": [
+        "File an application in the Labor Court for recovery of unpaid salary arrears.",
+        "Submit bank account statements showing missing salary payments.",
+        "Provide copy of employment contract and appointment letters."
+      ],
+      "keywords": [
+        "salary recovery",
+        "labor court",
+        "unpaid wages",
+        "employment dispute"
+      ]
+    },
+    {
+      "act": "Section 25F of the Industrial Disputes Act, 1947",
+      "category": "Employee Disputes",
+      "scope": "Conditions Precedent to Retrenchment",
+      "summary": "Prohibits lay-offs/retrenchments unless the worker is given a 1-month notice and severance pay.",
+      "details": "No workman employed in any industry who has been in continuous service for not less than one year shall be retrenched until: given one month's notice in writing or paid wages in lieu, and retrenchment compensation equal to 15 days' average pay for every year of service.",
+      "remedies": [
+        "Verify if retrenchment compensation is calculated correctly (15 days per year).",
+        "Challenge sudden terminations lacking the mandatory 30-day notice period.",
+        "File complaints with the regional Labor Commissioner."
+      ],
+      "keywords": [
+        "retrenchment compensation",
+        "wrongful termination",
+        "severance pay",
+        "layoff notice"
+      ]
+    },
+    {
+      "act": "Section 3 of the Payment of Wages Act, 1936",
+      "category": "Employee Disputes",
+      "scope": "Responsibility for Payment of Wages",
+      "summary": "Holds employers directly responsible for paying wages within statutory timeframes (usually by 7th/10th of next month).",
+      "details": "Every employer shall be responsible for the payment to persons employed by him of all wages required to be paid under this Act. Wages must be cleared before the 7th day (if under 1000 workers) or 10th day.",
+      "remedies": [
+        "Send a written legal notice to HR demanding immediate release of withheld salary.",
+        "File complaints before the Inspector under the Payment of Wages Act.",
+        "Document daily work logs/emails proving active service during unpaid periods."
+      ],
+      "keywords": [
+        "wage payment",
+        "withheld salary",
+        "payroll delay",
+        "labor inspector"
+      ]
+    },
+    {
+      "act": "Section 5 of the Payment of Gratuity Act, 1972",
+      "category": "Employee Disputes",
+      "scope": "Power to Exempt Gratuity Payments",
+      "summary": "Mandates gratuity pay upon termination/resignation after 5 years continuous service.",
+      "details": "Gratuity shall be payable to an employee on the termination of his employment after he has rendered continuous service for not less than five years: on superannuation, retirement, or resignation.",
+      "remedies": [
+        "Calculate gratuity amount (15 days wages per year of service).",
+        "Submit Form I to the employer within 30 days of leaving.",
+        "File an appeal before the Controlling Authority if the employer refuses gratuity clearance."
+      ],
+      "keywords": [
+        "gratuity eligibility",
+        "5 years service",
+        "retirement benefits",
+        "controlling authority"
+      ]
+    },
+    {
+      "act": "Section 12 of the Maternity Benefit Act, 1961",
+      "category": "Employee Disputes",
+      "scope": "Dismissal During Pregnancy",
+      "summary": "Prohibits employers from discharging or dismissing women employees during maternity leave.",
+      "details": "When a woman absents herself from work in accordance with the provisions of this Act, it shall be unlawful for her employer to discharge or dismiss her during or on account of such absence.",
+      "remedies": [
+        "File appeals to the Competent Authority within 60 days of wrongful dismissal.",
+        "Submit medical certificates proving pregnancy during service.",
+        "Claim full maternity wages and additional medical bonuses."
+      ],
+      "keywords": [
+        "maternity leave",
+        "pregnancy dismissal",
+        "wrongful discharge",
+        "maternity benefit"
+      ]
+    },
+    {
+      "act": "Section 4 of the Payment of Bonus Act, 1965",
+      "category": "Employee Disputes",
+      "scope": "Computation of Gross Profits and Bonus",
+      "summary": "Entitles employees to receive a minimum annual bonus (8.33% of wages) if they worked for 30 days.",
+      "details": "Every employer shall be bound to pay to every employee who has worked in the establishment for not less than thirty working days in an accounting year, a minimum bonus of 8.33% of the salary earned.",
+      "remedies": [
+        "Verify if the annual bonus calculation matches company profits declarations.",
+        "File claims before the Industrial Tribunal if bonus is withheld illegally.",
+        "Ensure base eligibility (30 days work) is met."
+      ],
+      "keywords": [
+        "annual bonus",
+        "minimum bonus",
+        "withheld bonus",
+        "industrial dispute"
+      ]
+    },
+    {
+      "act": "Section 7A of the Employees' Provident Funds Act, 1952",
+      "category": "Employee Disputes",
+      "scope": "Determination of Moneys Due from Employers",
+      "summary": "Authorizes PF Commissioners to audit employers and recover unpaid PF contributions.",
+      "details": "Allows the Central Provident Fund Commissioner or Assistant Commissioner to conduct inquiries to determine the amount due from any employer under the provisions of the Act.",
+      "remedies": [
+        "Check your PF ledger account online using the EPFO portal.",
+        "Report employers who deduct PF share from salary but fail to deposit it with EPFO.",
+        "Initiate commissioner inquiries for recovery of PF contributions."
+      ],
+      "keywords": [
+        "provident fund",
+        "pf contribution",
+        "epfo inquiry",
+        "pf deduction"
+      ]
+    },
+    {
+      "act": "Section 2(ra) of the Industrial Disputes Act, 1947",
+      "category": "Employee Disputes",
+      "scope": "Unfair Labor Practices",
+      "summary": "Lists illegal employer practices, including victimizing union members or employing workers as temporary casuals.",
+      "details": "Prohibits employers or workmen from committing any unfair labor practice specified in the Fifth Schedule, such as: discharging workers by way of victimization, or keeping workers temporary to deny permanent benefits.",
+      "remedies": [
+        "File disputes before the labor board for constant temporary contract renewals.",
+        "Submit union rosters proving management victimization.",
+        "Request inspections of office shift registers and logs."
+      ],
+      "keywords": [
+        "unfair labor practice",
+        "victimization",
+        "temporary contract",
+        "labor union dispute"
+      ]
+    },
+    {
+      "act": "Section 2A of the Industrial Disputes Act, 1947",
+      "category": "Employee Disputes",
+      "scope": "Dismissal of Workman Deemed Industrial Dispute",
+      "summary": "Allows individual employees to file cases for wrongful termination without needing a workers union.",
+      "details": "Where any employer discharges, dismisses, retrenches or otherwise terminates the services of an individual workman, any dispute connected therewith shall be deemed to be an industrial dispute.",
+      "remedies": [
+        "File direct conciliation petitions before the Assistant Labor Commissioner.",
+        "Challenge forced resignation letters written under HR coercion.",
+        "Demand reinstatement in service with full back wages."
+      ],
+      "keywords": [
+        "wrongful dismissal",
+        "conciliation officer",
+        "individual dispute",
+        "forced resignation"
+      ]
+    },
+    {
+      "act": "Section 9A of the Industrial Disputes Act, 1947",
+      "category": "Employee Disputes",
+      "scope": "Notice of Change in Service Conditions",
+      "summary": "Prohibits employers from altering salary, shifts, or leaves without a 21-day notice.",
+      "details": "No employer who proposes to effect any change in the conditions of service applicable to any workman in respect of wage structure, hours of work, or leave, shall do so without giving 21 days notice.",
+      "remedies": [
+        "Dispute sudden shifts or salary cuts implemented without notice.",
+        "File representations before the Conciliation Officer during the 21-day window.",
+        "Keep copies of original service agreements."
+      ],
+      "keywords": [
+        "service conditions",
+        "salary cut notice",
+        "shift change",
+        "contract alteration"
+      ]
+    },
+    {
+      "act": "Section 2(k) of the Industrial Disputes Act, 1947",
+      "category": "Employee Disputes",
+      "scope": "Definition of Industrial Dispute",
+      "summary": "Defines industrial disputes as conflicts between employers and workmen regarding employment terms.",
+      "details": "Establishes that an industrial dispute means any dispute or difference between employers and employers, or between employers and workmen, which is connected with the employment or non-employment.",
+      "remedies": [
+        "Formulate clear demands through registered trade unions.",
+        "Refer disputes to industrial tribunals if conciliations fail.",
+        "Keep records of charter of demands served to HR."
+      ],
+      "keywords": [
+        "industrial dispute",
+        "employment terms",
+        "trade union claim",
+        "tribunal reference"
+      ]
+    },
+    {
+      "act": "Section 4 of the Payment of Wages Act, 1936",
+      "category": "Employee Disputes",
+      "scope": "Fixation of Wage Periods",
+      "summary": "Mandates that wage periods (intervals for salary calculation) shall not exceed one month.",
+      "details": "No wage period fixed by the person responsible for the payment of wages shall exceed one month, ensuring monthly payments are standard.",
+      "remedies": [
+        "Challenge contract terms enforcing quarterly or semi-annual salary payouts.",
+        "Demand monthly accounting ledger updates from payroll.",
+        "File claims for interest on delayed monthly wage clearances."
+      ],
+      "keywords": [
+        "wage period",
+        "monthly salary",
+        "contract validation",
+        "wage interval"
+      ]
+    },
+    {
+      "act": "Section 7 of the Payment of Wages Act, 1936",
+      "category": "Employee Disputes",
+      "scope": "Deductions which may be made from Wages",
+      "summary": "Restricts salary deductions to statutory fines, absence from duty, or housing benefits.",
+      "details": "Lists permissible salary deductions: fines, deductions for absence from duty, damage to property, or housing accommodation. All other deductions are illegal and punishable.",
+      "remedies": [
+        "File complaints for arbitrary deductions labeled as 'administrative cuts'.",
+        "Check pay slips to ensure deductions align with section 7 classifications.",
+        "Demand recovery of cash amounts deducted without written warnings."
+      ],
+      "keywords": [
+        "salary deduction",
+        "illegal deduction",
+        "pay slip audit",
+        "administrative fine"
+      ]
+    },
+    {
+      "act": "Section 18 of the Shops and Establishments Act (State-specific)",
+      "category": "Employee Disputes",
+      "scope": "Overtime Wages",
+      "summary": "Entitles employees to receive double the normal wage rate for overtime hours worked.",
+      "details": "Where an employee is required to work in excess of the normal hours of work (usually 8 or 9 hours a day), he shall be entitled to wages at twice the ordinary rate of wages in respect of overtime.",
+      "remedies": [
+        "Log daily timesheet punch entries and email trails.",
+        "Demand overtime calculation charts during payroll disputes.",
+        "File overtime non-payment complaints to the local Shop Inspector."
+      ],
+      "keywords": [
+        "overtime wages",
+        "extra work hours",
+        "shop inspector",
+        "payroll overtime"
+      ]
+    },
+    {
+      "act": "Section 28 of the Indian Contract Act, 1872",
+      "category": "Employee Disputes",
+      "scope": "Agreements in Restraint of Legal Proceedings Void",
+      "summary": "Invalidates employment contract clauses that block employees from suing the company.",
+      "details": "Declares that every agreement by which any party thereto is restricted absolutely from enforcing his rights under or in respect of any contract, by the usual legal proceedings in the ordinary tribunals, is void.",
+      "remedies": [
+        "Dispute arbitration-only clauses that block Labor Court access.",
+        "Challenge one-sided liability agreements signed under duress.",
+        "Consult legal counsel to bypass illegal contract restraints."
+      ],
+      "keywords": [
+        "legal restraint",
+        "void agreement",
+        "labor court waiver",
+        "contract restriction"
+      ]
+    },
+    {
+      "act": "Section 6 of the Hindu Succession Act, 1956",
+      "category": "Inheritance & Heir Disputes",
+      "scope": "Devolution of Coparcenary Property",
+      "summary": "Grants daughters equal coparcenary (birthright) shares in ancestral properties on par with sons.",
+      "details": "Reformed by the 2005 Amendment. The daughter of a coparcener shall by birth become a coparcener in her own right in the same manner as the son, and have the same rights in the coparcenary property.",
+      "remedies": [
+        "File partition suits claiming equal property shares as a daughter.",
+        "Challenge ancestral property sales executed without your consent.",
+        "Submit genealogical tables proving birthright descent."
+      ],
+      "keywords": [
+        "coparcenary share",
+        "daughter inheritance",
+        "ancestral property",
+        "partition suit"
+      ]
+    },
+    {
+      "act": "Section 8 of the Hindu Succession Act, 1956",
+      "category": "Inheritance & Heir Disputes",
+      "scope": "General Rules of Succession in Case of Males",
+      "summary": "Governs how a deceased male's self-acquired property is shared among Class I heirs (spouse, kids, mother).",
+      "details": "The property of a male Hindu dying intestate shall devolve: firstly, upon Class I heirs (spouse, mother, son, daughter); secondly, upon Class II heirs if Class I is vacant.",
+      "remedies": [
+        "Obtain a Legal Heir Certificate listing all Class I surviving members.",
+        "File claims for equal split of self-acquired bank accounts and plots.",
+        "Challenge claims of distant relatives if Class I heirs are alive."
+      ],
+      "keywords": [
+        "intestate succession",
+        "class I heirs",
+        "legal heir certificate",
+        "male inheritance"
+      ]
+    },
+    {
+      "act": "Section 14 of the Hindu Succession Act, 1956",
+      "category": "Inheritance & Heir Disputes",
+      "scope": "Property of Female Hindu to be Her Absolute Property",
+      "summary": "Declares that any property owned by a female Hindu is her absolute property, ending limited estate rules.",
+      "details": "Any property possessed by a female Hindu, whether acquired before or after the commencement of this Act, shall be held by her as absolute owner and not as a limited owner.",
+      "remedies": [
+        "Sell or gift property inherited by you without needing husband/son approval.",
+        "File cases to delete family annotations labeling your estate as 'limited'.",
+        "Draft Wills disposing of your absolute properties independently."
+      ],
+      "keywords": [
+        "absolute property",
+        "female inheritance",
+        "limited estate",
+        "estate disposal"
+      ]
+    },
+    {
+      "act": "Section 15 of the Hindu Succession Act, 1956",
+      "category": "Inheritance & Heir Disputes",
+      "scope": "General Rules of Succession in Case of Female Hindus",
+      "summary": "Governs devolution of a deceased female's property, prioritizing children, spouse, and husband's heirs.",
+      "details": "Property of a female Hindu dying intestate shall devolve: firstly, upon sons and daughters (including kids of deceased children) and the husband; secondly, upon heirs of the husband.",
+      "remedies": [
+        "File succession claims for deceased mother's property.",
+        "Verify if maternal properties originate from parents or husband (different rules apply).",
+        "Object to claims of mother's siblings if husband/children are surviving."
+      ],
+      "keywords": [
+        "female intestate",
+        "maternal succession",
+        "mother property",
+        "heirs of husband"
+      ]
+    },
+    {
+      "act": "Section 21 of the Hindu Succession Act, 1956",
+      "category": "Inheritance & Heir Disputes",
+      "scope": "Presumption in Case of Simultaneous Deaths",
+      "summary": "Presumes that the younger individual survived the elder when deaths occur simultaneously (e.g. in accidents).",
+      "details": "Where two persons have died in circumstances rendering it uncertain which of them survived the other, it shall be presumed, until the contrary is proved, that the younger survived the elder.",
+      "remedies": [
+        "Submit joint death reports and medical certificates showing times of event.",
+        "Calculate property devolution assuming the younger child inherited from the father.",
+        "Structure probate petitions accordingly."
+      ],
+      "keywords": [
+        "simultaneous death",
+        "presumption of survival",
+        "inheritance succession",
+        "accident death estate"
+      ]
+    },
+    {
+      "act": "Section 22 of the Hindu Succession Act, 1956",
+      "category": "Inheritance & Heir Disputes",
+      "scope": "Preferential Right to Acquire Property",
+      "summary": "Grants Class I heirs the first right to buy out another co-heir's share in a business/plot.",
+      "details": "Where an interest in any immovable property or business of an intestate devolves upon two or more Class I heirs, and one proposes to transfer their interest, the other co-heirs have a preferential right to acquire it.",
+      "remedies": [
+        "Serve written notices exercising your preferential right to buy out a sibling's share.",
+        "File court suits to stop external third-party sales of shared family businesses.",
+        "Obtain valuation certifications to determine fair buy-out prices."
+      ],
+      "keywords": [
+        "preferential right",
+        "buyout share",
+        "coheir purchase",
+        "family business transfer"
+      ]
+    },
+    {
+      "act": "Section 63 of the Indian Succession Act, 1925",
+      "category": "Inheritance & Heir Disputes",
+      "scope": "Execution of Unprivileged Wills",
+      "summary": "Mandates that every Will must be in writing, signed by testator, and attested by 2 witnesses.",
+      "details": "Every testator shall sign or affix his mark to the Will, and the Will shall be attested by two or more witnesses, each of whom has seen the testator sign or received acknowledgment.",
+      "remedies": [
+        "Ensure your Will is signed by at least two independent, non-beneficiary witnesses.",
+        "Include a medical fitness certificate from a doctor confirming sound state of mind.",
+        "Register the Will at the Sub-Registrar's office to enhance authenticity."
+      ],
+      "keywords": [
+        "will execution",
+        "will attestation",
+        "testator signature",
+        "witness declaration"
+      ]
+    },
+    {
+      "act": "Section 213 of the Indian Succession Act, 1925",
+      "category": "Inheritance & Heir Disputes",
+      "scope": "Establishing Right under Will",
+      "summary": "Requires obtaining a Probate from court to establish executor rights under a Will in major metro cities.",
+      "details": "No right as executor or legatee under a Will can be established in any Court of Justice, unless a Court of competent jurisdiction in India has granted probate of the Will.",
+      "remedies": [
+        "Apply for a Probate Petition in the High Court/District Court.",
+        "Serve notices to all family heirs to verify if they have objections (caveats).",
+        "Publish public notice citations in local newspapers as required by court."
+      ],
+      "keywords": [
+        "probate petition",
+        "executor rights",
+        "will validation",
+        "court probate"
+      ]
+    },
+    {
+      "act": "Section 370 of the Indian Succession Act, 1925",
+      "category": "Inheritance & Heir Disputes",
+      "scope": "Succession Certificates",
+      "summary": "Authorizes courts to issue succession certificates to recover deceased persons debts/securities.",
+      "details": "A succession certificate shall not be granted with respect to any debt or security to which a right is required to be established by probate or letters of administration, unless under specific exceptions.",
+      "remedies": [
+        "Apply for a Succession Certificate in civil court for bank FD/shares releases.",
+        "Submit schedules of all bank account deposits and mutual fund holdings.",
+        "Post safety indemnity bonds if required by banking organizations."
+      ],
+      "keywords": [
+        "succession certificate",
+        "movable assets claim",
+        "bank account release",
+        "securities transfer"
+      ]
+    },
+    {
+      "act": "Section 57 of the Indian Succession Act, 1925",
+      "category": "Inheritance & Heir Disputes",
+      "scope": "Application of Wills Rules",
+      "summary": "Restricts probate requirements to Wills made in Kolkata, Chennai, and Mumbai, or relating to land in these cities.",
+      "details": "Specifies that the provisions of Section 213 (mandatory probate) apply only to Wills executed by Hindus, Buddhists, Sikhs, or Jains within the territories of Kolkata, Madras, and Bombay.",
+      "remedies": [
+        "Verify if the deceased’s property location requires a mandatory probate.",
+        "Skip expensive probates if the property is located in non-metro regions (Letters of Administration apply instead).",
+        "Submit Will directly to banking organizations for claims in non-metro areas."
+      ],
+      "keywords": [
+        "will probate metro",
+        "mandatory probate",
+        "territorial application",
+        "will execution location"
+      ]
+    },
+    {
+      "act": "Section 2 of the Indian Partition Act, 1893",
+      "category": "Inheritance & Heir Disputes",
+      "scope": "Power to Order Sale Instead of Division",
+      "summary": "Empowers courts to order public sale and cash division if physical division of land is impossible.",
+      "details": "Whenever in any suit for partition, it appears to the court that by reason of the nature of the property, a division cannot reasonably be made, the court may direct a sale of the property and distribution of proceeds.",
+      "remedies": [
+        "Request court-directed sale if dividing a single home/apartment among 5 siblings is impractical.",
+        "Participate in internal family bidding auctions to buy out other shares.",
+        "Submit valuation reports by registered engineers to set floor prices."
+      ],
+      "keywords": [
+        "partition sale",
+        "cash division",
+        "property auction",
+        "physical division partition"
+      ]
+    },
+    {
+      "act": "Section 4 of the Indian Partition Act, 1893",
+      "category": "Inheritance & Heir Disputes",
+      "scope": "Partition Suit of Dwelling House",
+      "summary": "Allows family members to buy out shares sold by a co-heir to an outsider.",
+      "details": "Where a share of a dwelling-house belonging to an undivided family has been transferred to a person who is not a member of such family, the court shall value such share and force sale to a family shareholder who wants to buy it.",
+      "remedies": [
+        "File applications to buy out external buyers attempting to occupy ancestral dwellings.",
+        "Prevent stranger entry into shared family compounds.",
+        "Request court valuations of the external buyer's share."
+      ],
+      "keywords": [
+        "dwelling house partition",
+        "outsider buyout",
+        "undivided family home",
+        "share valuation"
+      ]
+    },
+    {
+      "act": "Section 23 of the Hindu Succession Act, 1956",
+      "category": "Inheritance & Heir Disputes",
+      "scope": "Special Provision Respecting Dwelling Houses (Note: Repealed)",
+      "summary": "Previously restricted female heirs from demanding partition of family dwelling houses until male heirs decided (Note: Repealed).",
+      "details": "Formerly restricted a female heir's right to demand partition of a dwelling house until male heirs chose to divide it. This section was repealed in 2005, giving female heirs immediate rights to partition.",
+      "remedies": [
+        "File partition suits for shared parental houses at any time.",
+        "Reference the 2005 Repeal in court to dismiss claims blocking daughter partition suits.",
+        "Inquire about inheritance registries to verify property partition filings."
+      ],
+      "keywords": [
+        "dwelling house partition",
+        "repealed section 23",
+        "daughter partition suit",
+        "ancestral house"
+      ]
+    },
+    {
+      "act": "Section 25 of the Hindu Succession Act, 1956",
+      "category": "Inheritance & Heir Disputes",
+      "scope": "Murderer Disqualified from Inheriting",
+      "summary": "Disqualifies a person who commits murder from inheriting the victim's property.",
+      "details": "A person who commits murder or abets the commission of murder shall be disqualified from inheriting the property of the person murdered, or any other property in furtherance of which he committed the murder.",
+      "remedies": [
+        "Submit copies of criminal conviction judgments to disqualify an heir.",
+        "File claims routing inheritance to next eligible heirs in succession tables.",
+        "Obtain copy of FIR/charge sheets to stay inheritance transfers during pending trials."
+      ],
+      "keywords": [
+        "heir disqualification",
+        "murder inheritance",
+        "criminal conviction",
+        "succession exclusion"
+      ]
+    },
+    {
+      "act": "Section 26 of the Hindu Succession Act, 1956",
+      "category": "Inheritance & Heir Disputes",
+      "scope": "Convert's Descendants Disqualified",
+      "summary": "Disqualifies children born after an individual's conversion to another religion from inheriting Hindu relative estates.",
+      "details": "Where a Hindu has ceased to be a Hindu by conversion, children born to him after conversion shall be disqualified from inheriting the property of any of their Hindu relatives, unless they are Hindus at the time of succession.",
+      "remedies": [
+        "Verify the religion status of descendants during succession claims.",
+        "Provide proof of reconversion to Hinduism to restore inheritance claims.",
+        "Obtain birth certificates showing dates of birth relative to conversion dates."
+      ],
+      "keywords": [
+        "conversion disqualification",
+        "succession exclusion",
+        "descendant inheritance",
+        "religious conversion"
       ]
     }
   ]

@@ -1,5 +1,134 @@
 import React, { useState, useRef, useEffect } from 'react'
 
+// Interactive SVG Icon Components
+const DashboardIcon = ({ size = 20, color = 'currentColor' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="3" y="3" width="7" height="9" />
+    <rect x="14" y="3" width="7" height="5" />
+    <rect x="14" y="12" width="7" height="9" />
+    <rect x="3" y="16" width="7" height="5" />
+  </svg>
+);
+
+const LibraryIcon = ({ size = 20, color = 'currentColor' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+    <path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z" />
+  </svg>
+);
+
+const ScheduleIcon = ({ size = 20, color = 'currentColor' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+    <line x1="16" y1="2" x2="16" y2="6" />
+    <line x1="8" y1="2" x2="8" y2="6" />
+    <line x1="3" y1="10" x2="21" y2="10" />
+  </svg>
+);
+
+const ChatIcon = ({ size = 20, color = 'currentColor' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+  </svg>
+);
+
+const MenuIcon = ({ size = 20, color = 'currentColor' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="3" y1="12" x2="21" y2="12" />
+    <line x1="3" y1="6" x2="21" y2="6" />
+    <line x1="3" y1="18" x2="21" y2="18" />
+  </svg>
+);
+
+const ScaleIcon = ({ size = 32, color = 'currentColor' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="12" y1="3" x2="12" y2="21" />
+    <line x1="3" y1="7" x2="21" y2="7" />
+    <path d="M6 7c0 4.5 2 8 6 8s6-3.5 6-8" />
+    <path d="M4 21h16" />
+  </svg>
+);
+
+const BoltIcon = ({ size = 18, color = 'currentColor' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+  </svg>
+);
+
+const VolumeIcon = ({ size = 16, color = 'currentColor' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+    <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" />
+  </svg>
+);
+
+const PauseIcon = ({ size = 16, color = 'currentColor' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="6" y="4" width="4" height="16" />
+    <rect x="14" y="4" width="4" height="16" />
+  </svg>
+);
+
+const CopyIcon = ({ size = 14, color = 'currentColor' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+  </svg>
+);
+
+const FileIcon = ({ size = 32, color = 'currentColor' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+    <polyline points="14 2 14 8 20 8" />
+    <line x1="16" y1="13" x2="8" y2="13" />
+    <line x1="16" y1="17" x2="8" y2="17" />
+    <polyline points="10 9 9 9 8 9" />
+  </svg>
+);
+
+const LockIcon = ({ size = 36, color = 'currentColor' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+  </svg>
+);
+
+const SunIcon = ({ size = 18, color = 'currentColor' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="5" />
+    <line x1="12" y1="1" x2="12" y2="3" />
+    <line x1="12" y1="21" x2="12" y2="23" />
+    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+    <line x1="1" y1="12" x2="3" y2="12" />
+    <line x1="21" y1="12" x2="23" y2="12" />
+    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+  </svg>
+);
+
+const MoonIcon = ({ size = 18, color = 'currentColor' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+  </svg>
+);
+
+const UserIcon = ({ size = 16, color = 'currentColor' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+    <circle cx="12" cy="7" r="4" />
+  </svg>
+);
+
+const TrashIcon = ({ size = 14, color = 'currentColor' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="3 6 5 6 21 6" />
+    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+    <line x1="10" y1="11" x2="10" y2="17" />
+    <line x1="14" y1="11" x2="14" y2="17" />
+  </svg>
+);
+
 interface Milestone {
   title: string;
   date: string;
@@ -96,34 +225,6 @@ const UI_TRANSLATIONS: Record<string, Record<string, string>> = {
   }
 };
 
-const LAWS_LIBRARY_DATA = [
-  {
-    act: "Section 106 of the Transfer of Property Act, 1882",
-    scope: "Month-to-Month Rental Leases",
-    details: "Provides that a tenancy of immovable property from month to month can only be terminated by giving a 15-day written notice. If the notice is not served 15 days prior, any eviction lawsuit is legally invalid."
-  },
-  {
-    act: "Section 138 of the Negotiable Instruments Act, 1881",
-    scope: "Cheque Dishonor & Bounces",
-    details: "Establishes criminal liability for bounced cheques due to insufficient funds. Payees must send a demand letter within 30 days of dishonor, and drawers get 15 days to settle the payment."
-  },
-  {
-    act: "Section 56 of the Electricity Act, 2003",
-    scope: "Power Cuts & Arrears",
-    details: "Prohibits utility companies from disconnecting electricity supply without giving a clear, written 15-day warning notice to clear default dues."
-  },
-  {
-    act: "Section 19 of the Recovery of Debts and Bankruptcy Act, 1993",
-    scope: "Bank Loans & Recovery Tribunals",
-    details: "Specifies procedures for financial banks to sue default borrowers in Debts Recovery Tribunals (DRT). Borrowers can file dispute responses within 30 days."
-  },
-  {
-    act: "Section 499 of the Indian Penal Code (IPC) / BNS 356",
-    scope: "Criminal Defamation Cases",
-    details: "Governs criminal charges against false written or spoken allegations damaging a citizen's reputation. Truth and public benefit constitute solid defenses."
-  }
-];
-
 export default function App() {
   const [fileUploaded, setFileUploaded] = useState(false);
   const [activeTab, setActiveTab] = useState('summary');
@@ -132,6 +233,38 @@ export default function App() {
   const [activeNav, setActiveNav] = useState('dashboard'); 
   const [sidebarOpen, setSidebarOpen] = useState(true); // Default open for premium look
   const [isDarkMode, setIsDarkMode] = useState(true);
+
+  // Laws Library dynamic states
+  const [categories, setCategories] = useState<string[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string>('All');
+  const [lawsList, setLawsList] = useState<any[]>([]);
+  const [expandedLawId, setExpandedLawId] = useState<number | null>(null);
+  const [searchQuery, setSearchQuery] = useState<string>('');
+
+  // Fetch unique categories on load
+  useEffect(() => {
+    fetch('/api/laws/categories')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          setCategories(['All', ...data]);
+        }
+      })
+      .catch(err => console.error("Error fetching categories:", err));
+  }, []);
+
+  // Fetch filtered laws on selectedCategory change
+  useEffect(() => {
+    const url = selectedCategory === 'All' ? '/api/laws' : `/api/laws?category=${encodeURIComponent(selectedCategory)}`;
+    fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          setLawsList(data);
+        }
+      })
+      .catch(err => console.error("Error fetching laws:", err));
+  }, [selectedCategory]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [pendingCalendar, setPendingCalendar] = useState<{date: string, title: string} | null>(null);
@@ -412,6 +545,19 @@ export default function App() {
     }
   };
 
+  const filteredLaws = lawsList.filter(law => {
+    if (!searchQuery.trim()) return true;
+    const query = searchQuery.toLowerCase().trim();
+    
+    const actMatch = law.act?.toLowerCase().includes(query);
+    const scopeMatch = law.scope?.toLowerCase().includes(query);
+    const summaryMatch = law.summary?.toLowerCase().includes(query);
+    const detailsMatch = law.details?.toLowerCase().includes(query);
+    const keywordMatch = law.keywords?.some((kw: string) => kw.toLowerCase().includes(query));
+    
+    return actMatch || scopeMatch || summaryMatch || detailsMatch || keywordMatch;
+  });
+
   const displayAnalysis = language === 'telugu' && translatedAnalysis ? translatedAnalysis : analysis;
 
   return (
@@ -474,12 +620,14 @@ export default function App() {
           }}
           className="logo-pulse"
         >
-          ☰
+          <MenuIcon color="var(--color-text-primary)" size={20} />
         </button>
 
         {sidebarOpen && (
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '48px', textAlign: 'center', padding: '0 20px', animation: 'fadeIn 0.3s' }}>
-            <span style={{ fontSize: '42px', marginBottom: '14px', filter: 'drop-shadow(0 4px 10px rgba(99, 102, 241, 0.2))' }}>⚖️</span>
+            <span style={{ display: 'flex', justifyContent: 'center', marginBottom: '14px', filter: 'drop-shadow(0 4px 10px rgba(99, 102, 241, 0.2))' }}>
+              <ScaleIcon color="var(--color-accent-indigo)" size={48} />
+            </span>
             <h1 style={{ margin: 0, fontSize: '20px', fontWeight: '800', letterSpacing: '-0.02em', color: '#ffffff', fontFamily: 'var(--font-header)' }}>
               NyayaMitra AI
             </h1>
@@ -492,9 +640,9 @@ export default function App() {
         {/* Navigation links */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%', padding: '0 16px', boxSizing: 'border-box' }}>
           {[
-            { id: 'dashboard', label: language === 'english' ? 'Dashboard Portal' : 'డాష్‌బోర్డ్ పోర్టల్', icon: '📊' },
-            { id: 'library', label: language === 'english' ? 'Laws Database' : 'చట్టాల గ్రంథాలయం', icon: '📚' },
-            { id: 'schedule', label: language === 'english' ? 'Milestone Track' : 'గడువుల పట్టిక', icon: '📅' }
+            { id: 'dashboard', label: language === 'english' ? 'Dashboard Portal' : 'డాష్‌బోర్డ్ పోర్టల్', icon: <DashboardIcon color={activeNav === 'dashboard' ? '#ffffff' : 'var(--color-text-secondary)'} /> },
+            { id: 'library', label: language === 'english' ? 'Laws Database' : 'చట్టాల గ్రంథాలయం', icon: <LibraryIcon color={activeNav === 'library' ? '#ffffff' : 'var(--color-text-secondary)'} /> },
+            { id: 'schedule', label: language === 'english' ? 'Milestone Track' : 'గడువుల పట్టిక', icon: <ScheduleIcon color={activeNav === 'schedule' ? '#ffffff' : 'var(--color-text-secondary)'} /> }
           ].map((item) => {
             const isActive = activeNav === item.id;
             return (
@@ -522,7 +670,7 @@ export default function App() {
                   justifyContent: sidebarOpen ? 'flex-start' : 'center'
                 }}
               >
-                <span style={{ fontSize: '20px' }}>{item.icon}</span>
+                <span style={{ display: 'flex', alignItems: 'center' }}>{item.icon}</span>
                 {sidebarOpen && <span>{item.label}</span>}
               </button>
             );
@@ -614,7 +762,7 @@ export default function App() {
                 transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
               }}
             >
-              <span>{isDarkMode ? '☀️' : '🌙'}</span>
+              <span style={{ display: 'flex', alignItems: 'center' }}>{isDarkMode ? <SunIcon color="var(--color-accent-gold)" /> : <MoonIcon color="var(--color-accent-indigo)" />}</span>
               <span>{isDarkMode ? (language === 'english' ? 'LIGHT' : 'లైట్') : (language === 'english' ? 'DARK' : 'డార్క్')}</span>
             </button>
 
@@ -644,17 +792,13 @@ export default function App() {
                 transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
               }}
             >
-              <span>👤</span>
+              <span style={{ display: 'flex', alignItems: 'center' }}><UserIcon color={isLoggedIn ? 'var(--color-success)' : 'var(--color-text-primary)'} /></span>
               <span>
                 {isLoggedIn 
                   ? (language === 'english' ? 'LOGOUT' : 'లాగ్ అవుట్') 
                   : (language === 'english' ? 'SIGN IN' : 'లాగిన్')}
               </span>
             </button>
-
-            <a href="https://github.com/hanshikavelaga/Nyaya_mitra" target="_blank" rel="noreferrer" style={{ color: 'var(--color-text-secondary)', textDecoration: 'none', fontSize: '13px', fontWeight: '600', fontFamily: 'var(--font-header)', letterSpacing: '0.5px' }}>
-              GITHUB CODEBASE
-            </a>
           </div>
         </header>
 
@@ -734,7 +878,7 @@ export default function App() {
                     boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.02)'
                   }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '16px', overflow: 'hidden' }}>
-                      <span style={{ fontSize: '32px' }}>📄</span>
+                      <span style={{ display: 'flex', alignItems: 'center' }}><FileIcon color="var(--color-accent-indigo)" size={32} /></span>
                       <div style={{ overflow: 'hidden' }}>
                         <p style={{ margin: 0, fontSize: '14px', fontWeight: '800', color: '#ffffff', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>
                           {file?.name || "uploaded_notice.pdf"}
@@ -746,10 +890,25 @@ export default function App() {
                     </div>
                     <button 
                       onClick={handleReset}
-                      style={{ background: 'rgba(239, 68, 68, 0.08)', border: '1px solid rgba(239, 68, 68, 0.2)', padding: '6px 14px', borderRadius: '12px', color: 'var(--color-danger)', cursor: 'pointer', fontSize: '12px', fontWeight: '800', transition: 'all 0.2s', outline: 'none' }}
+                      style={{ 
+                        background: 'rgba(239, 68, 68, 0.08)', 
+                        border: '1px solid rgba(239, 68, 68, 0.2)', 
+                        padding: '6px 14px', 
+                        borderRadius: '12px', 
+                        color: 'var(--color-danger)', 
+                        cursor: 'pointer', 
+                        fontSize: '12px', 
+                        fontWeight: '800', 
+                        transition: 'all 0.2s', 
+                        outline: 'none',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '6px'
+                      }}
                       onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(239, 68, 68, 0.15)'}
                       onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(239, 68, 68, 0.08)'}
                     >
+                      <TrashIcon color="var(--color-danger)" size={14} />
                       {t('removeBtn')}
                     </button>
                   </div>
@@ -800,7 +959,7 @@ export default function App() {
             <section className="glass-card" style={{ flex: 1.3, padding: '32px', display: 'flex', flexDirection: 'column', height: 'calc(100vh - 176px)', overflow: 'hidden' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
                 <h2 style={{ margin: 0, fontSize: '16px', fontWeight: '800', letterSpacing: '-0.01em', color: 'var(--color-text-primary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ color: 'var(--color-accent-indigo)' }}>⚡</span> {t('workspaceTitle')}
+                  <span style={{ display: 'flex', alignItems: 'center' }}><BoltIcon color="var(--color-accent-indigo)" /></span> {t('workspaceTitle')}
                 </h2>
                 
                 {/* Visualizer tts synthesis button */}
@@ -836,7 +995,7 @@ export default function App() {
                         fontFamily: 'var(--font-header)'
                       }}
                     >
-                      <span>{isPlayingVoice ? '⏸️' : '🔊'}</span>
+                      <span style={{ display: 'flex', alignItems: 'center' }}>{isPlayingVoice ? <PauseIcon color="var(--color-accent-gold)" /> : <VolumeIcon color="#ffffff" />}</span>
                       <span>{isPlayingVoice ? t('pauseBtn') : t('listenBtn')}</span>
                     </button>
                   </div>
@@ -888,7 +1047,14 @@ export default function App() {
                           fontFamily: 'var(--font-header)'
                         }}
                       >
-                        {tab === 'chat' ? (language === 'english' ? '💬 Nyaya Chat' : '💬 న్యాయ చాట్') : (language === 'english' ? tab : t(tab + 'Title') || tab)}
+                        {tab === 'chat' ? (
+                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                            <ChatIcon size={14} color={activeTab === 'chat' ? 'var(--color-text-primary)' : 'var(--color-text-secondary)'} />
+                            {language === 'english' ? 'Nyaya Chat' : 'న్యాయ చాట్'}
+                          </span>
+                        ) : (
+                          language === 'english' ? tab : t(tab + 'Title') || tab
+                        )}
                       </button>
                     ))}
                   </div>
@@ -975,9 +1141,9 @@ export default function App() {
                             <button 
                               onClick={() => handleCopyToClipboard(displayAnalysis.response_template)}
                               className="glow-btn"
-                              style={{ fontSize: '11px', padding: '8px 18px', borderRadius: '14px' }}
+                              style={{ fontSize: '11px', padding: '8px 18px', borderRadius: '14px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
                             >
-                              📋 {t('copyBtn')}
+                              <CopyIcon color="#ffffff" size={14} /> {t('copyBtn')}
                             </button>
                           </div>
                           
@@ -1148,32 +1314,191 @@ export default function App() {
                 </p>
               </div>
 
-              {LAWS_LIBRARY_DATA.map((law, idx) => (
-                <div key={idx} className="glass-card" style={{ padding: '28px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
-                    <h4 style={{ margin: 0, fontSize: '15.5px', fontWeight: '800', color: 'var(--color-accent-gold)', letterSpacing: '0.2px', fontFamily: 'var(--font-header)' }}>
-                      {law.act}
-                    </h4>
-                    <span style={{ 
-                      fontSize: '11px', 
-                      background: 'rgba(99, 102, 241, 0.08)', 
-                      color: '#c7d2fe', 
-                      padding: '6px 14px', 
-                      borderRadius: '20px', 
+              {/* Category selector pills */}
+              <div style={{ 
+                display: 'flex', 
+                gap: '10px', 
+                flexWrap: 'wrap', 
+                marginBottom: '20px',
+                paddingBottom: '12px',
+                borderBottom: '1px solid var(--color-border)'
+              }}>
+                {(categories.length > 0 ? categories : ['All', 'Tenancy & Housing', 'Finance & Banking', 'Consumer Rights', 'Utilities & Services', 'Civil, Personal & Cyber']).map((cat) => {
+                  const isSelected = selectedCategory === cat;
+                  return (
+                    <button
+                      key={cat}
+                      onClick={() => {
+                        setSelectedCategory(cat);
+                        setExpandedLawId(null);
+                      }}
+                      style={{
+                        background: isSelected ? 'var(--color-accent-indigo)' : 'rgba(255, 255, 255, 0.02)',
+                        color: isSelected ? '#ffffff' : 'var(--color-text-secondary)',
+                        border: isSelected ? '1px solid var(--color-accent-indigo)' : '1px solid var(--color-border)',
+                        borderRadius: '30px',
+                        padding: '8px 18px',
+                        fontSize: '12.5px',
+                        fontWeight: '700',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease',
+                        fontFamily: 'var(--font-header)',
+                        outline: 'none'
+                      }}
+                    >
+                      {cat}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Search Bar Input */}
+              <div style={{ position: 'relative', marginBottom: '8px' }}>
+                <input 
+                  type="text" 
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder={language === 'english' ? "🔍 Search laws by act name, scope, summary or keyword..." : "🔍 చట్టాల పేరు, పరిధి, సారాంశం లేదా కీవర్డ్ ద్వారా శోధించండి..."}
+                  style={{
+                    width: '100%',
+                    background: 'rgba(255,255,255,0.02)',
+                    border: '1px solid var(--color-border)',
+                    borderRadius: '16px',
+                    padding: '14px 20px 14px 44px',
+                    color: 'var(--color-text-primary)',
+                    fontSize: '13.5px',
+                    outline: 'none',
+                    boxSizing: 'border-box',
+                    transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
+                  }}
+                />
+                {searchQuery && (
+                  <button 
+                    onClick={() => setSearchQuery('')}
+                    style={{
+                      position: 'absolute',
+                      right: '18px',
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      background: 'none',
+                      border: 'none',
+                      color: 'var(--color-text-secondary)',
+                      cursor: 'pointer',
+                      fontSize: '14px',
                       fontWeight: '800',
-                      border: '1px solid rgba(99, 102, 241, 0.15)',
-                      fontFamily: 'var(--font-header)',
-                      letterSpacing: '0.5px',
-                      textTransform: 'uppercase'
-                    }}>
-                      {law.scope}
-                    </span>
-                  </div>
-                  <p style={{ margin: '8px 0 0 0', fontSize: '13.5px', color: 'var(--color-text-secondary)', lineHeight: '1.75' }}>
-                    {law.details}
-                  </p>
+                      outline: 'none'
+                    }}
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
+
+              {filteredLaws.length > 0 ? (
+                filteredLaws.map((law, idx) => {
+                  const isExpanded = expandedLawId === law.id;
+                  return (
+                    <div 
+                      key={law.id || idx} 
+                      className="glass-card" 
+                      style={{ 
+                        padding: '24px 28px', 
+                        display: 'flex', 
+                        flexDirection: 'column', 
+                        gap: '12px',
+                        cursor: 'pointer',
+                        border: isExpanded ? '1px solid var(--color-accent-indigo)' : '1px solid var(--color-border)',
+                        boxShadow: isExpanded ? '0 12px 32px rgba(99, 102, 241, 0.15)' : 'none',
+                        transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
+                      }}
+                      onClick={() => setExpandedLawId(isExpanded ? null : law.id)}
+                    >
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+                        <h4 style={{ margin: 0, fontSize: '15.5px', fontWeight: '800', color: isExpanded ? 'var(--color-accent-indigo)' : 'var(--color-accent-gold)', letterSpacing: '0.2px', fontFamily: 'var(--font-header)', transition: 'color 0.2s' }}>
+                          {law.act}
+                        </h4>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <span style={{ 
+                            fontSize: '10px', 
+                            background: 'rgba(99, 102, 241, 0.08)', 
+                            color: '#c7d2fe', 
+                            padding: '4px 12px', 
+                            borderRadius: '20px', 
+                            fontWeight: '800',
+                            border: '1px solid rgba(99, 102, 241, 0.15)',
+                            fontFamily: 'var(--font-header)',
+                            letterSpacing: '0.5px',
+                            textTransform: 'uppercase'
+                          }}>
+                            {law.scope}
+                          </span>
+                          <span style={{ color: 'var(--color-text-secondary)', fontSize: '14px' }}>
+                            {isExpanded ? '▲' : '▼'}
+                          </span>
+                        </div>
+                      </div>
+                      
+                      <p style={{ margin: '6px 0 0 0', fontSize: '13.5px', color: 'var(--color-text-primary)', fontWeight: '500', lineHeight: '1.6' }}>
+                        {law.summary}
+                      </p>
+                      
+                      {/* Accordion Expanded Details */}
+                      {isExpanded && (
+                        <div 
+                          style={{ 
+                            marginTop: '12px',
+                            paddingTop: '16px',
+                            borderTop: '1px dashed var(--color-border)',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '16px',
+                            animation: 'fadeIn 0.2s ease-out'
+                          }}
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <div>
+                            <h5 style={{ margin: '0 0 6px 0', fontSize: '12px', fontWeight: '800', color: 'var(--color-accent-indigo)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                              Detailed Legal Description
+                            </h5>
+                            <p style={{ margin: 0, fontSize: '13px', color: 'var(--color-text-secondary)', lineHeight: '1.7' }}>
+                              {law.details}
+                            </p>
+                          </div>
+                          
+                          {law.remedies && law.remedies.length > 0 && (
+                            <div>
+                              <h5 style={{ margin: '0 0 8px 0', fontSize: '12px', fontWeight: '800', color: 'var(--color-success)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                                Recommended Citizen Actions & Remedies
+                              </h5>
+                              <ul style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                                {law.remedies.map((rem: string, rIdx: number) => (
+                                  <li key={rIdx} style={{ fontSize: '12.5px', color: 'var(--color-text-secondary)', lineHeight: '1.6' }}>
+                                    {rem}
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+                          
+                          {law.keywords && law.keywords.length > 0 && (
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '4px' }}>
+                              {law.keywords.map((kw: string, kIdx: number) => (
+                                <span key={kIdx} style={{ fontSize: '10px', background: 'rgba(255,255,255,0.03)', border: '1px solid var(--color-border)', color: 'var(--color-text-secondary)', padding: '2px 8px', borderRadius: '4px' }}>
+                                  #{kw}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })
+              ) : (
+                <div style={{ textAlign: 'center', padding: '40px', color: 'var(--color-text-secondary)' }}>
+                  {lawsList.length === 0 ? "Loading laws library entries..." : (language === 'english' ? "No matching laws found." : "సరిపోలే చట్టాలు కనుగొనబడలేదు.")}
                 </div>
-              ))}
+              )}
             </div>
           </main>
         ) : (
@@ -1288,7 +1613,7 @@ export default function App() {
               ✕
             </button>
             <div style={{ textAlign: 'center' }}>
-              <span style={{ fontSize: '36px' }}>🔒</span>
+              <span style={{ display: 'flex', justifyContent: 'center', marginBottom: '8px' }}><LockIcon color="var(--color-accent-indigo)" size={36} /></span>
               <h2 style={{ margin: '12px 0 6px 0', fontSize: '22px', fontWeight: '800', color: 'var(--color-text-primary)', fontFamily: 'var(--font-header)' }}>
                 {language === 'english' ? 'Sign In Required' : 'లాగిన్ అవసరం'}
               </h2>

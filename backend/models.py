@@ -47,3 +47,15 @@ class ChatLog(Base):
 
     # Relationship to Document
     document = relationship("Document", back_populates="chat_logs")
+
+class Law(Base):
+    __tablename__ = "laws"
+
+    id = Column(Integer, primary_key=True, index=True)
+    act = Column(String(255), nullable=False)
+    category = Column(String(100), nullable=False, index=True)
+    scope = Column(String(255), nullable=False)
+    summary = Column(Text, nullable=False)
+    details = Column(Text, nullable=False)
+    remedies_json = Column(Text, nullable=False) # JSON-serialized list
+    keywords_json = Column(Text, nullable=False) # JSON-serialized list
