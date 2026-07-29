@@ -1027,7 +1027,7 @@ export default function App() {
 
         {/* 3. Render Navigation Views */}
         {activeNav === 'dashboard' ? (
-          <main style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '36px 56px', gap: '28px', overflowY: 'auto' }}>
+          <main style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '36px 56px', gap: '28px', overflowY: 'auto', position: 'relative' }}>
             
             {/* Upper Grid: Ingestion and AI Workspace Side-by-Side */}
             <div style={{ display: 'flex', gap: '36px', flexWrap: 'wrap' }}>
@@ -1434,18 +1434,16 @@ export default function App() {
 
                         {/* Editor Textarea container */}
                         <div style={isTemplateExpanded ? {
-                          position: 'fixed',
-                          top: '100px',
-                          left: '50%',
-                          transform: 'translateX(-50%)',
-                          width: 'calc(100% - 100px)',
-                          maxWidth: '1200px',
-                          height: 'calc(100vh - 200px)',
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          width: '100%',
+                          height: '100%',
                           background: '#040711',
                           borderRadius: '16px',
                           border: '2px solid var(--color-accent-indigo)',
                           boxShadow: '0 20px 50px rgba(0,0,0,0.8)',
-                          zIndex: 9999,
+                          zIndex: 99,
                           display: 'flex',
                           flexDirection: 'column',
                           overflow: 'hidden',
