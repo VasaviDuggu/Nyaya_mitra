@@ -2,23 +2,40 @@ import os
 import json
 import re
 from typing import List, Dict, Any
+from database import SessionLocal
+import models
 
-# Resolve absolute path to laws_kb.json
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-LAWS_KB_PATH = os.path.join(BASE_DIR, "data", "laws_kb.json")
-
-def load_laws_knowledge_base() -> List[Dict[str, Any]]:
-    """Reads and parses the legal knowledge base JSON file."""
-    if not os.path.exists(LAWS_KB_PATH):
-        # Return fallback empty structure
-        return []
+def load_laws_from_db() -> List[Dict[str, Any]]:
+    """Reads and parses the legal acts from the SQLite database."""
+    db = SessionLocal()
     try:
-        with open(LAWS_KB_PATH, "r", encoding="utf-8") as f:
-            data = json.load(f)
-            return data.get("laws", [])
+        laws = db.query(models.Law).all()
+        formatted_laws = []
+        for l in laws:
+            try:
+                remedies = json.loads(l.remedies_json)
+            except Exception:
+                remedies = []
+            try:
+                keywords = json.loads(l.keywords_json)
+            except Exception:
+                keywords = []
+            formatted_laws.append({
+                "id": l.id,
+                "act": l.act,
+                "category": l.category,
+                "scope": l.scope,
+                "summary": l.summary,
+                "details": l.details,
+                "remedies": remedies,
+                "keywords": keywords
+            })
+        return formatted_laws
     except Exception as e:
-        print(f"Error loading legal database: {str(e)}")
+        print(f"Error loading legal database table: {str(e)}")
         return []
+    finally:
+        db.close()
 
 def tokenize_text(text: str) -> set:
     """Cleans and tokenizes text, converting to lowercase and stripping punctuation."""
@@ -31,10 +48,10 @@ def tokenize_text(text: str) -> set:
 
 def retrieve_matching_laws(document_text: str, limit: int = 2) -> List[Dict[str, Any]]:
     """
-    Ranks the legal acts in laws_kb.json based on keyword overlap count with document_text.
+    Ranks the legal acts in the SQLite database based on keyword overlap count with document_text.
     Returns the top 'limit' matching laws.
     """
-    laws = load_laws_knowledge_base()
+    laws = load_laws_from_db()
     if not laws:
         return []
 

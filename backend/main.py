@@ -28,6 +28,41 @@ if GEMINI_API_KEY:
 # Initialize SQLite database tables on server startup
 models.Base.metadata.create_all(bind=engine)
 
+# Seed database with laws if empty
+def seed_database_laws():
+    db = next(get_db())
+    try:
+        count = db.query(models.Law).count()
+        if count == 0:
+            logger.info("Database laws table is empty. Seeding from laws_kb.json...")
+            import os
+            BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+            json_path = os.path.join(BASE_DIR, "data", "laws_kb.json")
+            if os.path.exists(json_path):
+                with open(json_path, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                    laws = data.get("laws", [])
+                    for item in laws:
+                        db_law = models.Law(
+                            act=item["act"],
+                            category=item["category"],
+                            scope=item["scope"],
+                            summary=item["summary"],
+                            details=item["details"],
+                            remedies_json=json.dumps(item["remedies"]),
+                            keywords_json=json.dumps(item["keywords"])
+                        )
+                        db.add(db_law)
+                    db.commit()
+                    logger.info(f"Successfully seeded {len(laws)} laws into SQLite database.")
+            else:
+                logger.error(f"Seeding failed: {json_path} not found.")
+    except Exception as e:
+        db.rollback()
+        logger.error(f"Failed to seed database: {str(e)}")
+
+seed_database_laws()
+
 app = FastAPI(title="NyayaMitra AI API", version="1.0.0")
 
 # Enable CORS for frontend cross-origin requests
@@ -213,6 +248,49 @@ async def generate_calendar_event(date: str, title: str):
         "message": f"Calendar event file generated for {title}",
         "ics_file_content": ics_content
     }
+
+@app.get("/api/laws/categories")
+async def get_laws_categories(db: Session = Depends(get_db)):
+    try:
+        categories = db.query(models.Law.category).distinct().all()
+        category_list = [c[0] for c in categories if c[0]]
+        category_list.sort()
+        return category_list
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to fetch categories: {str(e)}")
+
+@app.get("/api/laws")
+async def get_laws(category: Optional[str] = None, db: Session = Depends(get_db)):
+    try:
+        query = db.query(models.Law)
+        if category and category.lower() != "all":
+            query = query.filter(models.Law.category == category)
+        laws = query.all()
+        
+        formatted_laws = []
+        for l in laws:
+            try:
+                remedies = json.loads(l.remedies_json)
+            except Exception:
+                remedies = []
+            try:
+                keywords = json.loads(l.keywords_json)
+            except Exception:
+                keywords = []
+                
+            formatted_laws.append({
+                "id": l.id,
+                "act": l.act,
+                "category": l.category,
+                "scope": l.scope,
+                "summary": l.summary,
+                "details": l.details,
+                "remedies": remedies,
+                "keywords": keywords
+            })
+        return formatted_laws
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to fetch laws: {str(e)}")
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
