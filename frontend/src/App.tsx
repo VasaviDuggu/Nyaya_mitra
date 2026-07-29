@@ -148,6 +148,24 @@ const UploadIcon = ({ size = 36, color = 'currentColor' }) => (
   </svg>
 );
 
+const MaximizeIcon = ({ size = 14, color = 'currentColor' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="15 3 21 3 21 9" />
+    <polyline points="9 21 3 21 3 15" />
+    <line x1="21" y1="3" x2="14" y2="10" />
+    <line x1="3" y1="21" x2="10" y2="14" />
+  </svg>
+);
+
+const MinimizeIcon = ({ size = 14, color = 'currentColor' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="4 14 10 14 10 20" />
+    <polyline points="20 10 14 10 14 4" />
+    <line x1="14" y1="10" x2="21" y2="3" />
+    <line x1="10" y1="14" x2="3" y2="21" />
+  </svg>
+);
+
 const getCategoryIcon = (cat: string, color: string) => {
   const normCat = cat.toLowerCase();
   if (normCat.includes('tenancy') || normCat.includes('housing')) {
@@ -399,6 +417,10 @@ export default function App() {
   const [isSendingChat, setIsSendingChat] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
+  // Template editor states
+  const [editedTemplate, setEditedTemplate] = useState<string>('');
+  const [isTemplateExpanded, setIsTemplateExpanded] = useState(false);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
@@ -423,6 +445,19 @@ export default function App() {
       window.speechSynthesis.cancel();
     };
   }, []);
+
+  // Sync editedTemplate state when new analysis data loads or language switches
+  useEffect(() => {
+    if (analysis) {
+      if (language === 'telugu' && translatedAnalysis) {
+        setEditedTemplate(translatedAnalysis.response_template || '');
+      } else {
+        setEditedTemplate(analysis.response_template || '');
+      }
+    } else {
+      setEditedTemplate('');
+    }
+  }, [analysis, translatedAnalysis, language]);
 
   const handleVoiceToggle = () => {
     const summaryText = displayAnalysis?.summary;
@@ -620,6 +655,81 @@ export default function App() {
     }, 2500);
   };
 
+  const handleDownloadPDF = (text: string) => {
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) return;
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>NyayaMitra AI - Draft Response Letter</title>
+          <style>
+            body {
+              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+              line-height: 1.6;
+              color: #333333;
+              padding: 40px;
+              max-width: 800px;
+              margin: 0 auto;
+            }
+            .letter-header {
+              text-align: center;
+              border-bottom: 2px solid #6366f1;
+              padding-bottom: 20px;
+              margin-bottom: 30px;
+            }
+            .letter-title {
+              font-size: 20px;
+              font-weight: bold;
+              color: #1e1b4b;
+              margin: 0;
+              text-transform: uppercase;
+              letter-spacing: 1px;
+            }
+            .letter-meta {
+              font-size: 12px;
+              color: #666666;
+              margin-top: 5px;
+            }
+            .letter-content {
+              white-space: pre-wrap;
+              font-size: 14px;
+              color: #333333;
+            }
+            .letter-footer {
+              margin-top: 50px;
+              border-top: 1px solid #e2e8f0;
+              padding-top: 20px;
+              font-size: 11px;
+              color: #888888;
+              text-align: center;
+            }
+            @media print {
+              body { padding: 0; }
+              .no-print { display: none; }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="letter-header">
+            <h1 class="letter-title">DISPUTE RESPONSE STATEMENT</h1>
+            <div class="letter-meta">Generated via NyayaMitra AI | Case Reference: #${documentId || 'N/A'}</div>
+          </div>
+          <div class="letter-content">${text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</div>
+          <div class="letter-footer">
+            Disclaimer: This is an AI-generated draft response based on public statutes. It is not formal legal advice. Please review with an advocate before formal filing.
+          </div>
+          <script>
+            window.onload = function() {
+              window.print();
+              window.close();
+            };
+          </script>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
+  };
+
   const handleReset = () => {
     window.speechSynthesis.cancel();
     setFile(null);
@@ -633,6 +743,8 @@ export default function App() {
     setActiveTab('summary');
     setIsPlayingVoice(false);
     setChatMessages([]);
+    setEditedTemplate('');
+    setIsTemplateExpanded(false);
   };
 
   const getRemainingDays = (dateStr: string) => {
@@ -1142,7 +1254,7 @@ export default function App() {
                     marginBottom: '24px',
                     gap: '8px'
                   }}>
-                    {['summary', 'laws', 'checklist', 'chat'].map((tab) => (
+                    {['summary', 'laws', 'checklist', 'template', 'chat'].map((tab) => (
                       <button 
                         key={tab}
                         onClick={() => setActiveTab(tab)}
@@ -1166,6 +1278,8 @@ export default function App() {
                             <ChatIcon size={14} color={activeTab === 'chat' ? 'var(--color-text-primary)' : 'var(--color-text-secondary)'} />
                             {language === 'english' ? 'Nyaya Chat' : 'న్యాయ చాట్'}
                           </span>
+                        ) : tab === 'template' ? (
+                          language === 'english' ? 'Response Draft' : 'ప్రత్యుత్తర నమూనా'
                         ) : (
                           language === 'english' ? tab : t(tab + 'Title') || tab
                         )}
@@ -1245,49 +1359,144 @@ export default function App() {
                             ))}
                           </ul>
                         </div>
+                      </div>
+                    )}
 
-                        {/* Copyable Letter Editor */}
-                        <div style={{ marginTop: '8px' }}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                            <h4 style={{ margin: 0, fontSize: '13.5px', fontWeight: '800', color: '#ffffff' }}>
-                              {t('responseDraftTitle')}
-                            </h4>
+                    {/* Response Template Tab */}
+                    {activeTab === 'template' && displayAnalysis && (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', animation: 'fadeIn 0.3s', height: '100%' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <h3 style={{ margin: 0, fontSize: '14.5px', fontWeight: '800', color: '#ffffff' }}>
+                            {language === 'english' ? 'Response Template Editor' : 'ప్రత్యుత్తర లేఖ ఎడిటర్'}
+                          </h3>
+                          <div style={{ display: 'flex', gap: '10px' }}>
+                            {/* Copy Button */}
                             <button 
-                              onClick={() => handleCopyToClipboard(displayAnalysis.response_template)}
+                              onClick={() => handleCopyToClipboard(editedTemplate)}
                               className="glow-btn"
-                              style={{ fontSize: '11px', padding: '8px 18px', borderRadius: '14px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                              style={{ fontSize: '11px', padding: '8px 16px', borderRadius: '14px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
                             >
                               <CopyIcon color="#ffffff" size={14} /> {t('copyBtn')}
                             </button>
-                          </div>
-                          
-                          {/* Code mock layout */}
-                          <div style={{ borderRadius: '16px', overflow: 'hidden', border: '1px solid var(--color-border)', boxShadow: '0 10px 30px rgba(0,0,0,0.5)' }}>
-                            <div style={{ background: '#0b0f19', padding: '10px 20px', borderBottom: '1px solid var(--color-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                              <span style={{ fontFamily: 'monospace', fontSize: '11px', color: 'var(--color-text-secondary)', fontWeight: 'bold' }}>nyaya_response_draft.txt</span>
-                              <span style={{ fontSize: '10px', background: 'rgba(255,255,255,0.05)', color: 'var(--color-text-secondary)', padding: '2px 8px', borderRadius: '6px' }}>UTF-8</span>
-                            </div>
-                            <textarea 
-                              readOnly 
-                              value={displayAnalysis.response_template}
-                              style={{
-                                width: '100%',
-                                height: '140px',
-                                background: '#040711',
-                                border: 'none !important',
-                                padding: '20px',
-                                color: '#a7f3d0',
-                                fontFamily: 'Fira Code, Consolas, Monaco, monospace',
-                                fontSize: '11.5px',
-                                resize: 'none',
-                                outline: 'none',
-                                boxSizing: 'border-box',
-                                lineHeight: '1.7',
-                                display: 'block',
-                                margin: 0
+                            
+                            {/* Download PDF Button */}
+                            <button 
+                              onClick={() => handleDownloadPDF(editedTemplate)}
+                              className="glow-btn"
+                              style={{ 
+                                fontSize: '11px', 
+                                padding: '8px 16px', 
+                                borderRadius: '14px', 
+                                display: 'inline-flex', 
+                                alignItems: 'center', 
+                                gap: '6px',
+                                background: 'linear-gradient(135deg, var(--color-accent-indigo) 0%, var(--color-accent-purple) 100%)'
                               }}
-                            />
+                            >
+                              <FileIcon color="#ffffff" size={14} /> {language === 'english' ? 'Download PDF' : 'PDF డౌన్‌లోడ్'}
+                            </button>
+
+                            {/* Expand/Compress Button */}
+                            <button 
+                              onClick={() => setIsTemplateExpanded(!isTemplateExpanded)}
+                              style={{
+                                background: 'rgba(255,255,255,0.04)',
+                                border: '1px solid var(--color-border)',
+                                padding: '8px 12px',
+                                borderRadius: '14px',
+                                color: '#ffffff',
+                                cursor: 'pointer',
+                                fontSize: '11px',
+                                fontWeight: '800',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '6px',
+                                transition: 'all 0.2s',
+                                outline: 'none'
+                              }}
+                              onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.08)'}
+                              onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.04)'}
+                            >
+                              {isTemplateExpanded ? (
+                                <>
+                                  <MinimizeIcon color="#ffffff" size={14} />
+                                  <span>{language === 'english' ? 'Compress' : 'కుదించు'}</span>
+                                </>
+                              ) : (
+                                <>
+                                  <MaximizeIcon color="#ffffff" size={14} />
+                                  <span>{language === 'english' ? 'Expand' : 'విస్తరించు'}</span>
+                                </>
+                              )}
+                            </button>
                           </div>
+                        </div>
+
+                        {/* Editor Textarea container */}
+                        <div style={isTemplateExpanded ? {
+                          position: 'fixed',
+                          top: '100px',
+                          left: '50%',
+                          transform: 'translateX(-50%)',
+                          width: 'calc(100% - 100px)',
+                          maxWidth: '1200px',
+                          height: 'calc(100vh - 200px)',
+                          background: '#040711',
+                          borderRadius: '16px',
+                          border: '2px solid var(--color-accent-indigo)',
+                          boxShadow: '0 20px 50px rgba(0,0,0,0.8)',
+                          zIndex: 9999,
+                          display: 'flex',
+                          flexDirection: 'column',
+                          overflow: 'hidden',
+                          animation: 'fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1)'
+                        } : {
+                          borderRadius: '16px',
+                          overflow: 'hidden',
+                          border: '1px solid var(--color-border)',
+                          boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
+                          flex: 1,
+                          display: 'flex',
+                          flexDirection: 'column',
+                          minHeight: '280px'
+                        }}>
+                          {isTemplateExpanded && (
+                            <div style={{ background: '#0b0f19', padding: '16px 24px', borderBottom: '1px solid var(--color-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                              <span style={{ fontSize: '13px', fontWeight: '800', color: '#ffffff' }}>
+                                {language === 'english' ? 'Response Template - Fullscreen Editor' : 'ప్రత్యుత్తర లేఖ - పూర్తి స్క్రీన్ ఎడిటర్'}
+                              </span>
+                              <button 
+                                onClick={() => setIsTemplateExpanded(false)}
+                                style={{ background: 'none', border: 'none', color: 'var(--color-text-secondary)', cursor: 'pointer', fontSize: '14px', fontWeight: '800', outline: 'none' }}
+                              >
+                                ✕ {language === 'english' ? 'Close' : 'మూసిвеయి'}
+                              </button>
+                            </div>
+                          )}
+                          <div style={{ background: '#0b0f19', padding: '10px 20px', borderBottom: '1px solid var(--color-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <span style={{ fontFamily: 'monospace', fontSize: '11px', color: 'var(--color-text-secondary)', fontWeight: 'bold' }}>nyaya_response_draft.txt</span>
+                            <span style={{ fontSize: '10px', background: 'rgba(255,255,255,0.05)', color: 'var(--color-text-secondary)', padding: '2px 8px', borderRadius: '6px' }}>Editable</span>
+                          </div>
+                          <textarea 
+                            value={editedTemplate}
+                            onChange={(e) => setEditedTemplate(e.target.value)}
+                            style={{
+                              width: '100%',
+                              flex: 1,
+                              background: '#040711',
+                              border: 'none',
+                              padding: '24px',
+                              color: '#a7f3d0',
+                              fontFamily: 'Fira Code, Consolas, Monaco, monospace',
+                              fontSize: '13px',
+                              resize: 'none',
+                              outline: 'none',
+                              boxSizing: 'border-box',
+                              lineHeight: '1.8',
+                              display: 'block',
+                              margin: 0
+                            }}
+                          />
                         </div>
                       </div>
                     )}
