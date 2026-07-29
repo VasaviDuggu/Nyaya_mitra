@@ -1433,22 +1433,7 @@ export default function App() {
                         </div>
 
                         {/* Editor Textarea container */}
-                        <div style={isTemplateExpanded ? {
-                          position: 'absolute',
-                          top: 0,
-                          left: 0,
-                          width: '100%',
-                          height: '100%',
-                          background: '#040711',
-                          borderRadius: '16px',
-                          border: '2px solid var(--color-accent-indigo)',
-                          boxShadow: '0 20px 50px rgba(0,0,0,0.8)',
-                          zIndex: 99,
-                          display: 'flex',
-                          flexDirection: 'column',
-                          overflow: 'hidden',
-                          animation: 'fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1)'
-                        } : {
+                        <div style={{
                           borderRadius: '16px',
                           overflow: 'hidden',
                           border: '1px solid var(--color-border)',
@@ -1458,19 +1443,7 @@ export default function App() {
                           flexDirection: 'column',
                           minHeight: '280px'
                         }}>
-                          {isTemplateExpanded && (
-                            <div style={{ background: '#0b0f19', padding: '16px 24px', borderBottom: '1px solid var(--color-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                              <span style={{ fontSize: '13px', fontWeight: '800', color: '#ffffff' }}>
-                                {language === 'english' ? 'Response Template - Fullscreen Editor' : 'ప్రత్యుత్తర లేఖ - పూర్తి స్క్రీన్ ఎడిటర్'}
-                              </span>
-                              <button 
-                                onClick={() => setIsTemplateExpanded(false)}
-                                style={{ background: 'none', border: 'none', color: 'var(--color-text-secondary)', cursor: 'pointer', fontSize: '14px', fontWeight: '800', outline: 'none' }}
-                              >
-                                ✕ {language === 'english' ? 'Close' : 'మూసిвеయి'}
-                              </button>
-                            </div>
-                          )}
+
                           <div style={{ background: '#0b0f19', padding: '10px 20px', borderBottom: '1px solid var(--color-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             <span style={{ fontFamily: 'monospace', fontSize: '11px', color: 'var(--color-text-secondary)', fontWeight: 'bold' }}>nyaya_response_draft.txt</span>
                             <span style={{ fontSize: '10px', background: 'rgba(255,255,255,0.05)', color: 'var(--color-text-secondary)', padding: '2px 8px', borderRadius: '6px' }}>Editable</span>
@@ -1696,6 +1669,96 @@ export default function App() {
             </div>
 
           </div>
+
+          {/* Fullscreen Expanded Template Editor Overlay */}
+          {isTemplateExpanded && activeTab === 'template' && displayAnalysis && (
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              background: '#040711',
+              borderRadius: '20px',
+              border: '2px solid var(--color-accent-indigo)',
+              boxShadow: '0 20px 50px rgba(0,0,0,0.8)',
+              zIndex: 99,
+              display: 'flex',
+              flexDirection: 'column',
+              overflow: 'hidden',
+              animation: 'fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1)'
+            }}>
+              <div style={{ background: '#0b0f19', padding: '16px 24px', borderBottom: '1px solid var(--color-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontSize: '14px', fontWeight: '800', color: '#ffffff', fontFamily: 'var(--font-header)' }}>
+                  {language === 'english' ? 'Response Template - Fullscreen Editor' : 'ప్రత్యుత్తర లేఖ - పూర్తి స్క్రీన్ ఎడిటర్'}
+                </span>
+                <div style={{ display: 'flex', gap: '10px' }}>
+                  <button 
+                    onClick={() => handleCopyToClipboard(editedTemplate)}
+                    className="glow-btn"
+                    style={{ fontSize: '11px', padding: '8px 16px', borderRadius: '12px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                  >
+                    <CopyIcon color="#ffffff" size={14} /> {t('copyBtn')}
+                  </button>
+                  <button 
+                    onClick={() => handleDownloadPDF(editedTemplate)}
+                    className="glow-btn"
+                    style={{ 
+                      fontSize: '11px', 
+                      padding: '8px 16px', 
+                      borderRadius: '12px', 
+                      display: 'inline-flex', 
+                      alignItems: 'center', 
+                      gap: '6px',
+                      background: 'linear-gradient(135deg, var(--color-accent-indigo) 0%, var(--color-accent-purple) 100%)'
+                    }}
+                  >
+                    <FileIcon color="#ffffff" size={14} /> {language === 'english' ? 'Download PDF' : 'PDF డౌన్‌లోడ్'}
+                  </button>
+                  <button 
+                    onClick={() => setIsTemplateExpanded(false)}
+                    style={{
+                      background: 'rgba(239, 68, 68, 0.1)',
+                      border: '1px solid rgba(239, 68, 68, 0.2)',
+                      padding: '8px 16px',
+                      borderRadius: '12px',
+                      color: 'var(--color-danger)',
+                      cursor: 'pointer',
+                      fontSize: '11px',
+                      fontWeight: '800',
+                      outline: 'none'
+                    }}
+                  >
+                    ✕ {language === 'english' ? 'Close' : 'మూసివేయి'}
+                  </button>
+                </div>
+              </div>
+              <div style={{ background: '#080c18', padding: '10px 20px', borderBottom: '1px solid var(--color-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontFamily: 'monospace', fontSize: '11px', color: 'var(--color-text-secondary)' }}>nyaya_response_draft.txt</span>
+                <span style={{ fontSize: '10px', background: 'rgba(255,255,255,0.04)', color: 'var(--color-text-secondary)', padding: '2px 8px', borderRadius: '6px' }}>Editable Mode</span>
+              </div>
+              <textarea 
+                value={editedTemplate}
+                onChange={(e) => setEditedTemplate(e.target.value)}
+                style={{
+                  width: '100%',
+                  flex: 1,
+                  background: '#040711',
+                  border: 'none',
+                  padding: '32px',
+                  color: '#a7f3d0',
+                  fontFamily: 'Fira Code, Consolas, Monaco, monospace',
+                  fontSize: '13.5px',
+                  resize: 'none',
+                  outline: 'none',
+                  boxSizing: 'border-box',
+                  lineHeight: '1.8',
+                  display: 'block',
+                  margin: 0
+                }}
+              />
+            </div>
+          )}
 
         </main>
       ) : activeNav === 'library' ? (
