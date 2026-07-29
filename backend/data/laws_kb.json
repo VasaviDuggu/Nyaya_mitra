@@ -1,6 +1,1431 @@
 {
   "laws": [
     {
+      "act": "Section 106 of the Transfer of Property Act, 1882",
+      "category": "Tenancy & Housing",
+      "scope": "Month-to-Month Rental Leases",
+      "summary": "Mandates that a month-to-month lease termination notice must be served in writing with at least 15 days notice.",
+      "details": "Requires a minimum of 15 days notice for terminating a monthly tenancy of immovable property. The notice must be in writing, signed by the party, and served personally or by post. Failure to provide a full 15-day notice makes any subsequent eviction suit legally void.",
+      "remedies": [
+        "Check the date of service of the eviction notice.",
+        "Verify if a full 15 days is allowed before the vacate date.",
+        "Consult an advocate to draft a reply highlighting any timing defects."
+      ],
+      "keywords": [
+        "lease termination",
+        "eviction",
+        "15 days notice",
+        "tenant eviction",
+        "property notice"
+      ]
+    },
+    {
+      "act": "Section 108 of the Transfer of Property Act, 1882",
+      "category": "Tenancy & Housing",
+      "scope": "Rights and Liabilities of Landlord and Tenant",
+      "summary": "Defines mutual rights and duties, including landlord's duty to maintain property and tenant's duty to pay rent.",
+      "details": "Details that in the absence of a contract to the contrary, the landlord is bound to disclose material defects in the property. The tenant is obligated to pay rent at proper times and maintain the property in good condition, normal wear and tear excepted.",
+      "remedies": [
+        "Request repairs for material property defects.",
+        "Keep evidence of regular rent payment transactions.",
+        "Send a written notice if the landlord fails to make basic structure repairs."
+      ],
+      "keywords": [
+        "tenant rights",
+        "landlord liability",
+        "property maintenance",
+        "rent payment",
+        "repair dispute"
+      ]
+    },
+    {
+      "act": "Section 12 of the Maharashtra Rent Control Act, 1999",
+      "category": "Tenancy & Housing",
+      "scope": "Tenant Protection against Eviction",
+      "summary": "Restricts landlords from evicting tenants if they regularly pay the standard rent and permitted increases.",
+      "details": "A landlord shall not be entitled to the recovery of possession of any premises so long as the tenant pays, or is ready and willing to pay, the amount of standard rent and permitted increases, and observes the other conditions of the tenancy.",
+      "remedies": [
+        "Pay any rent arrears within 90 days of landlord demand.",
+        "Deposit standard rent in court if landlord refuses acceptance.",
+        "Obtain printed receipts for all rent transactions."
+      ],
+      "keywords": [
+        "rent control",
+        "standard rent",
+        "possession recovery",
+        "eviction protection",
+        "maharashtra rent"
+      ]
+    },
+    {
+      "act": "Section 14 of the Delhi Rent Control Act, 1958",
+      "category": "Tenancy & Housing",
+      "scope": "Grounds for Landlord Recovery of Possession",
+      "summary": "Outlines specific grounds like personal necessity or non-payment of rent for recovering premises.",
+      "details": "Restricts recovery of possession except on specific statutory grounds such as: tenant defaulted in rent for two consecutive months, subletting without written consent, or landlord requires premises for personal residential necessity.",
+      "remedies": [
+        "Dispute arbitrary claims of personal necessity.",
+        "Provide proof of written consent for any subletting arrangement.",
+        "Clear dues within one month of receiving a legal demand notice."
+      ],
+      "keywords": [
+        "delhi rent control",
+        "recovery of possession",
+        "subletting",
+        "personal necessity",
+        "eviction grounds"
+      ]
+    },
+    {
+      "act": "Section 21 of the Maharashtra Rent Control Act, 1999",
+      "category": "Tenancy & Housing",
+      "scope": "Landlord's Duty to Repair Premises",
+      "summary": "Requires landlords to keep premises in good tenantable repair, failing which tenants can make repairs and deduct costs.",
+      "details": "Every landlord shall keep the premises in good and tenantable repair. If the landlord neglects to make repairs after receiving fifteen days notice in writing, the tenant may make such repairs and deduct the expenses from the rent, capped at one-fourth of the annual rent.",
+      "remedies": [
+        "Send a written 15-day notice demanding essential structural repairs.",
+        "Execute repairs locally if ignored, keeping all bill receipts.",
+        "Deduct up to 25% of annual rent to offset repair expenses."
+      ],
+      "keywords": [
+        "property repair",
+        "tenant deduction",
+        "essential services",
+        "maintenance neglect",
+        "rent offset"
+      ]
+    },
+    {
+      "act": "Section 56 of the Maharashtra Rent Control Act, 1999",
+      "category": "Tenancy & Housing",
+      "scope": "Legality of Pugree System",
+      "summary": "Validates the receipt of key-money (Pugree) or premium as part of tenancy transactions.",
+      "details": "Declares that it shall be lawful for a tenant to claim or receive any sum in consideration of the relinquishment, transfer or assignment of his tenancy of any premises, validating traditional Pugree transfer premiums.",
+      "remedies": [
+        "Draft a formal tripartite Pugree transfer agreement.",
+        "Pay the landlord's consent fee (usually 33% of transfer premium).",
+        "File a lawsuit if landlord refuses consent arbitrarily."
+      ],
+      "keywords": [
+        "pugree system",
+        "tenancy assignment",
+        "transfer premium",
+        "key money",
+        "lease transfer"
+      ]
+    },
+    {
+      "act": "Section 18 of the Real Estate Regulation and Development Act (RERA), 2016",
+      "category": "Tenancy & Housing",
+      "scope": "Return of Amount and Compensation for Delayed Possession",
+      "summary": "Entitles allottees to a full refund with interest if the promoter fails to give possession on time.",
+      "details": "Mandates that if the promoter fails to complete or is unable to give possession of an apartment in accordance with the agreement for sale, he shall be liable to return the amount received with interest and compensation if the allottee wishes to withdraw.",
+      "remedies": [
+        "File a claim before the RERA Adjudicating Officer.",
+        "Demand refund of principal amount along with prescribed delay interest.",
+        "Apply for interest on delay even if you choose to remain in the project."
+      ],
+      "keywords": [
+        "rera delayed possession",
+        "builder refund",
+        "builder delay interest",
+        "real estate fraud",
+        "allottee compensation"
+      ]
+    },
+    {
+      "act": "Section 31 of the RERA Act, 2016",
+      "category": "Tenancy & Housing",
+      "scope": "Filing of Complaints to Authority",
+      "summary": "Allows any aggrieved person to file a complaint for RERA violations against builders or agents.",
+      "details": "Provides that any aggrieved person may file a complaint with the RERA Authority or the Adjudicating Officer for any violation or contravention of the provisions of this Act or the rules and regulations made thereunder.",
+      "remedies": [
+        "File Form M online on the state RERA portal.",
+        "Attach builder agreements and receipt vouchers.",
+        "Represent your case personally or via an advocate before the authority."
+      ],
+      "keywords": [
+        "rera complaint",
+        "builder violation",
+        "rera authority",
+        "estate agent fraud",
+        "buyer dispute"
+      ]
+    },
+    {
+      "act": "Section 19 of the RERA Act, 2016",
+      "category": "Tenancy & Housing",
+      "scope": "Rights and Duties of Allottees",
+      "summary": "Details the rights of home buyers to obtain information on sanitations, layouts, and timelines.",
+      "details": "Home buyers (allottees) have the right to obtain information on stage-wise completion plans, water, sanitation, and electricity. The allottee is also duty-bound to make timely stage payments as per the sale agreement.",
+      "remedies": [
+        "Demand structural layout plans from the builder.",
+        "Withhold payment if stage completion certificate is not shown.",
+        "Pay interest on genuine payment delays if demanded as per RERA terms."
+      ],
+      "keywords": [
+        "buyer rights",
+        "rera allottee",
+        "stage payments",
+        "completion plans",
+        "layout verification"
+      ]
+    },
+    {
+      "act": "Section 11 of the RERA Act, 2016",
+      "category": "Tenancy & Housing",
+      "scope": "Functions and Duties of Promoter",
+      "summary": "Requires builders to register advertisements, update project details quarterly, and provide occupancy certificates.",
+      "details": "The builder (promoter) must upload project details on the RERA website quarterly. The promoter is responsible for all obligations under the sale agreement, obtaining leasehold titles, and providing occupancy/completion certificates.",
+      "remedies": [
+        "Verify project registration status on RERA website.",
+        "Inspect quarterly progress updates of the towers.",
+        "Refuse possession until builder provides a valid Occupancy Certificate (OC)."
+      ],
+      "keywords": [
+        "builder duty",
+        "occupancy certificate",
+        "rera registration",
+        "project details",
+        "promoter liability"
+      ]
+    },
+    {
+      "act": "Section 12 of the Tamil Nadu Regulation of Landlords and Tenants Act, 2017",
+      "category": "Tenancy & Housing",
+      "scope": "Registration of Tenancy Agreements",
+      "summary": "Mandates that all tenancy agreements must be registered in writing with the Rent Authority.",
+      "details": "No landlord shall let out and no tenant shall take on rent any premises except by an agreement in writing. This agreement must be registered with the Rent Authority within ninety days of execution.",
+      "remedies": [
+        "Draft a clear, written tenancy contract.",
+        "Register the agreement on the state tenancy portal within 90 days.",
+        "Keep the registration ID for any future rent tribunal filings."
+      ],
+      "keywords": [
+        "agreement registration",
+        "tamil nadu tenancy",
+        "rent authority",
+        "written agreement",
+        "lease execution"
+      ]
+    },
+    {
+      "act": "Section 21 of the Tamil Nadu Landlord Tenant Act, 2017",
+      "category": "Tenancy & Housing",
+      "scope": "Grounds for Eviction of Tenants",
+      "summary": "Limits eviction of tenants to statutory defaults like rent non-payment, damage, or misuse.",
+      "details": "Allows a landlord to apply to the Rent Court for recovery of possession only on specific defaults: failure to pay rent for two months, misuse of premises causing nuisance, or structural alteration without written consent.",
+      "remedies": [
+        "File written replies disputing false claims of nuisance.",
+        "Provide proof of regular rent payments to dismiss eviction.",
+        "Demand compensation if landlord cuts off water/power services illegally."
+      ],
+      "keywords": [
+        "eviction grounds",
+        "rent court",
+        "property damage",
+        "nuisance eviction",
+        "possession suit"
+      ]
+    },
+    {
+      "act": "Section 15 of the Karnataka Rent Act, 1999",
+      "category": "Tenancy & Housing",
+      "scope": "Inheritability of Tenancy",
+      "summary": "Restricts the right of tenancy inheritance to direct dependent relatives upon tenant's death.",
+      "details": "In the event of the death of a tenant, the right of tenancy shall devolve for a limited period on the surviving spouse, children, or parents who were ordinarily residing with the tenant as members of the family.",
+      "remedies": [
+        "Apply for name transfer in tenancy records as a legal heir.",
+        "Submit proof of co-residence (Aadhaar/Voter ID) with deceased tenant.",
+        "Clear any unpaid rent arrears immediately to prevent eviction."
+      ],
+      "keywords": [
+        "tenancy inheritance",
+        "karnataka rent",
+        "tenant death",
+        "legal heir rent",
+        "succession lease"
+      ]
+    },
+    {
+      "act": "Section 27 of the Karnataka Rent Act, 1999",
+      "category": "Tenancy & Housing",
+      "scope": "Rent Deposit Rules",
+      "summary": "Allows tenants to deposit rent directly with the court if the landlord refuses to accept it.",
+      "details": "Where the landlord refuses to accept rent or deliver a printed receipt, the tenant may deposit the rent with the Rent Controller after serving a written notice to the landlord.",
+      "remedies": [
+        "Send a written warning notice via registered post.",
+        "Apply to deposit monthly rent with the Rent Controller.",
+        "Use deposit receipts as proof in eviction defense cases."
+      ],
+      "keywords": [
+        "rent deposit",
+        "rent controller",
+        "landlord refusal",
+        "payment receipt",
+        "karnataka tenancy"
+      ]
+    },
+    {
+      "act": "Section 105 of the Transfer of Property Act, 1882",
+      "category": "Tenancy & Housing",
+      "scope": "Definition of Lease",
+      "summary": "Defines a lease as a transfer of right to enjoy property for a specified time in consideration of price/rent.",
+      "details": "Establishes that a lease of immovable property is a transfer of a right to enjoy such property, made for a certain time, express or implied, or in perpetuity, in consideration of a price paid or promised.",
+      "remedies": [
+        "Ensure the lease document clearly specifies duration.",
+        "Verify rent and security deposit refund parameters.",
+        "Incorporate lock-in period terms to prevent premature eviction."
+      ],
+      "keywords": [
+        "lease definition",
+        "lease term",
+        "rent consideration",
+        "property enjoyment",
+        "transfer of right"
+      ]
+    },
+    {
+      "act": "Section 138 of the Negotiable Instruments Act, 1881",
+      "category": "Finance & Banking",
+      "scope": "Cheque Dishonor & Bounces",
+      "summary": "Imposes criminal liability and up to 2 years prison for cheque bounces due to insufficient funds.",
+      "details": "Deals with dishonor of cheques for insufficiency of funds. Payee must send a demand notice within 30 days of dishonor. The drawer gets 15 days from notice receipt to pay the amount. Failure to pay within 15 days allows filing a criminal lawsuit within 30 days.",
+      "remedies": [
+        "Settle the bounced cheque amount within 15 days of notice receipt.",
+        "Verify if the bank return memo matches account records.",
+        "Engage legal counsel to draft a response if cheque was given as security."
+      ],
+      "keywords": [
+        "cheque bounce",
+        "insufficient funds",
+        "criminal liability",
+        "dishonor notice",
+        "negotiable instruments"
+      ]
+    },
+    {
+      "act": "Section 139 of the Negotiable Instruments Act, 1881",
+      "category": "Finance & Banking",
+      "scope": "Presumption in Favor of Holder",
+      "summary": "Presumes that a bounced cheque was issued to discharge a legally enforceable debt.",
+      "details": "It shall be presumed, unless the contrary is proved, that the holder of a cheque received the cheque of the nature referred to in section 138 for the discharge, in whole or in part, of any debt or other liability.",
+      "remedies": [
+        "Gather clear documentation proving the debt was already discharged.",
+        "Submit agreements proving the cheque was security and not for active debt.",
+        "Cross-examine the complainant to shake the legal liability presumption."
+      ],
+      "keywords": [
+        "presumption of liability",
+        "debt discharge",
+        "holder in due course",
+        "security cheque",
+        "complainant burden"
+      ]
+    },
+    {
+      "act": "Section 141 of the Negotiable Instruments Act, 1881",
+      "category": "Finance & Banking",
+      "scope": "Cheque Bounces by Companies",
+      "summary": "Holds company directors and officers personally liable for corporate cheque bounces.",
+      "details": "If the person committing an offence under section 138 is a company, every person who, at the time the offence was committed, was in charge of, and was responsible to the company for the conduct of the business, shall be deemed guilty.",
+      "remedies": [
+        "Identify directors who were active in daily company conduct.",
+        "Resign directors can show they had no knowledge of transaction.",
+        "Draft company responses separately from director liabilities."
+      ],
+      "keywords": [
+        "company bounce",
+        "director liability",
+        "corporate cheque",
+        "business conduct",
+        "vicarious liability"
+      ]
+    },
+    {
+      "act": "Section 142 of the Negotiable Instruments Act, 1881",
+      "category": "Finance & Banking",
+      "scope": "Cognizance of Offences",
+      "summary": "Limits filing of Section 138 complaints to within 1 month after the 15-day notice period ends.",
+      "details": "Restricts courts from taking cognizance of Section 138 offences unless a written complaint is made by the payee within one month of the date on which the cause of action arises (15 days after notice receipt).",
+      "remedies": [
+        "Verify if the criminal complaint was filed within the 30-day window.",
+        "File a condonation of delay application if the filing deadline was missed.",
+        "Challenge time-barred complaints to dismiss the criminal case."
+      ],
+      "keywords": [
+        "cognizance of offence",
+        "filing deadline",
+        "cause of action",
+        "written complaint",
+        "limitation period"
+      ]
+    },
+    {
+      "act": "Section 13 of the SARFAESI Act, 2002",
+      "category": "Finance & Banking",
+      "scope": "Enforcement of Security Interest",
+      "summary": "Allows banks to issue 60-day demand notices to default borrowers to clear secured debts.",
+      "details": "Enables secured creditors (banks) to enforce security interests without court intervention. Banks issue a 60-day demand notice (Sec 13(2)) to the default borrower. If ignored, the bank can take symbolic or physical possession (Sec 13(4)) of the property.",
+      "remedies": [
+        "Submit formal written objections/representations (Sec 13(3A)) within 15 days.",
+        "Pay the overdue balance within 60 days to prevent property possession.",
+        "Verify if the asset classification (NPA) matches RBI guidelines."
+      ],
+      "keywords": [
+        "sarfaesi notice",
+        "secured debt",
+        "property possession",
+        "bank default",
+        "npa classification"
+      ]
+    },
+    {
+      "act": "Section 14 of the SARFAESI Act, 2002",
+      "category": "Finance & Banking",
+      "scope": "Magistrate Assistance for Physical Possession",
+      "summary": "Empowers banks to request Magistrate assistance to take physical control of default properties.",
+      "details": "Where the possession of any secured asset is required to be taken by the bank, they may request the Chief Metropolitan Magistrate (CMM) or District Magistrate (DM) within whose jurisdiction the asset is located to take possession.",
+      "remedies": [
+        "Verify if the bank filed a valid affidavit confirming loan terms.",
+        "Check if magistrate notice was served to occupants.",
+        "File an urgent appeal to stay physical dispossession."
+      ],
+      "keywords": [
+        "district magistrate",
+        "physical possession",
+        "cmm order",
+        "property sealing",
+        "dispossession stay"
+      ]
+    },
+    {
+      "act": "Section 17 of the SARFAESI Act, 2002",
+      "category": "Finance & Banking",
+      "scope": "Right to Appeal in Debts Recovery Tribunal",
+      "summary": "Entitles borrowers to appeal bank enforcement actions within 45 days in the DRT.",
+      "details": "Any person (including the borrower) aggrieved by bank measures under Section 13(4) may make an application to the Debts Recovery Tribunal (DRT) within forty-five days from the date on which such measures had been taken.",
+      "remedies": [
+        "File a Securitisation Application (SA) in the DRT within 45 days.",
+        "Challenge procedural errors in the possession notice.",
+        "Obtain an interim stay on property auctions by depositing a fraction of the debt."
+      ],
+      "keywords": [
+        "drt appeal",
+        "securitisation application",
+        "auction stay",
+        "tribunal petition",
+        "sarfaesi appeal"
+      ]
+    },
+    {
+      "act": "Section 19 of the Recovery of Debts and Bankruptcy Act, 1993",
+      "category": "Finance & Banking",
+      "scope": "DRT Recovery Lawsuits",
+      "summary": "Governs formal recovery lawsuits filed by banks in the DRT and defendant reply timelines.",
+      "details": "Specifies procedures for financial banks to file applications in the Debts Recovery Tribunal (DRT) for debt recovery. The defendant receives summons and must file a Written Statement of defense within 30 days (extendable by 15 days).",
+      "remedies": [
+        "File a detailed Written Reply Statement within 30 days of receiving summons.",
+        "Verify interest calculations, compoundings, and penal charges.",
+        "File counter-claims if the bank caused monetary losses to your business."
+      ],
+      "keywords": [
+        "drt summons",
+        "written statement",
+        "debt recovery tribunal",
+        "bank recovery suit",
+        "financial litigation"
+      ]
+    },
+    {
+      "act": "Section 20 of the Recovery of Debts and Bankruptcy Act, 1993",
+      "category": "Finance & Banking",
+      "scope": "Appeals to Debts Recovery Appellate Tribunal",
+      "summary": "Allows appealing DRT orders to the Appellate Tribunal (DRAT) within 30 days.",
+      "details": "Any person aggrieved by an order made by the DRT may prefer an appeal to the Debts Recovery Appellate Tribunal (DRAT) within thirty days from the date of receipt of the order.",
+      "remedies": [
+        "File a formal appeal petition to the DRAT within 30 days.",
+        "Submit certified copies of the DRT order.",
+        "Deposit the mandatory pre-deposit amount to let the appeal proceed."
+      ],
+      "keywords": [
+        "drat appeal",
+        "appellate tribunal",
+        "drt order",
+        "tribunal petition",
+        "debt appeal"
+      ]
+    },
+    {
+      "act": "Section 21 of the Recovery of Debts and Bankruptcy Act, 1993",
+      "category": "Finance & Banking",
+      "scope": "Deposit of Debt Amount for Appeal",
+      "summary": "Mandates pre-depositing 50% of the debt before the DRAT will hear the appeal.",
+      "details": "No appeal by a debtor shall be entertained by the DRAT unless the debtor deposits fifty percent of the debt amount determined by the DRT. The DRAT may reduce this to not less than twenty-five percent.",
+      "remedies": [
+        "Request a waiver of pre-deposit down to 25% by filing an application.",
+        "Pay the pre-deposit amount via demand draft to the DRAT Registry.",
+        "Submit arguments of financial hardship to justify a reduced deposit."
+      ],
+      "keywords": [
+        "pre-deposit waiver",
+        "drat deposit",
+        "appeal waiver",
+        "drt debt amount",
+        "hardship waiver"
+      ]
+    },
+    {
+      "act": "Section 25 of the Recovery of Debts and Bankruptcy Act, 1993",
+      "category": "Finance & Banking",
+      "scope": "Modes of Debt Recovery",
+      "summary": "Details methods Recovery Officers use to recover dues, including selling property or arrest.",
+      "details": "Allows Recovery Officers to recover the debt specified in the certificate by attachment and sale of movable/immovable property, arrest of the defendant, and appointing a receiver to manage properties.",
+      "remedies": [
+        "Dispute the attachment of personal properties not mortgaged.",
+        "Request installment options to pay off the certificate amount.",
+        "Apply to stay arrest warrants by showing cooperative asset disclosures."
+      ],
+      "keywords": [
+        "recovery officer",
+        "attachment warrant",
+        "asset sale",
+        "arrest warrant",
+        "debt execution"
+      ]
+    },
+    {
+      "act": "Section 7 of the Insolvency and Bankruptcy Code (IBC), 2016",
+      "category": "Finance & Banking",
+      "scope": "Insolvency Initiation by Financial Creditor",
+      "summary": "Allows banks to trigger corporate insolvency proceedings in NCLT for loan defaults.",
+      "details": "A financial creditor (bank/lender) may file an application for initiating corporate insolvency resolution process (CIRP) against a corporate debtor before the National Company Law Tribunal (NCLT) when a default has occurred.",
+      "remedies": [
+        "File a written response disputing the occurrence of default.",
+        "Check if the default amount meets the threshold limit (INR 1 Crore).",
+        "Settle the outstanding claim through settlement agreements before admission."
+      ],
+      "keywords": [
+        "ibc insolvency",
+        "financial creditor",
+        "nclt petition",
+        "corporate debtor",
+        "cirp initiation"
+      ]
+    },
+    {
+      "act": "Section 9 of the Insolvency and Bankruptcy Code (IBC), 2016",
+      "category": "Finance & Banking",
+      "scope": "Insolvency Initiation by Operational Creditor",
+      "summary": "Enables vendors/suppliers to initiate NCLT insolvency after serving a 10-day demand notice.",
+      "details": "After the expiry of ten days from the delivery of the demand notice under Section 8, if the operational creditor does not receive payment or notice of dispute, they may file an application in the NCLT to initiate insolvency.",
+      "remedies": [
+        "Serve a reply notice within 10 days highlighting pre-existing quality disputes.",
+        "Submit proof of payment transactions.",
+        "Settle vendor payments to prevent business insolvency admission."
+      ],
+      "keywords": [
+        "operational creditor",
+        "demand notice",
+        "pre-existing dispute",
+        "vendor default",
+        "nclt insolvency"
+      ]
+    },
+    {
+      "act": "Section 14 of the Insolvency and Bankruptcy Code (IBC), 2016",
+      "category": "Finance & Banking",
+      "scope": "Moratorium Declaration",
+      "summary": "Declares a freeze on all lawsuits, recovery actions, and foreclosure measures during insolvency.",
+      "details": "Requires the Adjudicating Authority to declare a moratorium prohibiting: the institution or continuation of suits, enforcement of any security interest (SARFAESI), or recovery of any property by an owner or lessor.",
+      "remedies": [
+        "Apply to stay active civil court/DRT recovery trials.",
+        "Block bank possession notices (Sec 13(4)) while moratorium is active.",
+        "Continue operational business transactions under the Resolution Professional."
+      ],
+      "keywords": [
+        "moratorium freeze",
+        "nclt stay",
+        "bankruptcy freeze",
+        "insolvency protection",
+        "creditor restraint"
+      ]
+    },
+    {
+      "act": "Section 31 of the Banking Regulation Act, 1949",
+      "category": "Finance & Banking",
+      "scope": "Submission of Accounts and Balance Sheets",
+      "summary": "Requires banks to publish audited balance sheets, ensuring public transparency.",
+      "details": "Mandates that every banking company must prepare and submit audited accounts and balance sheets to the Reserve Bank of India (RBI) within three months from the end of the period to which they relate.",
+      "remedies": [
+        "Request audited financial sheets for corporate loan matching.",
+        "Audit bank interest statements against published schedules.",
+        "File complaints with the banking ombudsman for illegal accounts manipulations."
+      ],
+      "keywords": [
+        "balance sheet audit",
+        "banking regulation",
+        "accounts submission",
+        "rbi compliance",
+        "interest statements"
+      ]
+    },
+    {
+      "act": "Section 2(9) of the Consumer Protection Act, 2019",
+      "category": "Consumer Rights",
+      "scope": "Definitions of Consumer Rights",
+      "summary": "Guarantees rights including protection against hazardous goods, information access, and competitive pricing.",
+      "details": "Defines core consumer rights: right to be protected against marketing of goods hazardous to life; right to be informed about quality, quantity, potency, and price; right to be assured competitive prices; and right to seek redressal against unfair exploitation.",
+      "remedies": [
+        "File written complaints on the National Consumer Helpline.",
+        "Demand product specifications and quality certifications.",
+        "Refuse purchasing items lacking price/manufacturing date labels."
+      ],
+      "keywords": [
+        "consumer rights",
+        "hazardous goods",
+        "fair pricing",
+        "redressal right",
+        "consumer protection"
+      ]
+    },
+    {
+      "act": "Section 35 of the Consumer Protection Act, 2019",
+      "category": "Consumer Rights",
+      "scope": "Filing of Consumer Complaints",
+      "summary": "Allows consumers to file formal complaints before the District Commission regarding defects.",
+      "details": "Allows a consumer, recognized consumer association, or Central Authority to file a complaint with the District Commission regarding defective goods, deficient services, overcharging, or unfair trade practices.",
+      "remedies": [
+        "Draft a formal complaint listing purchase receipts and communications.",
+        "File the case online using the E-Daakhil portal.",
+        "Serve the required pre-complaint legal notice to the vendor."
+      ],
+      "keywords": [
+        "district commission",
+        "consumer complaint",
+        "e-daakhil filing",
+        "defective product",
+        "deficient service"
+      ]
+    },
+    {
+      "act": "Section 38 of the Consumer Protection Act, 2019",
+      "category": "Consumer Rights",
+      "scope": "Procedure on Admission of Complaint",
+      "summary": "Outlines response timelines for opposite parties and laboratory testing procedures.",
+      "details": "Requires the District Commission to refer a copy of the admitted complaint to the opposite party, directing them to file their version within thirty days (extendable by fifteen days). Allows testing in designated laboratories if product defects are hard to verify.",
+      "remedies": [
+        "File opposite party reply statement within 30 days of receiving notice.",
+        "Request lab testing for industrial / chemical defects.",
+        "Present arguments within the commission's hearing schedule."
+      ],
+      "keywords": [
+        "admission procedure",
+        "laboratory testing",
+        "opposite party response",
+        "commission notice",
+        "timeline response"
+      ]
+    },
+    {
+      "act": "Section 39 of the Consumer Protection Act, 2019",
+      "category": "Consumer Rights",
+      "scope": "Findings of the District Commission",
+      "summary": "Authorizes commissions to order replacements, refunds, or compensation for losses.",
+      "details": "Empowers the commission, upon finding defects or deficiencies, to order the seller to: remove the defect, replace the goods, return the price paid, or pay compensation for any loss/injury suffered by the consumer.",
+      "remedies": [
+        "Request execution of commission orders if the company delays compliance.",
+        "Demand refund of price along with reasonable interest.",
+        "Claim compensation for mental harassment and litigation costs."
+      ],
+      "keywords": [
+        "commission orders",
+        "product replacement",
+        "price refund",
+        "consumer compensation",
+        "execution petition"
+      ]
+    },
+    {
+      "act": "Section 47 of the Consumer Protection Act, 2019",
+      "category": "Consumer Rights",
+      "scope": "Jurisdiction of State Commission",
+      "summary": "Sets pecuniary limits for appealing District orders or filing directly in the State Commission.",
+      "details": "Details that the State Consumer Disputes Redressal Commission has jurisdiction to entertain complaints where the value of goods/services paid exceeds INR 50 Lakhs but does not exceed INR 2 Crores, and to hear appeals against District Commission orders.",
+      "remedies": [
+        "File appeals to the State Commission within 45 days of District order.",
+        "File high-value complaints directly to the State Commission.",
+        "Deposit 50% of the ordered amount before filing an appeal as required."
+      ],
+      "keywords": [
+        "state commission",
+        "pecuniary jurisdiction",
+        "appellate commission",
+        "deposit condition",
+        "consumer appeal"
+      ]
+    },
+    {
+      "act": "Section 58 of the Consumer Protection Act, 2019",
+      "category": "Consumer Rights",
+      "scope": "Jurisdiction of National Commission",
+      "summary": "Handles consumer complaints exceeding INR 2 Crores and appeals against State orders.",
+      "details": "The National Consumer Disputes Redressal Commission (NCDRC) has jurisdiction for complaints where the value paid exceeds INR 2 Crores, and has appellate power over State Commission orders.",
+      "remedies": [
+        "File direct petitions to NCDRC for high-value corporate defaults.",
+        "File second appeals against State orders within 30 days.",
+        "Submit case briefs directly at the NCDRC registry in New Delhi."
+      ],
+      "keywords": [
+        "ncdrc petition",
+        "national commission",
+        "corporate litigation",
+        "state commission appeal",
+        "appellate registry"
+      ]
+    },
+    {
+      "act": "Section 2(47) of the Consumer Protection Act, 2019",
+      "category": "Consumer Rights",
+      "scope": "Unfair Trade Practice",
+      "summary": "Defines misleading advertisements, false quality claims, and refusal to issue receipts as illegal.",
+      "details": "Defines an unfair trade practice as a trade practice which, for the purpose of promoting sales, adopts any unfair method or deceptive practice including: falsely representing goods, making misleading statements, or refusing to issue cash memos/receipts.",
+      "remedies": [
+        "Report vendors refusing to print retail tax bills.",
+        "Submit screenshots of misleading web listings as evidence.",
+        "Claim damages for bait-and-switch pricing tactics."
+      ],
+      "keywords": [
+        "unfair trade",
+        "misleading claim",
+        "deceptive practice",
+        "cash memo",
+        "price fraud"
+      ]
+    },
+    {
+      "act": "Section 2(28) of the Consumer Protection Act, 2019",
+      "category": "Consumer Rights",
+      "scope": "Misleading Advertisement",
+      "summary": "Imposes penalties on manufacturers and endorsers for publishing false product claims.",
+      "details": "An advertisement is misleading if it falsely describes a product, guarantees performance without scientific proof, or contains representation that is likely to deceive the consumer.",
+      "remedies": [
+        "File complaints against misleading endorsements to the CCPA (Central Authority).",
+        "Demand proof of performance claims from manufacturers.",
+        "Refuse purchases based on unverified miracle cure ads."
+      ],
+      "keywords": [
+        "misleading advertisement",
+        "ccpa complaint",
+        "false endorsement",
+        "performance claim",
+        "consumer deception"
+      ]
+    },
+    {
+      "act": "Section 84 of the Consumer Protection Act, 2019",
+      "category": "Consumer Rights",
+      "scope": "Liability of Product Manufacturer",
+      "summary": "Holds manufacturers liable for design defects, manufacturing errors, or lack of warnings.",
+      "details": "A product manufacturer shall be liable in a product liability action if the product contains a manufacturing defect, is defective in design, deviates from specifications, or does not contain adequate instructions on correct usage.",
+      "remedies": [
+        "File product liability suits for injuries caused by design flaws.",
+        "Document product failure with photos and user manuals.",
+        "Request replacement of all defective batches from the vendor."
+      ],
+      "keywords": [
+        "manufacturer liability",
+        "design defect",
+        "product liability",
+        "user warning",
+        "manufacturing defect"
+      ]
+    },
+    {
+      "act": "Section 85 of the Consumer Protection Act, 2019",
+      "category": "Consumer Rights",
+      "scope": "Liability of Product Service Provider",
+      "summary": "Holds service providers liable for poor quality, negligence, or lack of safety warnings.",
+      "details": "A product service provider shall be liable in a product liability action if the service was faulty or deficient, they withheld adequate instructions, or they did not conform to express warranty terms.",
+      "remedies": [
+        "File negligence claims for faulty electronic/mechanical repairs.",
+        "Submit warranty card copies proving service agreements.",
+        "Seek recovery for damages caused by poor service executions."
+      ],
+      "keywords": [
+        "service provider",
+        "deficient service",
+        "service negligence",
+        "warranty breach",
+        "repair damage"
+      ]
+    },
+    {
+      "act": "Section 86 of the Consumer Protection Act, 2019",
+      "category": "Consumer Rights",
+      "scope": "Liability of Product Sellers",
+      "summary": "Holds retail sellers liable if they altered the product, made independent warranties, or cannot identify the manufacturer.",
+      "details": "A product seller who is not a manufacturer shall be liable if they exercised control over design/packaging, altered the product, or if the manufacturer is not subject to law in India.",
+      "remedies": [
+        "Settle claims with local retail sellers if foreign manufacturers cannot be reached.",
+        "Dispute altered packages sold in retail outlets.",
+        "Document seller's verbal performance promises."
+      ],
+      "keywords": [
+        "seller liability",
+        "retailer dispute",
+        "product alteration",
+        "package tempering",
+        "seller warranty"
+      ]
+    },
+    {
+      "act": "Section 90 of the Consumer Protection Act, 2019",
+      "category": "Consumer Rights",
+      "scope": "Cognizance of Offences by Courts",
+      "summary": "Limits trial of offences under this Act to Metropolitan or Judicial Magistrates.",
+      "details": "No court inferior to that of a Metropolitan Magistrate or a Judicial Magistrate of the first class shall try any offence punishable under this Act, ensuring formal judicial oversight.",
+      "remedies": [
+        "Verify that criminal complaints under this Act are filed in competent Magistrate courts.",
+        "Challenge prosecutions initiated in improper forums.",
+        "File appeals against Magistrate orders in District Session Courts."
+      ],
+      "keywords": [
+        "magistrate trial",
+        "cognizance court",
+        "criminal prosecution",
+        "punishable offence",
+        "judicial oversight"
+      ]
+    },
+    {
+      "act": "Section 5 of the Bureau of Indian Standards (BIS) Act, 2016",
+      "category": "Consumer Rights",
+      "scope": "Standard Mark Certification",
+      "summary": "Regulates the printing of ISI/BIS quality marks on consumer products.",
+      "details": "Requires manufacturers of notified items (like helmets, cylinders, electronic items) to conform to BIS standards and print standard marks. Selling fake certified goods constitutes an offense.",
+      "remedies": [
+        "Verify the ISI/BIS registration number online on the BIS app.",
+        "File complaints against duplicate goods using standard marks.",
+        "Refuse purchases of non-certified helmets or electricals."
+      ],
+      "keywords": [
+        "bis mark",
+        "isi standard",
+        "product certification",
+        "counterfeit mark",
+        "quality checks"
+      ]
+    },
+    {
+      "act": "Section 12 of the Food Safety and Standards (FSS) Act, 2006",
+      "category": "Consumer Rights",
+      "scope": "Food Warranty and Consumer Claims",
+      "summary": "Requires food business operators to provide written warranty on food safety.",
+      "details": "Mandates that no food manufacturer or distributor shall sell food items without giving a written warranty regarding the purity and safety of the food to the purchaser/retailer.",
+      "remedies": [
+        "Demand food purity test reports from manufacturers.",
+        "File complaints to the local Food Safety Officer for contaminated purchases.",
+        "Keep restaurant bills showing food items ordered."
+      ],
+      "keywords": [
+        "food safety",
+        "fssai warranty",
+        "food safety officer",
+        "food poisoning",
+        "adulteration complaint"
+      ]
+    },
+    {
+      "act": "Section 40 of the Legal Metrology Act, 2009",
+      "category": "Consumer Rights",
+      "scope": "Rules Regarding Packaging and Declarations",
+      "summary": "Prohibits the sale of pre-packaged commodities lacking standard weight, price, or manufacturer labels.",
+      "details": "No person shall manufacture, pack, import, or sell any pre-packaged commodity unless such package bears declarations including net weight, manufacturing date, retail sale price (MRP), and consumer care details.",
+      "remedies": [
+        "Refuse paying more than the printed Maximum Retail Price (MRP).",
+        "Report packages lacking manufacturer details or weight prints.",
+        "File legal claims for underweight packed packages."
+      ],
+      "keywords": [
+        "mrp rule",
+        "legal metrology",
+        "packaged commodity",
+        "underweight product",
+        "package declaration"
+      ]
+    },
+    {
+      "act": "Section 56 of the Electricity Act, 2003",
+      "category": "Utilities & Services",
+      "scope": "Power Disconnection Warning Notices",
+      "summary": "Prohibits power disconnection unless a clear 15-day written warning is served to the consumer.",
+      "details": "Restricts utility companies from cutting off electricity supply unless the consumer has neglected payment of dues for a period of fifteen clear days. The warning must be in writing and served to the consumer.",
+      "remedies": [
+        "Verify if you received 15 clear days notice in writing before power cuts.",
+        "Pay the undisputed base balance to prevent service disconnection.",
+        "File complaints to the Consumer Grievance Redressal Forum (CGRF) for sudden cuts."
+      ],
+      "keywords": [
+        "power disconnection",
+        "electricity bill",
+        "disconnection notice",
+        "utility service",
+        "15 days warning"
+      ]
+    },
+    {
+      "act": "Section 42 of the Electricity Act, 2003",
+      "category": "Utilities & Services",
+      "scope": "Consumer Grievance Redressal Forum",
+      "summary": "Mandates electricity distribution companies to establish a forum (CGRF) for customer complaints.",
+      "details": "Every distribution licensee must establish a forum for redressal of grievances of the consumers in accordance with guidelines as specified by the State Commission. Aggrieved consumers can appeal to the Electricity Ombudsman.",
+      "remedies": [
+        "File complaints to the CGRF regarding billing errors or faulty meters.",
+        "File appeals to the Electricity Ombudsman if CGRF rejects your claims.",
+        "Obtain grievance case registration IDs for tracking."
+      ],
+      "keywords": [
+        "cgrf forum",
+        "ombudsman appeal",
+        "billing dispute",
+        "faulty meter",
+        "electricity grievance"
+      ]
+    },
+    {
+      "act": "Section 43 of the Electricity Act, 2003",
+      "category": "Utilities & Services",
+      "scope": "Duty to Supply Electricity on Request",
+      "summary": "Requires power utilities to provide power connection within 1 month of receiving an application.",
+      "details": "Mandates that every distribution licensee shall, on an application by the owner or occupier of any premises, give supply of electricity to such premises, within one month after receipt of the application.",
+      "remedies": [
+        "Submit applications with ownership/occupancy proof (Sale Deed/Lease).",
+        "Claim penalty charges (up to INR 1,000 per day of delay) if supply is delayed beyond 30 days.",
+        "File petitions to the state electricity commission for denial of service."
+      ],
+      "keywords": [
+        "new connection",
+        "supply request",
+        "utility delay penalty",
+        "distribution licensee",
+        "electricity access"
+      ]
+    },
+    {
+      "act": "Section 50 of the Electricity Act, 2003",
+      "category": "Utilities & Services",
+      "scope": "Electricity Supply Code",
+      "summary": "Requires state commissions to publish a supply code detailing connection and meter reading rules.",
+      "details": "Requires the State Commission to specify an Electricity Supply Code to provide for recovery of electricity charges, intervals of billing, installation of meters, and conditions of supply.",
+      "remedies": [
+        "Verify billing intervals match the published State Supply Code.",
+        "Demand annual tests of connection meters to check accuracy.",
+        "Dispute arbitrary security deposit hikes not matching code formulas."
+      ],
+      "keywords": [
+        "supply code",
+        "billing interval",
+        "meter installation",
+        "security deposit",
+        "utility code"
+      ]
+    },
+    {
+      "act": "Section 126 of the Electricity Act, 2003",
+      "category": "Utilities & Services",
+      "scope": "Assessment of Unauthorized Use of Electricity",
+      "summary": "Outlines assessment and penalty rules if a consumer is found using power unauthorizedly.",
+      "details": "If on inspection of any premises, the assessing officer comes to the conclusion that such person is indulging in unauthorized use of electricity, he shall provisionally assess the electricity charges at twice the normal rate.",
+      "remedies": [
+        "Submit written objections to the provisional assessment within 15 days.",
+        "File appeals to the Appellate Authority after depositing 50% of the assessed amount.",
+        "Verify if the inspection was executed by an authorized officer with valid IDs."
+      ],
+      "keywords": [
+        "unauthorized use",
+        "provisional assessment",
+        "penalty rate",
+        "utility inspection",
+        "electricity assessment"
+      ]
+    },
+    {
+      "act": "Section 135 of the Electricity Act, 2003",
+      "category": "Utilities & Services",
+      "scope": "Theft of Electricity",
+      "summary": "Imposes criminal penalties for tapping lines, tampering meters, or bypassing connections.",
+      "details": "Provides that whoever dishonestly taps overhead lines, tampers with meters, or damages equipment to abstract energy shall be punishable with imprisonment for a term which may extend to three years or with fine.",
+      "remedies": [
+        "Ensure meters are sealed and show no physical tampering.",
+        "Verify if power line tapping claims have solid photo/video evidence.",
+        "File bail petitions immediately if criminal FIRs are filed."
+      ],
+      "keywords": [
+        "electricity theft",
+        "meter tampering",
+        "illegal tapping",
+        "criminal utility",
+        "power theft FIR"
+      ]
+    },
+    {
+      "act": "Section 142 of the Electricity Act, 2003",
+      "category": "Utilities & Services",
+      "scope": "Punishment for Non-Compliance of Directions",
+      "summary": "Imposes penalties on utility companies that violate state commission orders.",
+      "details": "If any licensee fails to comply with any direction of the Commission, they shall pay a penalty not exceeding one lakh rupees for each contravention, and additional fines for continuing defaults.",
+      "remedies": [
+        "Report utility companies violating grid codes to the State Commission.",
+        "Apply for compensation for continuous load-sheddings.",
+        "Demand compliance files from regional substation offices."
+      ],
+      "keywords": [
+        "licensee penalty",
+        "commission direction",
+        "non-compliance fine",
+        "utility omission",
+        "service violation"
+      ]
+    },
+    {
+      "act": "Section 24 of the Water (Prevention & Control of Pollution) Act, 1974",
+      "category": "Utilities & Services",
+      "scope": "Prohibition on Pollution of Streams and Wells",
+      "summary": "Bans discharging toxic or polluting sewage directly into water bodies.",
+      "details": "No person shall knowingly cause or permit any poisonous, noxious or polluting matter determined in accordance with standards laid down by the State Board to enter into any stream or well or sewer.",
+      "remedies": [
+        "File complaints to the State Pollution Control Board for factory discharge.",
+        "Verify if the local municipal plant has water filtration setups.",
+        "Obtain water quality test reports from public health labs."
+      ],
+      "keywords": [
+        "water pollution",
+        "sewer discharge",
+        "factory toxic waste",
+        "pollution board",
+        "municipal drainage"
+      ]
+    },
+    {
+      "act": "Section 25 of the Water Act, 1974",
+      "category": "Utilities & Services",
+      "scope": "Restrictions on New Sewage Outlets",
+      "summary": "Requires consent from the State Board before setting up new outlet sewers.",
+      "details": "No person shall, without the previous consent of the State Board, establish or take any steps to establish any industry, operation or process, or any treatment and disposal system which is likely to discharge sewage.",
+      "remedies": [
+        "Verify if nearby factories have valid 'Consent to Establish' certificates.",
+        "Report unauthorized sewage construction lines.",
+        "File public petitions against dumping sewers close to residential zones."
+      ],
+      "keywords": [
+        "consent to establish",
+        "sewage outlet",
+        "treatment plant",
+        "industrial discharge",
+        "environmental permit"
+      ]
+    },
+    {
+      "act": "Section 21 of the Air (Prevention & Control of Pollution) Act, 1981",
+      "category": "Utilities & Services",
+      "scope": "Air Pollution Consent Requirements",
+      "summary": "Requires prior consent from the State Pollution Board to operate industrial plants.",
+      "details": "Restricts operation of any industrial plant in an air pollution control area unless previous consent of the State Board has been obtained. Violations invite heavy penalties and closure.",
+      "remedies": [
+        "Request copies of 'Consent to Operate' from polluting neighborhood units.",
+        "Report emission standard violations with air quality tracking graphs.",
+        "Apply for closure orders of unlicensed brick kilns/mixers."
+      ],
+      "keywords": [
+        "air pollution consent",
+        "industrial emission",
+        "pollution board license",
+        "factory smoke",
+        "environmental compliance"
+      ]
+    },
+    {
+      "act": "Section 15 of the Environment (Protection) Act, 1986",
+      "category": "Utilities & Services",
+      "scope": "Penalty for Contravention of Environment Rules",
+      "summary": "Imposes prison up to 5 years and heavy fines for violating ecological rules.",
+      "details": "Imposes strict criminal liability for failing to comply with directions issued under this Act. Violations are punishable with imprisonment up to five years, or with fine which may extend to one lakh rupees, or both.",
+      "remedies": [
+        "File National Green Tribunal (NGT) petitions for local waste burnings.",
+        "Report illegal hazardous waste dumping yards.",
+        "Document ecological damages with geo-tagged photos."
+      ],
+      "keywords": [
+        "environmental penalty",
+        "hazardous waste",
+        "ngt petition",
+        "ecological damage",
+        "pollution violation"
+      ]
+    },
+    {
+      "act": "Section 19 of the Municipal Corporation Act",
+      "category": "Utilities & Services",
+      "scope": "Notice for Unsanitary Drains",
+      "summary": "Empowers Municipalities to issue notices to landowners to clean choked drains.",
+      "details": "Authorizes the municipal commissioner to serve written notices to owners of buildings requiring them to repair, clear, or construct proper toilet septic pipes and sewage lines within a specified timeframe.",
+      "remedies": [
+        "Send letters to municipal wards for clearing blocked community drains.",
+        "Verify if warning notices list clear timelines.",
+        "Dispute arbitrary fines if drainage choke is outside property boundaries."
+      ],
+      "keywords": [
+        "municipal drain",
+        "drain blockage",
+        "septic tank notice",
+        "sanitation cleanup",
+        "commissioner notice"
+      ]
+    },
+    {
+      "act": "Section 234 of the Delhi Municipal Corporation Act, 1957",
+      "category": "Utilities & Services",
+      "scope": "Water Supply Connection Regulations",
+      "summary": "Outlines rules for obtaining water connections and installing water meters.",
+      "details": "Regulates the supply of water for domestic purposes, installation of water meters, and penalties for wasting water or using illegal sub-pumps on main municipal lines.",
+      "remedies": [
+        "Apply for name updates in domestic water bills.",
+        "Report usage of high-power sub-pumps by neighbors during dry seasons.",
+        "Challenge inflated utility water bills based on average meter readings."
+      ],
+      "keywords": [
+        "water connection",
+        "water meter",
+        "inflated bill",
+        "water wastage",
+        "municipal connection"
+      ]
+    },
+    {
+      "act": "Section 313 of the Delhi Municipal Corporation Act, 1957",
+      "category": "Utilities & Services",
+      "scope": "Layout Plans of Land and Building Notices",
+      "summary": "Prohibits construction of layouts or buildings without municipal plan sanction.",
+      "details": "Mandates that any person intending to lay out a new private street or construct buildings must submit detailed layout plans to the Commissioner for approval. Unauthorized constructions are liable to demolition.",
+      "remedies": [
+        "Obtain municipal sanctioned building plan copies before purchase.",
+        "Verify if demolition notices allow a 15-day cure period.",
+        "File civil court injunction suits to halt illegal municipal demolitions."
+      ],
+      "keywords": [
+        "sanctioned plan",
+        "unauthorized construction",
+        "demolition notice",
+        "layout approval",
+        "municipal sanction"
+      ]
+    },
+    {
+      "act": "Section 4 of the Right to Information (RTI) Act, 2005",
+      "category": "Utilities & Services",
+      "scope": "Obligations of Public Authorities",
+      "summary": "Requires government departments to proactively publish key data, including directories and budgets.",
+      "details": "Every public authority shall maintain all its records cataloged and indexed, and publish details of its organization, functions, directories, salary scales, and project subsidy allocations.",
+      "remedies": [
+        "File formal online RTI applications for delayed public project details.",
+        "Inspect regional utility project expenditure sheets.",
+        "Challenge vague responses from Public Information Officers (PIOs)."
+      ],
+      "keywords": [
+        "rti application",
+        "public authority",
+        "information disclosure",
+        "pio appeal",
+        "utility budget"
+      ]
+    },
+    {
+      "act": "Section 499 of the Indian Penal Code (IPC) / BNS 356",
+      "category": "Civil, Personal & Cyber",
+      "scope": "Defamation Notice & Exceptions",
+      "summary": "Defines defamation as false spoken/written words damaging a citizen's reputation, with 10 exceptions.",
+      "details": "Defines defamation. Outlines that making or publishing any imputation intending to harm the reputation of a person constitutes an offense, subject to 10 exceptions (such as imputation of truth for public good, or public conduct of public servants).",
+      "remedies": [
+        "Check if the statements fall under the 10 statutory exceptions.",
+        "Draft responses to legal notices denying malicious intent.",
+        "Keep records of published source materials to prove truth/public good."
+      ],
+      "keywords": [
+        "defamation notice",
+        "BNS 356",
+        "reputation damage",
+        "public good",
+        "libel slander"
+      ]
+    },
+    {
+      "act": "Section 500 of the Indian Penal Code (IPC) / BNS 356",
+      "category": "Civil, Personal & Cyber",
+      "scope": "Punishment for Defamation",
+      "summary": "Imposes simple imprisonment up to 2 years, or fine, or both for defamation.",
+      "details": "Specifies punishment for criminal defamation. Whoever defames another shall be punished with simple imprisonment for a term which may extend to two years, or with fine, or with both.",
+      "remedies": [
+        "File criminal quash petitions in the High Court if cases are vexatious.",
+        "Engage legal representation for magistrate hearings.",
+        "Propose mutual retraction and apology letters to settle disputes outside court."
+      ],
+      "keywords": [
+        "criminal defamation",
+        "ipc 500",
+        "quash petition",
+        "defamation trial",
+        "apology settlement"
+      ]
+    },
+    {
+      "act": "Section 66A of the Information Technology (IT) Act, 2000",
+      "category": "Civil, Personal & Cyber",
+      "scope": "Offensive Electronic Messages",
+      "summary": "Deals with sending offensive messages electronically (Note: struck down by Supreme Court).",
+      "details": "Previously punished sending offensive or annoying messages using computer resource. Landmark judgment 'Shreya Singhal v. Union of India' struck this section down as unconstitutional. No FIR can be legally registered under this section.",
+      "remedies": [
+        "Demand immediate dismissal of any FIR citing Section 66A.",
+        "Reference the Supreme Court Shreya Singhal judgment in court replies.",
+        "File counter-petitions for harassment against police misuse of struck-down laws."
+      ],
+      "keywords": [
+        "shreya singhal",
+        "struck down law",
+        "offensive message",
+        "police harassment",
+        "unconstitutional FIR"
+      ]
+    },
+    {
+      "act": "Section 66C of the IT Act, 2000",
+      "category": "Civil, Personal & Cyber",
+      "scope": "Identity Theft Punishment",
+      "summary": "Imposes prison up to 3 years and INR 1 Lakh fine for fraudulent use of digital signatures/IDs.",
+      "details": "Punishes identity theft. Whoever fraudulently or dishonestly makes use of the electronic signature, password or any other unique identification feature of any other person, shall be punished with imprisonment up to three years.",
+      "remedies": [
+        "Report hacked accounts to the Cyber Crime cell immediately.",
+        "Block compromised digital signatures.",
+        "Submit bank transaction logs and IP login trace history in identity theft defense."
+      ],
+      "keywords": [
+        "identity theft",
+        "hacked password",
+        "digital signature",
+        "cyber fraud",
+        "identity hijacking"
+      ]
+    },
+    {
+      "act": "Section 66D of the IT Act, 2000",
+      "category": "Civil, Personal & Cyber",
+      "scope": "Cheating by Personation using Computer Resource",
+      "summary": "Imposes prison up to 3 years for cheating by pretending to be someone else online.",
+      "details": "Punishes cheating by personation. Whoever by means of any communication device or computer resource cheats by personation, shall be punished with imprisonment of either description for a term which may extend to three years.",
+      "remedies": [
+        "File cyber cell complaints for fake social media profiles.",
+        "Verify banking representative IDs before sharing transaction OTPs.",
+        "Track email headers to confirm sender domain authenticity in phishing cases."
+      ],
+      "keywords": [
+        "cheating by personation",
+        "fake profile",
+        "cyber impersonation",
+        "phishing scam",
+        "social engineering"
+      ]
+    },
+    {
+      "act": "Section 66E of the IT Act, 2000",
+      "category": "Civil, Personal & Cyber",
+      "scope": "Violation of Personal Privacy",
+      "summary": "Imposes prison up to 3 years for publishing private images of individuals without consent.",
+      "details": "Punishes violation of privacy. Whoever, intentionally captures, publishes or transmits the image of a private area of any person without his or her consent, shall be punished with imprisonment up to three years or with fine.",
+      "remedies": [
+        "File urgent injunction requests to pull down non-consensual private images.",
+        "Submit platform abuse notices on Google/Meta/Twitter to block links.",
+        "Register cyber cell complaints with IP logins and messaging screenshots."
+      ],
+      "keywords": [
+        "privacy violation",
+        "non-consensual image",
+        "cyber harassment",
+        "platform abuse",
+        "image removal"
+      ]
+    },
+    {
+      "act": "Section 67 of the IT Act, 2000",
+      "category": "Civil, Personal & Cyber",
+      "scope": "Obscene Material Electronic Publishing",
+      "summary": "Imposes prison up to 3 years for publishing sexually explicit content online.",
+      "details": "Punishes publishing or transmitting obscene material in electronic form. First conviction carries prison up to three years and fine up to five lakh rupees; subsequent convictions invite heavier sentences.",
+      "remedies": [
+        "Audit online content uploads to ensure compliance with censorship laws.",
+        "Submit written representations proving content has artistic or scientific merit.",
+        "Engage legal counsel to secure anticipatory bail if accused falsely."
+      ],
+      "keywords": [
+        "obscene content",
+        "explicit publishing",
+        "electronic transmission",
+        "censorship check",
+        "cyber bail"
+      ]
+    },
+    {
+      "act": "Section 72 of the IT Act, 2000",
+      "category": "Civil, Personal & Cyber",
+      "scope": "Breach of Confidentiality and Privacy",
+      "summary": "Imposes prison up to 2 years for government/system administrators sharing private records without consent.",
+      "details": "Punishes breach of confidentiality. If any person who has secured access to any electronic record, book, register or document without consent discloses such information, they shall be liable to prison up to two years.",
+      "remedies": [
+        "Report system administrators sharing private chat history logs or customer profiles.",
+        "File civil suits for corporate breach of confidentiality.",
+        "Audit server login logs to trace unauthorized record accesses."
+      ],
+      "keywords": [
+        "confidentiality breach",
+        "data leak",
+        "disclosure penalty",
+        "admin breach",
+        "access violation"
+      ]
+    },
+    {
+      "act": "Section 43 of the IT Act, 2000",
+      "category": "Civil, Personal & Cyber",
+      "scope": "Penalty for Damage to Computer and Network",
+      "summary": "Imposes heavy compensation penalties for downloading data or introducing viruses without permission.",
+      "details": "If any person, without permission of the owner, accesses a computer, downloads or extracts data, introduces a computer contaminant or virus, or damages data, they shall be liable to pay damages by way of compensation to the affected person.",
+      "remedies": [
+        "File claims before the Adjudicating Officer under the IT Act for compensation.",
+        "Document data loss with server audit reports and technician logs.",
+        "Establish firewall protocols to prove secure database ownership."
+      ],
+      "keywords": [
+        "computer damage",
+        "data theft",
+        "adjudicating officer",
+        "compensation claim",
+        "database hacking"
+      ]
+    },
+    {
+      "act": "Section 43A of the IT Act, 2000",
+      "category": "Civil, Personal & Cyber",
+      "scope": "Compensation for Failure to Protect Sensitive Data",
+      "summary": "Holds corporate bodies liable to pay unlimited damages for failing to secure private user databases.",
+      "details": "Where a body corporate, possessing, dealing or handling any sensitive personal data in a computer resource, is negligent in maintaining reasonable security practices, resulting in wrongful loss/gain, they shall be liable to pay damages.",
+      "remedies": [
+        "File class-action style compensation complaints for corporate database leaks.",
+        "Verify if the target company follows ISO/IEC 27001 security standards.",
+        "Document financial losses resulting from identity leakage."
+      ],
+      "keywords": [
+        "data breach compensation",
+        "corporate negligence",
+        "sensitive data leak",
+        "privacy security",
+        "corporate liability"
+      ]
+    },
+    {
+      "act": "Section 4 of the Digital Personal Data Protection (DPDP) Act, 2023",
+      "category": "Civil, Personal & Cyber",
+      "scope": "Grounds for Processing Personal Data",
+      "summary": "Restricts corporate processing of personal data to lawful purposes with explicit consent.",
+      "details": "A person may process personal data of a Data Principal only in accordance with the provisions of this Act, and for a lawful purpose for which the Data Principal has given her consent.",
+      "remedies": [
+        "Request standard data processing disclosure declarations from mobile apps.",
+        "Withhold consent for processing unrelated to core services.",
+        "File notices demanding deletion of data collected without lawful basis."
+      ],
+      "keywords": [
+        "dpdp consent",
+        "data principal",
+        "lawful processing",
+        "data fiduciary",
+        "privacy consent"
+      ]
+    },
+    {
+      "act": "Section 5 of the DPDP Act, 2023",
+      "category": "Civil, Personal & Cyber",
+      "scope": "Notice Requirements for Data Processing",
+      "summary": "Mandates companies to serve written notices detailing what data is collected and why.",
+      "details": "Every request for consent shall be accompanied or preceded by a notice containing: the personal data to be processed, the purpose, and the manner in which the Data Principal can exercise her right to withdraw consent.",
+      "remedies": [
+        "Read the mandatory data collection notice popped up by applications.",
+        "Verify if the notice lists English and regional languages option.",
+        "Identify the designated Data Protection Officer's contact details."
+      ],
+      "keywords": [
+        "data notice",
+        "collection purpose",
+        "consent withdrawal",
+        "privacy officer",
+        "dpdp compliance"
+      ]
+    },
+    {
+      "act": "Section 6 of the DPDP Act, 2023",
+      "category": "Civil, Personal & Cyber",
+      "scope": "Consent Requirements",
+      "summary": "Mandates that data consent must be free, specific, informed, unconditional, and withdrawable.",
+      "details": "Consent given by the Data Principal shall be free, specific, informed, unconditional and unambiguous with a clear affirmative action. The Principal has the right to withdraw her consent at any time.",
+      "remedies": [
+        "Withdraw data sharing consent through corporate portal settings.",
+        "Refuse check-box agreements that bundle unnecessary personal permissions.",
+        "Keep copies of data processing approvals."
+      ],
+      "keywords": [
+        "specific consent",
+        "consent withdrawal",
+        "affirmative action",
+        "bundled agreement",
+        "dpdp consent"
+      ]
+    },
+    {
+      "act": "Section 13 of the DPDP Act, 2023",
+      "category": "Civil, Personal & Cyber",
+      "scope": "Right to Grievance Redressal",
+      "summary": "Entitles citizens to file complaints regarding privacy violations directly with the Data Fiduciary.",
+      "details": "A Data Principal shall have the right to register a grievance with a Data Fiduciary regarding any act or omission of such Fiduciary in relation to the obligations under this Act.",
+      "remedies": [
+        "File formal grievance reports to the company's Data Protection Officer.",
+        "Escalate unresolved privacy disputes to the Data Protection Board of India (DPBI).",
+        "Keep copies of all communication correspondence logs."
+      ],
+      "keywords": [
+        "data principal grievance",
+        "dpbi complaint",
+        "privacy breach report",
+        "data protection officer",
+        "grievance escalation"
+      ]
+    },
+    {
+      "act": "Section 8 of the DPDP Act, 2023",
+      "category": "Civil, Personal & Cyber",
+      "scope": "Obligations of Data Fiduciary",
+      "summary": "Requires companies to maintain database accuracy, secure records, and delete data when no longer needed.",
+      "details": "The Data Fiduciary is responsible for ensuring the accuracy of processed personal data, implementing reasonable technical security safeguards, and deleting data once the specified purpose is fulfilled.",
+      "remedies": [
+        "File requests to inspect the stored profile details for accuracy.",
+        "Demand permanent deletion of your profile history from app databases after account closure.",
+        "Report firms lacking firewall security shields to the DPBI."
+      ],
+      "keywords": [
+        "data deletion",
+        "security safeguards",
+        "database accuracy",
+        "corporate privacy duty",
+        "dpdp fiduciary"
+      ]
+    },
+    {
       "act": "Section 138 of the Negotiable Instruments Act, 1881",
       "category": "Bank Statements & Finance",
       "scope": "Cheque Dishonor & Bounces",

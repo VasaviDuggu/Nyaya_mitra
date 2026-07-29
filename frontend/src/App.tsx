@@ -129,6 +129,104 @@ const TrashIcon = ({ size = 14, color = 'currentColor' }) => (
   </svg>
 );
 
+const FolderIcon = ({ size = 18, color = 'currentColor' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+  </svg>
+);
+
+const UploadIcon = ({ size = 36, color = 'currentColor' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12" />
+  </svg>
+);
+
+const getCategoryIcon = (cat: string, color: string) => {
+  const normCat = cat.toLowerCase();
+  if (normCat.includes('tenancy') || normCat.includes('housing')) {
+    return (
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+        <polyline points="9 22 9 12 15 12 15 22" />
+      </svg>
+    );
+  }
+  if (normCat.includes('finance') || normCat.includes('bank')) {
+    return (
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="6" width="20" height="12" rx="2" />
+        <circle cx="12" cy="12" r="2" />
+        <line x1="6" y1="12" x2="6" y2="12.01" />
+        <line x1="18" y1="12" x2="18" y2="12.01" />
+      </svg>
+    );
+  }
+  if (normCat.includes('consumer') || normCat.includes('right')) {
+    return (
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+      </svg>
+    );
+  }
+  if (normCat.includes('utilit') || normCat.includes('service')) {
+    return (
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+      </svg>
+    );
+  }
+  if (normCat.includes('civil') || normCat.includes('personal') || normCat.includes('cyber')) {
+    return (
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="10" />
+        <line x1="2" y1="12" x2="22" y2="12" />
+        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+      </svg>
+    );
+  }
+  if (normCat.includes('land')) {
+    return (
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+        <circle cx="12" cy="10" r="3" />
+      </svg>
+    );
+  }
+  if (normCat.includes('family')) {
+    return (
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+      </svg>
+    );
+  }
+  if (normCat.includes('employ')) {
+    return (
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+      </svg>
+    );
+  }
+  if (normCat.includes('inherit') || normCat.includes('heir')) {
+    return (
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+        <polyline points="14 2 14 8 20 8" />
+        <line x1="16" y1="13" x2="8" y2="13" />
+        <line x1="16" y1="17" x2="8" y2="17" />
+      </svg>
+    );
+  }
+  return (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="3" width="7" height="7" />
+      <rect x="14" y="3" width="7" height="7" />
+      <rect x="14" y="14" width="7" height="7" />
+      <rect x="3" y="14" width="7" height="7" />
+    </svg>
+  );
+};
+
 interface Milestone {
   title: string;
   date: string;
@@ -809,7 +907,7 @@ export default function App() {
             {/* Left Column: Document Ingestion */}
             <section className="glass-card" style={{ flex: 1.05, padding: '32px', display: 'flex', flexDirection: 'column', height: 'calc(100vh - 176px)', overflow: 'hidden' }}>
               <h2 style={{ margin: '0 0 24px 0', fontSize: '16px', fontWeight: '800', letterSpacing: '-0.01em', color: 'var(--color-text-primary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ color: 'var(--color-accent-indigo)' }}>📁</span> {t('ingestionTitle')}
+                <span style={{ display: 'flex', alignItems: 'center' }}><FolderIcon color="var(--color-accent-indigo)" /></span> {t('ingestionTitle')}
               </h2>
 
               <input 
@@ -846,7 +944,7 @@ export default function App() {
                     <>
                       <div style={{ position: 'relative', width: '80px', height: '80px', marginBottom: '24px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         <div style={{ position: 'absolute', width: '100%', height: '100%', border: '3px solid rgba(99, 102, 241, 0.1)', borderTopColor: 'var(--color-accent-indigo)', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
-                        <span style={{ fontSize: '32px' }}>⚡</span>
+                        <BoltIcon size={32} color="var(--color-accent-indigo)" />
                       </div>
                       <p style={{ margin: '0 0 8px 0', fontWeight: '800', color: '#ffffff', fontSize: '15px' }}>{t('analyzingText')}</p>
                       <p style={{ margin: '0 0 24px 0', fontSize: '12.5px', color: 'var(--color-text-secondary)' }}>{t('extractingText')}</p>
@@ -854,7 +952,7 @@ export default function App() {
                   ) : (
                     <>
                       <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: 'rgba(99, 102, 241, 0.08)', display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '24px', boxShadow: '0 8px 24px rgba(99,102,241,0.1)' }}>
-                        <span style={{ fontSize: '36px' }}>📄</span>
+                        <span style={{ display: 'flex', alignItems: 'center' }}><UploadIcon color="var(--color-accent-indigo)" size={36} /></span>
                       </div>
                       <p style={{ margin: '0 0 8px 0', fontWeight: '800', color: '#ffffff', fontSize: '15.5px' }}>{t('dragDropText')}</p>
                       <p style={{ margin: '0 0 32px 0', fontSize: '12.5px', color: 'var(--color-text-secondary)', fontWeight: '500' }}>{t('supportText')}</p>
@@ -1343,10 +1441,14 @@ export default function App() {
                         cursor: 'pointer',
                         transition: 'all 0.2s ease',
                         fontFamily: 'var(--font-header)',
-                        outline: 'none'
+                        outline: 'none',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '6px'
                       }}
                     >
-                      {cat}
+                      {getCategoryIcon(cat, isSelected ? '#ffffff' : 'var(--color-text-secondary)')}
+                      <span>{cat}</span>
                     </button>
                   );
                 })}
@@ -1551,9 +1653,9 @@ export default function App() {
                         <button 
                           onClick={() => handleCalendarDownload(m.date, m.title)}
                           className="glow-btn"
-                          style={{ fontSize: '12.5px', padding: '12px 24px' }}
+                          style={{ fontSize: '12.5px', padding: '12px 24px', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
                         >
-                          📅 {t('downloadCal')}
+                          <ScheduleIcon color="#ffffff" size={14} /> {t('downloadCal')}
                         </button>
                       </div>
                     );
@@ -1561,7 +1663,7 @@ export default function App() {
                 </div>
               ) : (
                 <div className="glass-card" style={{ padding: '64px', textAlign: 'center', color: 'var(--color-text-secondary)' }}>
-                  <span style={{ fontSize: '64px', display: 'block', marginBottom: '24px' }}>📅</span>
+                  <span style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}><ScheduleIcon color="var(--color-accent-indigo)" size={64} /></span>
                   <p style={{ fontSize: '15px', color: '#ffffff', fontWeight: '600' }}>No Active Notice Data</p>
                   <p style={{ fontSize: '12.5px', maxWidth: '320px', margin: '8px auto 0 auto', lineHeight: '1.6' }}>Upload a legal document in the Dashboard to automatically populate and download calendar invite triggers.</p>
                 </div>
