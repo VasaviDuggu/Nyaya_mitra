@@ -427,6 +427,7 @@ export default function App() {
   const [voiceNoticeText, setVoiceNoticeText] = useState('');
   const [showVoiceIngestionModal, setShowVoiceIngestionModal] = useState(false);
   const [recognitionObj, setRecognitionObj] = useState<any>(null);
+  const [voiceActiveType, setVoiceActiveType] = useState<'summary' | 'laws' | 'checklist' | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
@@ -466,40 +467,125 @@ export default function App() {
     }
   }, [analysis, translatedAnalysis, language]);
 
-  const handleVoiceToggle = () => {
-    const summaryText = displayAnalysis?.summary;
-    if (!summaryText) return;
-
-    if (isPlayingVoice) {
-      window.speechSynthesis.pause();
-      setIsPlayingVoice(false);
-    } else {
-      if (window.speechSynthesis.paused) {
-        window.speechSynthesis.resume();
-        setIsPlayingVoice(true);
-      } else {
-        window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(summaryText);
-        utteranceRef.current = utterance;
-        
-        const voices = window.speechSynthesis.getVoices();
-        if (language === 'telugu') {
-          const telVoice = voices.find(v => v.lang.includes('te') || v.lang.includes('IN'));
-          if (telVoice) utterance.voice = telVoice;
-          utterance.lang = 'te-IN';
-        } else {
-          const engVoice = voices.find(v => v.lang.includes('en'));
-          if (engVoice) utterance.voice = engVoice;
-          utterance.lang = 'en-US';
-        }
-
-        utterance.onend = () => setIsPlayingVoice(false);
-        utterance.onerror = () => setIsPlayingVoice(false);
-
-        window.speechSynthesis.speak(utterance);
-        setIsPlayingVoice(true);
+  const handleVoiceToggle = (type: 'summary' | 'laws' | 'checklist') => {
+    let textToSpeak = '';
+    if (type === 'summary') {
+      textToSpeak = displayAnalysis?.summary || '';
+    } else if (type === 'laws') {
+      if (displayAnalysis?.legal_references) {
+        const prefix = language === 'telugu' ? 'ఇవి నోటీసుకు సంబంధించిన చట్టాలు: ' : 'Here are the relevant legal citations: ';
+        const citations = displayAnalysis.legal_references.map((ref, idx) => {
+          const count = language === 'telugu' ? `${idx + 1}. ` : `Citation ${idx + 1}. `;
+          return `${count}${ref.section}. ${ref.description}`;
+        }).join('. ');
+        textToSpeak = prefix + citations;
+      }
+    } else if (type === 'checklist') {
+      if (displayAnalysis?.checklist) {
+        const prefix = language === 'telugu' ? 'మీరు తీసుకోవలసిన తదుపరి చర్యల జాబితా ఇక్కడ ఉంది: ' : 'Here is your recommended next steps checklist: ';
+        const steps = displayAnalysis.checklist.map((step, idx) => {
+          const count = language === 'telugu' ? `దశ ${idx + 1}: ` : `Step ${idx + 1}: `;
+          return `${count}${step}`;
+        }).join('. ');
+        textToSpeak = prefix + steps;
       }
     }
+
+    if (!textToSpeak.trim()) return;
+
+    if (isPlayingVoice && voiceActiveType === type) {
+      window.speechSynthesis.pause();
+      setIsPlayingVoice(false);
+    } else if (!isPlayingVoice && voiceActiveType === type && window.speechSynthesis.paused) {
+      window.speechSynthesis.resume();
+      setIsPlayingVoice(true);
+    } else {
+      window.speechSynthesis.cancel();
+      setVoiceActiveType(type);
+      
+      const utterance = new SpeechSynthesisUtterance(textToSpeak);
+      utteranceRef.current = utterance;
+      
+      const voices = window.speechSynthesis.getVoices();
+      if (language === 'telugu') {
+        const telVoice = voices.find(v => v.lang.includes('te') || v.lang.includes('IN'));
+        if (telVoice) utterance.voice = telVoice;
+        utterance.lang = 'te-IN';
+      } else {
+        const engVoice = voices.find(v => v.lang.includes('en'));
+        if (engVoice) utterance.voice = engVoice;
+        utterance.lang = 'en-US';
+      }
+
+      utterance.onend = () => {
+        setIsPlayingVoice(false);
+        setVoiceActiveType(null);
+      };
+      utterance.onerror = () => {
+        setIsPlayingVoice(false);
+        setVoiceActiveType(null);
+      };
+
+      window.speechSynthesis.speak(utterance);
+      setIsPlayingVoice(true);
+    }
+  };
+
+  const handleVoiceRestart = (type: 'summary' | 'laws' | 'checklist') => {
+    window.speechSynthesis.cancel();
+    
+    let textToSpeak = '';
+    if (type === 'summary') {
+      textToSpeak = displayAnalysis?.summary || '';
+    } else if (type === 'laws') {
+      if (displayAnalysis?.legal_references) {
+        const prefix = language === 'telugu' ? 'ఇవి నోటీసుకు సంబంధించిన చట్టాలు: ' : 'Here are the relevant legal citations: ';
+        const citations = displayAnalysis.legal_references.map((ref, idx) => {
+          const count = language === 'telugu' ? `${idx + 1}. ` : `Citation ${idx + 1}. `;
+          return `${count}${ref.section}. ${ref.description}`;
+        }).join('. ');
+        textToSpeak = prefix + citations;
+      }
+    } else if (type === 'checklist') {
+      if (displayAnalysis?.checklist) {
+        const prefix = language === 'telugu' ? 'మీరు తీసుకోవలసిన తదుపరి చర్యల జాబితా ఇక్కడ ఉంది: ' : 'Here is your recommended next steps checklist: ';
+        const steps = displayAnalysis.checklist.map((step, idx) => {
+          const count = language === 'telugu' ? `దశ ${idx + 1}: ` : `Step ${idx + 1}: `;
+          return `${count}${step}`;
+        }).join('. ');
+        textToSpeak = prefix + steps;
+      }
+    }
+
+    if (!textToSpeak.trim()) return;
+
+    setVoiceActiveType(type);
+    setIsPlayingVoice(true);
+
+    const utterance = new SpeechSynthesisUtterance(textToSpeak);
+    utteranceRef.current = utterance;
+    
+    const voices = window.speechSynthesis.getVoices();
+    if (language === 'telugu') {
+      const telVoice = voices.find(v => v.lang.includes('te') || v.lang.includes('IN'));
+      if (telVoice) utterance.voice = telVoice;
+      utterance.lang = 'te-IN';
+    } else {
+      const engVoice = voices.find(v => v.lang.includes('en'));
+      if (engVoice) utterance.voice = engVoice;
+      utterance.lang = 'en-US';
+    }
+
+    utterance.onend = () => {
+      setIsPlayingVoice(false);
+      setVoiceActiveType(null);
+    };
+    utterance.onerror = () => {
+      setIsPlayingVoice(false);
+      setVoiceActiveType(null);
+    };
+
+    window.speechSynthesis.speak(utterance);
   };
 
   const triggerTranslation = async () => {
@@ -1346,42 +1432,91 @@ export default function App() {
                 </h2>
                 
                 {/* Visualizer tts synthesis button */}
-                {fileUploaded && activeTab !== 'chat' && (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                {fileUploaded && ['summary', 'laws', 'checklist'].includes(activeTab) && (
+                  (() => {
+                    const voiceType = activeTab as 'summary' | 'laws' | 'checklist';
+                    const isActive = voiceActiveType === voiceType;
+                    const isCurrentPlaying = isPlayingVoice && isActive;
                     
-                    {/* Bouncing audio wave */}
-                    {isPlayingVoice && (
-                      <div style={{ display: 'flex', alignItems: 'flex-end', gap: '3px', height: '18px' }}>
-                        <div className="audio-wave-bar" />
-                        <div className="audio-wave-bar" />
-                        <div className="audio-wave-bar" />
-                        <div className="audio-wave-bar" />
-                      </div>
-                    )}
+                    const btnLabel = isCurrentPlaying 
+                      ? t('pauseBtn') 
+                      : voiceType === 'summary' 
+                        ? (language === 'english' ? 'Listen Summary' : 'సారాంశం వినండి')
+                        : voiceType === 'laws'
+                          ? (language === 'english' ? 'Listen Laws' : 'చట్టాలు వినండి')
+                          : (language === 'english' ? 'Listen Checklist' : 'చర్యలు వినండి');
 
-                    <button 
-                      onClick={handleVoiceToggle}
-                      style={{
-                        background: isPlayingVoice ? 'rgba(245, 158, 11, 0.15)' : 'rgba(120, 120, 120, 0.08)',
-                        color: isPlayingVoice ? 'var(--color-accent-gold)' : 'var(--color-text-primary)',
-                        border: isPlayingVoice ? '1px solid rgba(245, 158, 11, 0.3)' : '1px solid var(--color-border)',
-                        borderRadius: '30px',
-                        padding: '8px 18px',
-                        fontSize: '11px',
-                        cursor: 'pointer',
-                        fontWeight: '800',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        outline: 'none',
-                        transition: 'all 0.2s',
-                        fontFamily: 'var(--font-header)'
-                      }}
-                    >
-                      <span style={{ display: 'flex', alignItems: 'center' }}>{isPlayingVoice ? <PauseIcon color="var(--color-accent-gold)" /> : <VolumeIcon color="var(--color-text-primary)" />}</span>
-                      <span>{isPlayingVoice ? t('pauseBtn') : t('listenBtn')}</span>
-                    </button>
-                  </div>
+                    return (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        
+                        {/* Bouncing audio wave */}
+                        {isCurrentPlaying && (
+                          <div style={{ display: 'flex', alignItems: 'flex-end', gap: '3px', height: '18px', marginRight: '4px' }}>
+                            <div className="audio-wave-bar" />
+                            <div className="audio-wave-bar" />
+                            <div className="audio-wave-bar" />
+                            <div className="audio-wave-bar" />
+                          </div>
+                        )}
+
+                        <button 
+                          onClick={() => handleVoiceToggle(voiceType)}
+                          style={{
+                            background: isCurrentPlaying ? 'rgba(245, 158, 11, 0.15)' : 'rgba(120, 120, 120, 0.08)',
+                            color: isCurrentPlaying ? 'var(--color-accent-gold)' : 'var(--color-text-primary)',
+                            border: isCurrentPlaying ? '1px solid rgba(245, 158, 11, 0.3)' : '1px solid var(--color-border)',
+                            borderRadius: '30px',
+                            padding: '8px 18px',
+                            fontSize: '11px',
+                            cursor: 'pointer',
+                            fontWeight: '800',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            outline: 'none',
+                            transition: 'all 0.2s',
+                            fontFamily: 'var(--font-header)'
+                          }}
+                        >
+                          <span style={{ display: 'flex', alignItems: 'center' }}>
+                            {isCurrentPlaying ? <PauseIcon color="var(--color-accent-gold)" /> : <VolumeIcon color="var(--color-text-primary)" />}
+                          </span>
+                          <span>{btnLabel}</span>
+                        </button>
+
+                        {/* Reset / Restart voice button */}
+                        {isActive && (
+                          <button 
+                            onClick={() => handleVoiceRestart(voiceType)}
+                            style={{
+                              background: 'rgba(120, 120, 120, 0.08)',
+                              color: 'var(--color-text-primary)',
+                              border: '1px solid var(--color-border)',
+                              borderRadius: '30px',
+                              padding: '8px 14px',
+                              fontSize: '11px',
+                              cursor: 'pointer',
+                              fontWeight: '800',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '6px',
+                              outline: 'none',
+                              transition: 'all 0.2s',
+                              fontFamily: 'var(--font-header)'
+                            }}
+                            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(120, 120, 120, 0.15)'}
+                            onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(120, 120, 120, 0.08)'}
+                            title="Listen from starting"
+                          >
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67" />
+                            </svg>
+                            <span>{language === 'english' ? 'From Start' : 'మొదటి నుండి'}</span>
+                          </button>
+                        )}
+                      </div>
+                    );
+                  })()
                 )}
               </div>
 
