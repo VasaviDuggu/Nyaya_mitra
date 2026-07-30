@@ -421,6 +421,13 @@ export default function App() {
   const [editedTemplate, setEditedTemplate] = useState<string>('');
   const [isTemplateExpanded, setIsTemplateExpanded] = useState(false);
 
+  // Speech-to-Text states
+  const [isIngestionRecording, setIsIngestionRecording] = useState(false);
+  const [isChatRecording, setIsChatRecording] = useState(false);
+  const [voiceNoticeText, setVoiceNoticeText] = useState('');
+  const [showVoiceIngestionModal, setShowVoiceIngestionModal] = useState(false);
+  const [recognitionObj, setRecognitionObj] = useState<any>(null);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
@@ -540,6 +547,123 @@ export default function App() {
       return data.translated_text;
     } catch {
       return `[తెలుగు] ${text}`;
+    }
+  };
+
+  const getSpeechRecognition = (
+    lang: string,
+    onResult: (text: string) => void,
+    onEnd: () => void
+  ) => {
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("Your browser does not support Speech Recognition. Please try Google Chrome or MS Edge.");
+      return null;
+    }
+    const recognition = new SpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = lang === 'telugu' ? 'te-IN' : 'en-US';
+
+    recognition.onresult = (event: any) => {
+      let speechSoFar = '';
+      for (let i = 0; i < event.results.length; i++) {
+        speechSoFar += event.results[i][0].transcript + ' ';
+      }
+      onResult(speechSoFar.trim());
+    };
+
+    recognition.onend = () => {
+      onEnd();
+    };
+
+    recognition.onerror = (event: any) => {
+      console.error("Speech Recognition Error:", event.error);
+    };
+
+    return recognition;
+  };
+
+  const handleToggleVoiceIngestion = () => {
+    if (isIngestionRecording) {
+      recognitionObj?.stop();
+      setIsIngestionRecording(false);
+    } else {
+      setVoiceNoticeText('');
+      const rec = getSpeechRecognition(
+        language,
+        (text) => setVoiceNoticeText(text),
+        () => setIsIngestionRecording(false)
+      );
+      if (rec) {
+        setRecognitionObj(rec);
+        rec.start();
+        setIsIngestionRecording(true);
+        setShowVoiceIngestionModal(true);
+      }
+    }
+  };
+
+  const handleToggleVoiceChat = () => {
+    if (isChatRecording) {
+      recognitionObj?.stop();
+      setIsChatRecording(false);
+    } else {
+      const rec = getSpeechRecognition(
+        language,
+        (text) => setChatInput(text),
+        () => setIsChatRecording(false)
+      );
+      if (rec) {
+        setRecognitionObj(rec);
+        rec.start();
+        setIsChatRecording(true);
+      }
+    }
+  };
+
+  const handleSubmitVoiceNotice = async () => {
+    if (!voiceNoticeText.trim()) return;
+    
+    // Stop recording
+    if (isIngestionRecording) {
+      recognitionObj?.stop();
+      setIsIngestionRecording(false);
+    }
+    
+    setShowVoiceIngestionModal(false);
+    setIsUploading(true);
+    setError(null);
+
+    // Create a mock text file representation for UI state consistency
+    const mockFile = new File([voiceNoticeText], "verbal_notice_description.txt", { type: "text/plain" });
+    setFile(mockFile);
+
+    const formData = new FormData();
+    formData.append("spoken_text", voiceNoticeText);
+
+    try {
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error(`Analysis failed with status ${response.status}`);
+      }
+
+      const data: UploadResponse = await response.json();
+      setDocumentId(data.document_id);
+      setDocType(data.doc_type);
+      setRawText(data.raw_text || '');
+      setAnalysis(data.analysis);
+      setChatMessages([{ role: 'assistant', content: t('chatGreeting') }]);
+      setFileUploaded(true);
+    } catch (err: any) {
+      setError(err.message || "Failed to analyze verbal notice.");
+      setFile(null);
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -921,6 +1045,39 @@ export default function App() {
           </div>
 
           <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
+            {/* Top Mic button for verbal notice ingestion */}
+            {activeNav === 'dashboard' && !fileUploaded && (
+              <button
+                onClick={handleToggleVoiceIngestion}
+                style={{
+                  background: isIngestionRecording ? 'rgba(239, 68, 68, 0.15)' : 'rgba(255, 255, 255, 0.02)',
+                  border: `1px solid ${isIngestionRecording ? 'var(--color-danger)' : 'var(--color-border)'}`,
+                  borderRadius: '30px',
+                  padding: '8px 18px',
+                  color: isIngestionRecording ? 'var(--color-danger)' : 'var(--color-text-primary)',
+                  fontSize: '11px',
+                  fontWeight: '800',
+                  fontFamily: 'var(--font-header)',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  outline: 'none',
+                  transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
+                }}
+                className={isIngestionRecording ? "recording-pulse" : ""}
+              >
+                <span style={{ display: 'flex', alignItems: 'center' }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+                    <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                    <line x1="12" y1="19" x2="12" y2="22" />
+                  </svg>
+                </span>
+                <span>{language === 'english' ? 'DESCRIBE VERBALLY' : 'నోటీసు వివరించండి'}</span>
+              </button>
+            )}
+
             {/* Language switch */}
             <div style={{ 
               display: 'flex', 
@@ -1554,14 +1711,15 @@ export default function App() {
                             gap: '12px', 
                             padding: '16px 0 0 0', 
                             borderTop: '1px solid var(--color-border)',
-                            marginTop: 'auto'
+                            marginTop: 'auto',
+                            alignItems: 'center'
                           }}
                         >
                           <input 
                             type="text" 
                             value={chatInput}
                             onChange={(e) => setChatInput(e.target.value)}
-                            placeholder={t('chatPlaceholder')}
+                            placeholder={isChatRecording ? (language === 'english' ? 'Listening... Speak your question' : 'వింటున్నాము... మీ ప్రశ్న చెప్పండి') : t('chatPlaceholder')}
                             disabled={isSendingChat}
                             style={{
                               flex: 1,
@@ -1569,17 +1727,46 @@ export default function App() {
                               border: '1px solid var(--color-border)',
                               borderRadius: '30px',
                               padding: '14px 24px',
-                              color: '#ffffff',
+                              color: 'var(--color-text-primary)',
                               fontSize: '13.5px',
                               outline: 'none',
                               transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
                             }}
                           />
+                          
+                          {/* Microphone toggle button */}
+                          <button
+                            type="button"
+                            onClick={handleToggleVoiceChat}
+                            style={{
+                              background: isChatRecording ? 'rgba(239, 68, 68, 0.15)' : 'rgba(120, 120, 120, 0.08)',
+                              border: `1px solid ${isChatRecording ? 'var(--color-danger)' : 'var(--color-border)'}`,
+                              borderRadius: '50%',
+                              width: '46px',
+                              height: '46px',
+                              display: 'flex',
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              color: isChatRecording ? 'var(--color-danger)' : 'var(--color-text-primary)',
+                              cursor: 'pointer',
+                              transition: 'all 0.2s',
+                              outline: 'none',
+                              flexShrink: 0
+                            }}
+                            className={isChatRecording ? "recording-pulse" : ""}
+                          >
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+                              <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                              <line x1="12" y1="19" x2="12" y2="22" />
+                            </svg>
+                          </button>
+
                           <button 
                             type="submit" 
                             disabled={isSendingChat || !chatInput.trim()}
                             className="glow-btn"
-                            style={{ padding: '8px 28px', opacity: (isSendingChat || !chatInput.trim()) ? 0.5 : 1 }}
+                            style={{ padding: '14px 28px', opacity: (isSendingChat || !chatInput.trim()) ? 0.5 : 1, borderRadius: '30px', fontSize: '13.5px' }}
                           >
                             {t('sendBtn')}
                           </button>
@@ -1757,6 +1944,114 @@ export default function App() {
                   margin: 0
                 }}
               />
+            </div>
+          )}
+
+          {/* Voice Notice Ingestion Modal/Overlay */}
+          {showVoiceIngestionModal && (
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              background: 'rgba(3, 7, 18, 0.85)',
+              backdropFilter: 'blur(16px)',
+              zIndex: 100,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              animation: 'fadeIn 0.2s ease-out'
+            }}>
+              <div className="glass-card" style={{
+                width: '100%',
+                maxWidth: '600px',
+                padding: '40px',
+                background: 'rgba(15, 23, 42, 0.95)',
+                border: '2px solid var(--color-accent-indigo)',
+                boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)',
+                textAlign: 'center',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '24px',
+                borderRadius: '24px'
+              }}>
+                <h3 style={{ margin: 0, fontSize: '18px', fontWeight: '800', color: '#ffffff' }}>
+                  {language === 'english' ? 'Verbal Notice Description' : 'మౌఖిక నోటీసు వివరణ'}
+                </h3>
+                <p style={{ margin: 0, fontSize: '13px', color: 'var(--color-text-secondary)', lineHeight: '1.6' }}>
+                  {language === 'english' 
+                    ? 'Clearly explain your notice (e.g. eviction warning or cheque bounce notice details) in detail. Our AI will analyze your verbal description.'
+                    : 'మీరు అందుకున్న చట్టపరమైన నోటీసు వివరాలను స్పష్టంగా వివరించండి. మా AI మీ వాయిస్ వివరణను విశ్లేషిస్తుంది.'}
+                </p>
+
+                {/* Animated visualizer wave */}
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', height: '60px' }}>
+                  <div className={`visualizer-bar ${isIngestionRecording ? 'wave-active' : ''}`} style={{ animationDelay: '0.1s' }} />
+                  <div className={`visualizer-bar ${isIngestionRecording ? 'wave-active' : ''}`} style={{ animationDelay: '0.3s' }} />
+                  <div className={`visualizer-bar ${isIngestionRecording ? 'wave-active' : ''}`} style={{ animationDelay: '0.5s' }} />
+                  <div className={`visualizer-bar ${isIngestionRecording ? 'wave-active' : ''}`} style={{ animationDelay: '0.2s' }} />
+                  <div className={`visualizer-bar ${isIngestionRecording ? 'wave-active' : ''}`} style={{ animationDelay: '0.4s' }} />
+                </div>
+
+                {/* Live transcription text box */}
+                <div style={{
+                  background: '#040711',
+                  border: '1px solid var(--color-border)',
+                  borderRadius: '16px',
+                  padding: '20px',
+                  minHeight: '120px',
+                  maxHeight: '200px',
+                  overflowY: 'auto',
+                  textAlign: 'left',
+                  color: '#a7f3d0',
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '13.5px',
+                  lineHeight: '1.7', whiteSpace: 'pre-wrap'
+                }}>
+                  {voiceNoticeText || (
+                    <span style={{ color: 'var(--color-text-secondary)', fontStyle: 'italic' }}>
+                      {language === 'english' ? 'Listening... Start speaking now.' : 'వింటున్నాము... మాట్లాడటం ప్రారంభించండి.'}
+                    </span>
+                  )}
+                </div>
+
+                {/* Modal actions */}
+                <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', marginTop: '12px' }}>
+                  <button 
+                    onClick={handleSubmitVoiceNotice}
+                    className="glow-btn"
+                    disabled={!voiceNoticeText.trim()}
+                    style={{ 
+                      padding: '12px 28px', 
+                      borderRadius: '14px', 
+                      opacity: !voiceNoticeText.trim() ? 0.5 : 1,
+                      cursor: !voiceNoticeText.trim() ? 'not-allowed' : 'pointer'
+                    }}
+                  >
+                    {language === 'english' ? 'Analyze Spoken Notice' : 'మౌఖిక నోటీసు విశ్లేషించు'}
+                  </button>
+                  <button 
+                    onClick={() => {
+                      recognitionObj?.stop();
+                      setIsIngestionRecording(false);
+                      setShowVoiceIngestionModal(false);
+                    }}
+                    style={{
+                      background: 'rgba(239, 68, 68, 0.08)',
+                      border: '1px solid rgba(239, 68, 68, 0.2)',
+                      padding: '12px 28px',
+                      borderRadius: '14px',
+                      color: 'var(--color-danger)',
+                      fontWeight: '800',
+                      cursor: 'pointer',
+                      fontSize: '13.5px'
+                    }}
+                  >
+                    {language === 'english' ? 'Cancel' : 'రద్దు చేయి'}
+                  </button>
+                </div>
+              </div>
             </div>
           )}
 
