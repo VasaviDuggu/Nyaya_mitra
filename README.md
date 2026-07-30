@@ -128,4 +128,4 @@ cd Nyaya_mitra
 ---
 
 ## ⚖️ Disclaimer
-NyayaMitra AI is an educational accessibility tool designed to assist citizens in understanding public legal notices. It is **not** a replacement for professional legal representation. Always consult a qualified advocate or attorney before submitting formal legal responses.
+NyayaMitra AI is an AI tool designed to assist citizens in understanding public legal notices. It is **not** a replacement for professional legal representation. Always consult a qualified advocate or attorney before submitting formal legal responses.
