@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
+import { useAuth } from './context/AuthContext'
 
 // Interactive SVG Icon Components
 const DashboardIcon = ({ size = 20, color = 'currentColor' }) => (
@@ -83,13 +84,6 @@ const FileIcon = ({ size = 32, color = 'currentColor' }) => (
     <line x1="16" y1="13" x2="8" y2="13" />
     <line x1="16" y1="17" x2="8" y2="17" />
     <polyline points="10 9 9 9 8 9" />
-  </svg>
-);
-
-const LockIcon = ({ size = 36, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
   </svg>
 );
 
@@ -375,9 +369,36 @@ export default function App() {
       })
       .catch(err => console.error("Error fetching laws:", err));
   }, [selectedCategory]);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [showLoginModal, setShowLoginModal] = useState(false);
-  const [pendingCalendar, setPendingCalendar] = useState<{date: string, title: string} | null>(null);
+  const { user, token, openAuthModal, logout, userDocuments } = useAuth();
+  const isLoggedIn = user !== null;
+
+  // Auto-restore previous notice history when user logs in
+  useEffect(() => {
+    if (userDocuments && userDocuments.length > 0 && !analysis) {
+      const latestDoc = userDocuments[0];
+      setDocumentId(latestDoc.id);
+      setDocType(latestDoc.doc_type);
+      setRawText(latestDoc.summary || '');
+      try {
+        const parsedDates = typeof latestDoc.extracted_dates === 'string' ? JSON.parse(latestDoc.extracted_dates) : latestDoc.extracted_dates;
+        const parsedRefs = typeof latestDoc.legal_references === 'string' ? JSON.parse(latestDoc.legal_references) : latestDoc.legal_references;
+        const parsedChecklist = typeof latestDoc.checklist === 'string' ? JSON.parse(latestDoc.checklist) : latestDoc.checklist;
+
+        setAnalysis({
+          summary: latestDoc.summary,
+          extracted_dates: parsedDates || [],
+          legal_references: parsedRefs || [],
+          checklist: parsedChecklist || [],
+          response_template: latestDoc.response_template || ''
+        });
+        setChatMessages([{ role: 'assistant', content: `Welcome back, ${user?.full_name || 'User'}! Restored your previously analyzed notice: ${latestDoc.filename}.` }]);
+        setFileUploaded(true);
+      } catch (err) {
+        console.error("Failed to parse user document history:", err);
+      }
+    }
+  }, [userDocuments, user]);
+
   const [toastText, setToastText] = useState('Copied to clipboard!');
 
   // Full-stack states
@@ -397,6 +418,7 @@ export default function App() {
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [chatInput, setChatInput] = useState('');
   const [isSendingChat, setIsSendingChat] = useState(false);
+  const [isLogoutConfirmOpen, setIsLogoutConfirmOpen] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -529,8 +551,14 @@ export default function App() {
     formData.append("file", selectedFile);
 
     try {
+      const headers: Record<string, string> = {};
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
       const response = await fetch('/api/upload', {
         method: 'POST',
+        headers,
         body: formData,
       });
 
@@ -588,8 +616,7 @@ export default function App() {
 
   const handleCalendarDownload = async (dateStr: string, titleStr: string) => {
     if (!isLoggedIn) {
-      setPendingCalendar({ date: dateStr, title: titleStr });
-      setShowLoginModal(true);
+      openAuthModal();
       return;
     }
     try {
@@ -877,39 +904,74 @@ export default function App() {
               <span>{isDarkMode ? (language === 'english' ? 'LIGHT' : 'లైట్') : (language === 'english' ? 'DARK' : 'డార్క్')}</span>
             </button>
 
-            {/* User Profile Login/Logout Button */}
-            <button 
-              onClick={() => {
-                if (isLoggedIn) {
-                  setIsLoggedIn(false);
-                } else {
-                  setShowLoginModal(true);
-                }
-              }}
-              style={{
-                background: isLoggedIn ? 'rgba(16, 185, 129, 0.08)' : 'rgba(255, 255, 255, 0.02)',
-                border: `1px solid ${isLoggedIn ? 'var(--color-success)' : 'var(--color-border)'}`,
-                borderRadius: '30px',
-                padding: '8px 18px',
-                color: isLoggedIn ? 'var(--color-success)' : 'var(--color-text-primary)',
-                fontSize: '11px',
-                fontWeight: '800',
-                fontFamily: 'var(--font-header)',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                outline: 'none',
-                transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
-              }}
-            >
-              <span style={{ display: 'flex', alignItems: 'center' }}><UserIcon color={isLoggedIn ? 'var(--color-success)' : 'var(--color-text-primary)'} /></span>
-              <span>
-                {isLoggedIn 
-                  ? (language === 'english' ? 'LOGOUT' : 'లాగ్ అవుట్') 
-                  : (language === 'english' ? 'SIGN IN' : 'లాగిన్')}
-              </span>
-            </button>
+            {/* User Profile Badge & Separate Logout Button */}
+            {isLoggedIn ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div 
+                  style={{
+                    background: 'rgba(16, 185, 129, 0.1)',
+                    border: '1px solid var(--color-success)',
+                    borderRadius: '30px',
+                    padding: '8px 16px',
+                    color: 'var(--color-success)',
+                    fontSize: '11px',
+                    fontWeight: '800',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                  }}
+                >
+                  <UserIcon color="var(--color-success)" />
+                  <span>{user?.full_name?.toUpperCase() || 'USER'}</span>
+                </div>
+
+                <button 
+                  onClick={() => setIsLogoutConfirmOpen(true)}
+                  onDoubleClick={() => setIsLogoutConfirmOpen(true)}
+                  style={{
+                    background: 'rgba(239, 68, 68, 0.12)',
+                    border: '1px solid rgba(239, 68, 68, 0.4)',
+                    borderRadius: '30px',
+                    padding: '8px 16px',
+                    color: '#fca5a5',
+                    fontSize: '11px',
+                    fontWeight: '800',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    outline: 'none',
+                    transition: 'all 0.2s ease-in-out',
+                    boxShadow: '0 4px 12px rgba(239, 68, 68, 0.2)'
+                  }}
+                >
+                  🚪 {language === 'english' ? 'LOG OUT' : 'లాగ్ అవుట్'}
+                </button>
+              </div>
+            ) : (
+              <button 
+                onClick={openAuthModal}
+                style={{
+                  background: 'rgba(255, 255, 255, 0.02)',
+                  border: '1px solid var(--color-border)',
+                  borderRadius: '30px',
+                  padding: '8px 18px',
+                  color: 'var(--color-text-primary)',
+                  fontSize: '11px',
+                  fontWeight: '800',
+                  fontFamily: 'var(--font-header)',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  outline: 'none',
+                  transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
+                }}
+              >
+                <UserIcon color="var(--color-text-primary)" />
+                <span>{language === 'english' ? 'SIGN IN / SIGN UP' : 'లాగిన్ / సైన్ అప్'}</span>
+              </button>
+            )}
           </div>
         </header>
 
@@ -1877,151 +1939,86 @@ export default function App() {
             </div>
           </main>
         )}
-      </div>
-
-      {/* 5. Glassmorphic Login Modal */}
-      {showLoginModal && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          background: 'rgba(3, 7, 18, 0.6)',
-          backdropFilter: 'blur(16px)',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          zIndex: 9999,
-          animation: 'fadeIn 0.25s ease-out'
-        }}>
-          <div className="glass-card" style={{
-            width: '420px',
-            padding: '40px',
-            position: 'relative',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '24px',
-            border: '1px solid rgba(255, 255, 255, 0.1)'
-          }}>
-            <button 
-              onClick={() => setShowLoginModal(false)}
+        {/* Logout Confirmation Modal */}
+        {isLogoutConfirmOpen && (
+          <div
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              width: '100vw',
+              height: '100vh',
+              background: 'rgba(3, 7, 18, 0.75)',
+              backdropFilter: 'blur(16px)',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              zIndex: 999999,
+            }}
+          >
+            <div
               style={{
-                position: 'absolute',
-                top: '20px',
-                right: '20px',
-                background: 'none',
-                border: 'none',
-                color: 'var(--color-text-secondary)',
-                fontSize: '18px',
-                cursor: 'pointer',
-                outline: 'none'
+                width: '380px',
+                padding: '32px',
+                background: 'rgba(15, 23, 42, 0.95)',
+                border: '1px solid rgba(239, 68, 68, 0.4)',
+                borderRadius: '24px',
+                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.7)',
+                color: '#ffffff',
+                textAlign: 'center',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '16px',
               }}
             >
-              ✕
-            </button>
-            <div style={{ textAlign: 'center' }}>
-              <span style={{ display: 'flex', justifyContent: 'center', marginBottom: '8px' }}><LockIcon color="var(--color-accent-indigo)" size={36} /></span>
-              <h2 style={{ margin: '12px 0 6px 0', fontSize: '22px', fontWeight: '800', color: 'var(--color-text-primary)', fontFamily: 'var(--font-header)' }}>
-                {language === 'english' ? 'Sign In Required' : 'లాగిన్ అవసరం'}
-              </h2>
-              <p style={{ margin: 0, fontSize: '13px', color: 'var(--color-text-secondary)' }}>
-                {language === 'english' ? 'Please log in to export notice milestones to your personal calendar.' : 'మీ వ్యక్తిగత క్యాలెండర్‌కు మైలురాళ్లను సమకాలీకరించడానికి దయచేసి లాగిన్ చేయండి.'}
+              <div style={{ fontSize: '38px' }}>🚪</div>
+              <h3 style={{ margin: 0, fontSize: '20px', fontWeight: '800', color: '#ffffff' }}>
+                Are you sure you want to log out?
+              </h3>
+              <p style={{ margin: 0, fontSize: '13px', color: '#94a3b8', lineHeight: '1.5' }}>
+                Your current legal notice session will be saved to your database account. You can sign back in anytime.
               </p>
-            </div>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <div>
-                <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', marginBottom: '8px', color: 'var(--color-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                  {language === 'english' ? 'Email Address' : 'ఈమెయిల్ చిరునామా'}
-                </label>
-                <input 
-                  type="text" 
-                  placeholder="hansh@nyayamitra.ai" 
+              <div style={{ display: 'flex', gap: '12px', marginTop: '8px' }}>
+                <button
+                  onClick={() => setIsLogoutConfirmOpen(false)}
                   style={{
-                    width: '100%',
-                    padding: '12px 16px',
+                    flex: 1,
+                    padding: '12px',
                     borderRadius: '12px',
-                    fontSize: '14px',
-                    boxSizing: 'border-box'
+                    background: 'rgba(255, 255, 255, 0.08)',
+                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                    color: '#ffffff',
+                    fontWeight: '700',
+                    cursor: 'pointer',
                   }}
-                />
-              </div>
-              <div>
-                <label style={{ display: 'block', fontSize: '11px', fontWeight: '700', marginBottom: '8px', color: 'var(--color-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                  {language === 'english' ? 'Password' : 'పాస్‌వర్డ్'}
-                </label>
-                <input 
-                  type="password" 
-                  placeholder="••••••••" 
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    logout();
+                    setIsLogoutConfirmOpen(false);
+                  }}
                   style={{
-                    width: '100%',
-                    padding: '12px 16px',
+                    flex: 1,
+                    padding: '12px',
                     borderRadius: '12px',
-                    background: 'rgba(255, 255, 255, 0.03)',
-                    border: '1px solid rgba(255, 255, 255, 0.08)',
-                    color: 'var(--color-text-primary)',
-                    fontSize: '14px',
-                    boxSizing: 'border-box'
+                    background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
+                    border: 'none',
+                    color: '#ffffff',
+                    fontWeight: '700',
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 14px rgba(239, 68, 68, 0.4)',
                   }}
-                />
+                >
+                  Yes, Log Out
+                </button>
               </div>
-            </div>
-
-            <button 
-              onClick={() => {
-                setIsLoggedIn(true);
-                setShowLoginModal(false);
-                setToastText(language === 'english' ? 'Logged in successfully! Exporting calendar...' : 'విజయవంతంగా లాగిన్ అయ్యారు! క్యాలెండర్ ఎగుమతి అవుతోంది...');
-                setShowCopyToast(true);
-                setTimeout(() => {
-                  setShowCopyToast(false);
-                }, 2500);
-
-                if (pendingCalendar) {
-                  // Direct download with isLoggedIn = true
-                  const fetchAndDownload = async () => {
-                    try {
-                      const url = `/api/calendar?date=${pendingCalendar.date}&title=${encodeURIComponent(pendingCalendar.title)}`;
-                      const response = await fetch(url);
-                      const data = await response.json();
-                      
-                      if (data.ics_file_content) {
-                        const element = document.createElement("a");
-                        const file = new Blob([data.ics_file_content], { type: 'text/calendar' });
-                        element.href = URL.createObjectURL(file);
-                        element.download = `${pendingCalendar.title.toLowerCase().replace(/ /g, '_')}_reminder.ics`;
-                        document.body.appendChild(element);
-                        element.click();
-                        document.body.removeChild(element);
-                      }
-                    } catch (err) {
-                      console.error(err);
-                    }
-                  };
-                  fetchAndDownload();
-                  setPendingCalendar(null);
-                }
-              }}
-              className="glow-btn"
-              style={{
-                width: '100%',
-                justifyContent: 'center',
-                padding: '14px'
-              }}
-            >
-              {language === 'english' ? 'Sign In & Sync' : 'లాగిన్ & సమకాలీకరణ'}
-            </button>
-            
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', margin: '8px 0 0 0', fontSize: '12px', color: 'var(--color-text-secondary)' }}>
-              <span>{language === 'english' ? "Don't have an account?" : "ఖాతా లేదా?"}</span>
-              <a href="#" style={{ color: 'var(--color-accent-indigo)', fontWeight: '600', textDecoration: 'none' }}>
-                {language === 'english' ? 'Sign Up' : 'నమోదు చేయండి'}
-              </a>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
+
     </div>
   );
 }

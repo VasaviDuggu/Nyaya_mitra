@@ -1,4 +1,4 @@
-from fastapi import APIRouter, UploadFile, File, Form, HTTPException, Depends
+from fastapi import APIRouter, UploadFile, File, Form, HTTPException, Depends, Header
 from sqlalchemy.orm import Session
 import json
 import logging
@@ -8,6 +8,8 @@ from database import get_db
 import models
 from services.gemini_client import analyze_notice_document
 from services.rag_retriever import retrieve_matching_laws
+from services.auth import verify_access_token
+from services.twilio_service import send_sms
 from config import GEMINI_API_KEY, OPENROUTER_API_KEY
 
 # Configure logging
@@ -50,9 +52,18 @@ You must output a single JSON object matching this exact schema:
 async def upload_and_analyze_document(
     file: UploadFile = File(...),
     notice_type: Optional[str] = Form(None),
+    user_id: Optional[int] = Form(None),
+    authorization: Optional[str] = Header(None),
     db: Session = Depends(get_db)
 ):
     try:
+        # Determine authenticated user ID if token provided
+        authenticated_user_id = user_id
+        if authorization and authorization.startswith("Bearer "):
+            token = authorization.split(" ")[1]
+            payload = verify_access_token(token)
+            if payload and "sub" in payload:
+                authenticated_user_id = int(payload["sub"])
         # 1. Read uploaded file bytes
         content = await file.read()
         if not content:
@@ -242,6 +253,7 @@ You MUST ground your legal references, plain description, and recommended checkl
 
         # 4. Save analysis results to the SQLite Database
         db_doc = models.Document(
+            user_id=authenticated_user_id,
             filename=file.filename,
             doc_type=analysis_data.get("document_type", "Unknown Notice"),
             raw_text=analysis_data.get("raw_text", raw_text_preview),
@@ -251,11 +263,17 @@ You MUST ground your legal references, plain description, and recommended checkl
             checklist_json=json.dumps(analysis_data.get("checklist", [])),
             response_template=analysis_data.get("response_template", "")
         )
-        
         db.add(db_doc)
         db.commit()
         db.refresh(db_doc)
 
+        try:
+          send_sms(
+             to_number="+91YOUR_VERIFIED_PHONE_NUMBER",
+             message=f"Nyaya Mitra: Your document '{db_doc.filename}' has been analyzed successfully."
+    )
+        except Exception as sms_error:
+             logger.warning(f"SMS sending failed: {sms_error}")
         # 5. Return structured result payload
         return {
             "document_id": db_doc.id,
