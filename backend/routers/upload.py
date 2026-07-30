@@ -48,40 +48,51 @@ You must output a single JSON object matching this exact schema:
 
 @router.post("/upload")
 async def upload_and_analyze_document(
-    file: UploadFile = File(...),
+    file: Optional[UploadFile] = File(None),
     notice_type: Optional[str] = Form(None),
+    spoken_text: Optional[str] = Form(None),
     db: Session = Depends(get_db)
 ):
     try:
-        # 1. Read uploaded file bytes
-        content = await file.read()
-        if not content:
-            raise HTTPException(status_code=400, detail="Uploaded file is empty.")
-
-        # Determine MIME type (default fallback)
-        mime_type = file.content_type
-        if not mime_type:
-            mime_type = "application/pdf" if file.filename.endswith(".pdf") else "image/png"
+        # 1. Get content and metadata depending on upload type (File or Spoken Text)
+        content = b""
+        mime_type = "text/plain"
+        filename = "spoken_notice.txt"
+        
+        if file is not None:
+            content = await file.read()
+            if not content:
+                raise HTTPException(status_code=400, detail="Uploaded file is empty.")
+            mime_type = file.content_type
+            filename = file.filename
+            if not mime_type:
+                mime_type = "application/pdf" if filename.endswith(".pdf") else "image/png"
+        elif spoken_text is not None and spoken_text.strip():
+            content = spoken_text.encode("utf-8")
+            mime_type = "text/plain"
+            filename = "spoken_notice.txt"
+        else:
+            raise HTTPException(status_code=400, detail="Please upload a notice file or describe your notice verbally.")
 
         # Determine default raw text preview from decode (fallback only)
         raw_text_preview = ""
-        if mime_type.startswith("text/") or file.filename.endswith(".txt"):
+        if mime_type.startswith("text/") or filename.endswith(".txt"):
             try:
                 raw_text_preview = content.decode("utf-8")
             except Exception:
                 raw_text_preview = "[Binary notice file content]"
         else:
-            raw_text_preview = f"[Multimodal PDF/Image Notice Binary File: {file.filename}]"
+            raw_text_preview = f"[Multimodal PDF/Image Notice Binary File: {filename}]"
 
         # 2. Retrieve matched laws from the local database (RAG Grounding)
-        matched_laws = retrieve_matching_laws(file.filename + " " + raw_text_preview)
+        matched_laws = retrieve_matching_laws(filename + " " + raw_text_preview)
         matched_laws_json = json.dumps(matched_laws, indent=2)
 
         # 3. Call LLM API (OpenRouter or direct Gemini) or load mock fallback if keys are missing
         if not GEMINI_API_KEY and not OPENROUTER_API_KEY:
-            logger.warning("No API keys set. Loading dynamic mock analysis data based on filename.")
+            logger.warning("No API keys set. Loading dynamic mock analysis data based on filename or text description.")
             
-            fn_lower = file.filename.lower()
+            fn_lower = (filename + " " + raw_text_preview).lower()
             
             # A. Court Summons Case Match
             if "summons" in fn_lower or "court" in fn_lower:
@@ -242,7 +253,7 @@ You MUST ground your legal references, plain description, and recommended checkl
 
         # 4. Save analysis results to the SQLite Database
         db_doc = models.Document(
-            filename=file.filename,
+            filename=filename,
             doc_type=analysis_data.get("document_type", "Unknown Notice"),
             raw_text=analysis_data.get("raw_text", raw_text_preview),
             summary_explanation=analysis_data.get("summary", ""),
