@@ -14,7 +14,6 @@ import {
   Pause as PauseIcon,
   Copy as CopyIcon,
   FileText as FileIcon,
-  Lock as LockIcon,
   Sun as SunIcon,
   Moon as MoonIcon,
   User as UserIcon,
@@ -1103,7 +1102,6 @@ export default function App() {
               <span>{isDarkMode ? (language === 'english' ? 'LIGHT' : 'లైట్') : (language === 'english' ? 'DARK' : 'డార్క్')}</span>
             </button>
 
-<<<<<<< HEAD
             {/* User Profile Badge & Separate Logout Button */}
             {isLoggedIn ? (
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -1172,43 +1170,6 @@ export default function App() {
                 <span>{language === 'english' ? 'SIGN IN / SIGN UP' : 'లాగిన్ / సైన్ అప్'}</span>
               </button>
             )}
-=======
-            {/* User Profile Login/Logout Button */}
-            <button 
-              onClick={() => {
-                if (isLoggedIn) {
-                  setIsLoggedIn(false);
-                } else {
-                  setShowLoginModal(true);
-                }
-              }}
-              style={{
-                background: isLoggedIn ? 'rgba(16, 185, 129, 0.08)' : 'rgba(255, 255, 255, 0.02)',
-                border: `1px solid ${isLoggedIn ? 'var(--color-success)' : 'var(--color-border)'}`,
-                borderRadius: '30px',
-                padding: '8px 18px',
-                color: isLoggedIn ? 'var(--color-success)' : 'var(--color-text-primary)',
-                fontSize: '11px',
-                fontWeight: '800',
-                fontFamily: 'var(--font-header)',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                outline: 'none',
-                transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
-              }}
-              className="icon-interactive"
-              title={isLoggedIn ? (language === 'english' ? "Logout session" : "లాగ్ అవుట్ చేయండి") : (language === 'english' ? "Sign In / Register" : "లాగిన్ అవ్వండి")}
-            >
-              <span style={{ display: 'flex', alignItems: 'center' }}><UserIcon color={isLoggedIn ? 'var(--color-success)' : 'var(--color-text-primary)'} size={14} /></span>
-              <span>
-                {isLoggedIn 
-                  ? (language === 'english' ? 'LOGOUT' : 'లాగ్ అవుట్') 
-                  : (language === 'english' ? 'SIGN IN' : 'లాగిన్')}
-              </span>
-            </button>
->>>>>>> origin/main
           </div>
         </header>
 
