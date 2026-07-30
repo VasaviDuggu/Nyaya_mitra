@@ -6,12 +6,33 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
-    phone_number = Column(String(50), nullable=True)
-    preferred_language = Column(String(50), default="english")
+    full_name = Column(String(255), nullable=True)
+    email = Column(String(255), unique=True, index=True, nullable=True)
+    phone_number = Column(String(50), unique=True, index=True, nullable=True)
+    password_hash = Column(String(255), nullable=True)
+    auth_provider = Column(String(50), default="email")  # "email" or "phone"
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     # Relationship to uploaded documents
     documents = relationship("Document", back_populates="owner")
+
+class OTPCode(Base):
+    __tablename__ = "otp_codes"
+
+    id = Column(Integer, primary_key=True, index=True)
+    phone_number = Column(String(50), index=True, nullable=False)
+    otp = Column(String(6), nullable=False)
+    expires_at = Column(DateTime(timezone=True), nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+class EmailOTPCode(Base):
+    __tablename__ = "email_otp_codes"
+
+    id = Column(Integer, primary_key=True, index=True)
+    email = Column(String(255), index=True, nullable=False)
+    otp = Column(String(6), nullable=False)
+    expires_at = Column(DateTime(timezone=True), nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
 
 class Document(Base):
     __tablename__ = "documents"
