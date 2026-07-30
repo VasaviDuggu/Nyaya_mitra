@@ -1205,8 +1205,8 @@ export default function App() {
                     <button 
                       onClick={handleVoiceToggle}
                       style={{
-                        background: isPlayingVoice ? 'rgba(245, 158, 11, 0.15)' : 'rgba(255, 255, 255, 0.03)',
-                        color: isPlayingVoice ? 'var(--color-accent-gold)' : '#ffffff',
+                        background: isPlayingVoice ? 'rgba(245, 158, 11, 0.15)' : 'rgba(120, 120, 120, 0.08)',
+                        color: isPlayingVoice ? 'var(--color-accent-gold)' : 'var(--color-text-primary)',
                         border: isPlayingVoice ? '1px solid rgba(245, 158, 11, 0.3)' : '1px solid var(--color-border)',
                         borderRadius: '30px',
                         padding: '8px 18px',
@@ -1221,7 +1221,7 @@ export default function App() {
                         fontFamily: 'var(--font-header)'
                       }}
                     >
-                      <span style={{ display: 'flex', alignItems: 'center' }}>{isPlayingVoice ? <PauseIcon color="var(--color-accent-gold)" /> : <VolumeIcon color="#ffffff" />}</span>
+                      <span style={{ display: 'flex', alignItems: 'center' }}>{isPlayingVoice ? <PauseIcon color="var(--color-accent-gold)" /> : <VolumeIcon color="var(--color-text-primary)" />}</span>
                       <span>{isPlayingVoice ? t('pauseBtn') : t('listenBtn')}</span>
                     </button>
                   </div>
@@ -1326,7 +1326,7 @@ export default function App() {
                     {/* Laws Tab */}
                     {activeTab === 'laws' && displayAnalysis && (
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', animation: 'fadeIn 0.3s' }}>
-                        <h3 style={{ margin: 0, fontSize: '14.5px', fontWeight: '800', color: '#ffffff', letterSpacing: '0.5px' }}>
+                        <h3 style={{ margin: 0, fontSize: '14.5px', fontWeight: '800', color: 'var(--color-text-primary)', letterSpacing: '0.5px' }}>
                           {t('legalCitations')}
                         </h3>
                         {displayAnalysis.legal_references.map((l, idx) => (
@@ -1345,7 +1345,7 @@ export default function App() {
                     {/* Checklist Tab */}
                     {activeTab === 'checklist' && displayAnalysis && (
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', animation: 'fadeIn 0.3s' }}>
-                        <h3 style={{ margin: 0, fontSize: '14.5px', fontWeight: '800', color: '#ffffff' }}>
+                        <h3 style={{ margin: 0, fontSize: '14.5px', fontWeight: '800', color: 'var(--color-text-primary)' }}>
                           {t('checklistTitle')}
                         </h3>
                         
@@ -1366,7 +1366,7 @@ export default function App() {
                     {activeTab === 'template' && displayAnalysis && (
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', animation: 'fadeIn 0.3s', height: '100%' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <h3 style={{ margin: 0, fontSize: '14.5px', fontWeight: '800', color: '#ffffff' }}>
+                          <h3 style={{ margin: 0, fontSize: '14.5px', fontWeight: '800', color: 'var(--color-text-primary)' }}>
                             {language === 'english' ? 'Response Template Editor' : 'ప్రత్యుత్తర లేఖ ఎడిటర్'}
                           </h3>
                           <div style={{ display: 'flex', gap: '10px' }}>
@@ -1400,11 +1400,11 @@ export default function App() {
                             <button 
                               onClick={() => setIsTemplateExpanded(!isTemplateExpanded)}
                               style={{
-                                background: 'rgba(255,255,255,0.04)',
+                                background: 'rgba(120, 120, 120, 0.08)',
                                 border: '1px solid var(--color-border)',
                                 padding: '8px 12px',
                                 borderRadius: '14px',
-                                color: '#ffffff',
+                                color: 'var(--color-text-primary)',
                                 cursor: 'pointer',
                                 fontSize: '11px',
                                 fontWeight: '800',
@@ -1414,17 +1414,17 @@ export default function App() {
                                 transition: 'all 0.2s',
                                 outline: 'none'
                               }}
-                              onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.08)'}
-                              onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.04)'}
+                              onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(120, 120, 120, 0.15)'}
+                              onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(120, 120, 120, 0.08)'}
                             >
                               {isTemplateExpanded ? (
                                 <>
-                                  <MinimizeIcon color="#ffffff" size={14} />
+                                  <MinimizeIcon color="var(--color-text-primary)" size={14} />
                                   <span>{language === 'english' ? 'Compress' : 'కుదించు'}</span>
                                 </>
                               ) : (
                                 <>
-                                  <MaximizeIcon color="#ffffff" size={14} />
+                                  <MaximizeIcon color="var(--color-text-primary)" size={14} />
                                   <span>{language === 'english' ? 'Expand' : 'విస్తరించు'}</span>
                                 </>
                               )}
