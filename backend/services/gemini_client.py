@@ -41,10 +41,16 @@ def analyze_notice_document(file_bytes: bytes, mime_type: str, prompt: str) -> s
     if OPENROUTER_API_KEY:
         logger.info(f"OpenRouter Gateway Active. Sending payload to model: {OPENROUTER_MODEL}")
         is_pdf = "pdf" in mime_type.lower()
+        is_text = "text" in mime_type.lower()
         
-        # If it is a PDF document, extract the text locally using pypdf.
-        # This bypasses OpenRouter's $0.50 minimum balance policy for file attachments!
-        if is_pdf:
+        if is_text:
+            text_str = file_bytes.decode("utf-8")
+            logger.info("Spoken or plain text notice description received. Sending as standard text query.")
+            full_prompt = f"{prompt}\n\nSPOKEN OR PLAIN TEXT NOTICE:\n{text_str}"
+            message_content = [
+                {"type": "text", "text": full_prompt}
+            ]
+        elif is_pdf:
             local_text = extract_text_from_pdf_bytes(file_bytes)
             if local_text.strip():
                 logger.info("PDF text extracted locally. Sending as standard text query to bypass OpenRouter $0.50 file restrictions.")
@@ -97,7 +103,7 @@ def analyze_notice_document(file_bytes: bytes, mime_type: str, prompt: str) -> s
                 }
             ],
             "response_format": {"type": "json_object"},
-            "max_tokens": 4000
+            "max_tokens": 1500
         }
 
         try:
@@ -121,21 +127,28 @@ def analyze_notice_document(file_bytes: bytes, mime_type: str, prompt: str) -> s
     # B. Default fallback to direct Google Gemini API if key is present
     elif GEMINI_API_KEY:
         logger.info("Direct Gemini API Active. Sending payload via generativeai SDK.")
-        model = genai.GenerativeModel("gemini-1.5-flash")
-
-        file_part = {
-            "mime_type": mime_type,
-            "data": file_bytes
-        }
+        model = genai.GenerativeModel("gemini-flash-latest")
+        is_text = "text" in mime_type.lower()
 
         generation_config = {
             "response_mime_type": "application/json"
         }
 
-        response = model.generate_content(
-            [file_part, prompt],
-            generation_config=generation_config
-        )
+        if is_text:
+            text_str = file_bytes.decode("utf-8")
+            response = model.generate_content(
+                f"{prompt}\n\nSPOKEN OR PLAIN TEXT NOTICE:\n{text_str}",
+                generation_config=generation_config
+            )
+        else:
+            file_part = {
+                "mime_type": mime_type,
+                "data": file_bytes
+            }
+            response = model.generate_content(
+                [file_part, prompt],
+                generation_config=generation_config
+            )
         return response.text
 
     else:
@@ -191,7 +204,7 @@ def generate_text_completion(system_prompt: str, user_prompt: str, history_messa
 
     # B. Use direct Gemini API
     elif GEMINI_API_KEY:
-        model = genai.GenerativeModel("gemini-1.5-flash")
+        model = genai.GenerativeModel("gemini-flash-latest")
         
         # Build prompt incorporating system context and history
         chat_prompt = f"{system_prompt}\n\n"

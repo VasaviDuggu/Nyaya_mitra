@@ -1,231 +1,74 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { useAuth } from './context/AuthContext'
 
-// Interactive SVG Icon Components
-const DashboardIcon = ({ size = 20, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="3" y="3" width="7" height="9" />
-    <rect x="14" y="3" width="7" height="5" />
-    <rect x="14" y="12" width="7" height="9" />
-    <rect x="3" y="16" width="7" height="5" />
-  </svg>
-);
-
-const LibraryIcon = ({ size = 20, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-    <path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z" />
-  </svg>
-);
-
-const ScheduleIcon = ({ size = 20, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-    <line x1="16" y1="2" x2="16" y2="6" />
-    <line x1="8" y1="2" x2="8" y2="6" />
-    <line x1="3" y1="10" x2="21" y2="10" />
-  </svg>
-);
-
-const ChatIcon = ({ size = 20, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-  </svg>
-);
-
-const MenuIcon = ({ size = 20, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <line x1="3" y1="12" x2="21" y2="12" />
-    <line x1="3" y1="6" x2="21" y2="6" />
-    <line x1="3" y1="18" x2="21" y2="18" />
-  </svg>
-);
-
-const ScaleIcon = ({ size = 32, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <line x1="12" y1="3" x2="12" y2="21" />
-    <line x1="3" y1="7" x2="21" y2="7" />
-    <path d="M6 7c0 4.5 2 8 6 8s6-3.5 6-8" />
-    <path d="M4 21h16" />
-  </svg>
-);
-
-const BoltIcon = ({ size = 18, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-  </svg>
-);
-
-const VolumeIcon = ({ size = 16, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
-    <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" />
-  </svg>
-);
-
-const PauseIcon = ({ size = 16, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="6" y="4" width="4" height="16" />
-    <rect x="14" y="4" width="4" height="16" />
-  </svg>
-);
-
-const CopyIcon = ({ size = 14, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-  </svg>
-);
-
-const FileIcon = ({ size = 32, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-    <polyline points="14 2 14 8 20 8" />
-    <line x1="16" y1="13" x2="8" y2="13" />
-    <line x1="16" y1="17" x2="8" y2="17" />
-    <polyline points="10 9 9 9 8 9" />
-  </svg>
-);
-
-const SunIcon = ({ size = 18, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="12" cy="12" r="5" />
-    <line x1="12" y1="1" x2="12" y2="3" />
-    <line x1="12" y1="21" x2="12" y2="23" />
-    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-    <line x1="1" y1="12" x2="3" y2="12" />
-    <line x1="21" y1="12" x2="23" y2="12" />
-    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-  </svg>
-);
-
-const MoonIcon = ({ size = 18, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-  </svg>
-);
-
-const UserIcon = ({ size = 16, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-    <circle cx="12" cy="7" r="4" />
-  </svg>
-);
-
-const SettingsIcon = ({ size = 20, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="12" cy="12" r="3" />
-    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
-  </svg>
-);
-
-const TrashIcon = ({ size = 14, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <polyline points="3 6 5 6 21 6" />
-    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-    <line x1="10" y1="11" x2="10" y2="17" />
-    <line x1="14" y1="11" x2="14" y2="17" />
-  </svg>
-);
-
-const FolderIcon = ({ size = 18, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
-  </svg>
-);
-
-const UploadIcon = ({ size = 36, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12" />
-  </svg>
-);
+// Premium Lucide Icons Imports
+import {
+  Home as DashboardIcon,
+  Library as LibraryIcon,
+  CalendarClock as ScheduleIcon,
+  MessageCircle as ChatIcon,
+  Menu as MenuIcon,
+  Scale as ScaleIcon,
+  Zap as BoltIcon,
+  Volume2 as VolumeIcon,
+  Pause as PauseIcon,
+  Copy as CopyIcon,
+  FileText as FileIcon,
+  Lock as LockIcon,
+  Sun as SunIcon,
+  Moon as MoonIcon,
+  User as UserIcon,
+  Settings as SettingsIcon,
+  Trash2 as TrashIcon,
+  Upload as UploadIcon,
+  Brain as BrainIcon,
+  Languages as LanguagesIcon,
+  Maximize2 as MaximizeIcon,
+  Minimize2 as MinimizeIcon,
+  AlertTriangle as AlertIcon,
+  Mic as MicIcon,
+  RotateCcw as RotateIcon,
+  Star as StarIcon,
+  Landmark,
+  Shield,
+  Globe,
+  MapPin,
+  Heart,
+  Briefcase,
+  ClipboardCheck,
+  ScrollText as ScrollIcon
+} from 'lucide-react';
 
 const getCategoryIcon = (cat: string, color: string) => {
   const normCat = cat.toLowerCase();
   if (normCat.includes('tenancy') || normCat.includes('housing')) {
-    return (
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-        <polyline points="9 22 9 12 15 12 15 22" />
-      </svg>
-    );
+    return <DashboardIcon size={13} color={color} />;
   }
   if (normCat.includes('finance') || normCat.includes('bank')) {
-    return (
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="2" y="6" width="20" height="12" rx="2" />
-        <circle cx="12" cy="12" r="2" />
-        <line x1="6" y1="12" x2="6" y2="12.01" />
-        <line x1="18" y1="12" x2="18" y2="12.01" />
-      </svg>
-    );
+    return <Landmark size={13} color={color} />;
   }
   if (normCat.includes('consumer') || normCat.includes('right')) {
-    return (
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-      </svg>
-    );
+    return <Shield size={13} color={color} />;
   }
   if (normCat.includes('utilit') || normCat.includes('service')) {
-    return (
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-      </svg>
-    );
+    return <BoltIcon size={13} color={color} />;
   }
   if (normCat.includes('civil') || normCat.includes('personal') || normCat.includes('cyber')) {
-    return (
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="12" r="10" />
-        <line x1="2" y1="12" x2="22" y2="12" />
-        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-      </svg>
-    );
+    return <Globe size={13} color={color} />;
   }
   if (normCat.includes('land')) {
-    return (
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-        <circle cx="12" cy="10" r="3" />
-      </svg>
-    );
+    return <MapPin size={13} color={color} />;
   }
   if (normCat.includes('family')) {
-    return (
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-      </svg>
-    );
+    return <Heart size={13} color={color} />;
   }
   if (normCat.includes('employ')) {
-    return (
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
-        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
-      </svg>
-    );
+    return <Briefcase size={13} color={color} />;
   }
   if (normCat.includes('inherit') || normCat.includes('heir')) {
-    return (
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-        <polyline points="14 2 14 8 20 8" />
-        <line x1="16" y1="13" x2="8" y2="13" />
-        <line x1="16" y1="17" x2="8" y2="17" />
-      </svg>
-    );
+    return <FileIcon size={13} color={color} />;
   }
-  return (
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="3" y="3" width="7" height="7" />
-      <rect x="14" y="3" width="7" height="7" />
-      <rect x="14" y="14" width="7" height="7" />
-      <rect x="3" y="14" width="7" height="7" />
-    </svg>
-  );
+  return <BrainIcon size={13} color={color} />;
 };
 
 interface Milestone {
@@ -290,7 +133,9 @@ const UI_TRANSLATIONS: Record<string, Record<string, string>> = {
     warningText: "This document contains high-urgency deadlines. Please review the timeline and checklists immediately.",
     downloadCal: "Sync Calendar (.ics)",
     copyBtn: "Copy Draft",
-    copiedToast: "Response Template Copied!"
+    copiedToast: "Response Template Copied!",
+    summaryTitle: "Summary",
+    lawsTitle: "Applicable Laws"
   },
   telugu: {
     ingestionTitle: "1. పత్రం అప్‌లోడ్ పోర్టల్",
@@ -320,7 +165,9 @@ const UI_TRANSLATIONS: Record<string, Record<string, string>> = {
     warningText: "ఈ పత్రంలో అత్యవసర గడువులు ఉన్నాయి. దయచేసి గడువు తేదీలు మరియు చర్యలను వెంటనే పరిశీలించండి.",
     downloadCal: "క్యాలెండర్ గుర్తు (.ics)",
     copyBtn: "కాపీ చేయండి",
-    copiedToast: "ప్రత్యుత్తర నమూనా కాపీ చేయబడింది!"
+    copiedToast: "ప్రత్యుత్తర నమూనా కాపీ చేయబడింది!",
+    summaryTitle: "సారాంశం",
+    lawsTitle: "చట్టాలు"
   }
 };
 
@@ -421,6 +268,21 @@ export default function App() {
   const [isLogoutConfirmOpen, setIsLogoutConfirmOpen] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
+  // Template editor states
+  const [editedTemplate, setEditedTemplate] = useState<string>('');
+  const [isTemplateExpanded, setIsTemplateExpanded] = useState(false);
+
+  // Speech-to-Text states
+  const [isIngestionRecording, setIsIngestionRecording] = useState(false);
+  const [isChatRecording, setIsChatRecording] = useState(false);
+  const [voiceNoticeText, setVoiceNoticeText] = useState('');
+  const [showVoiceIngestionModal, setShowVoiceIngestionModal] = useState(false);
+  const [recognitionObj, setRecognitionObj] = useState<any>(null);
+  const [voiceActiveType, setVoiceActiveType] = useState<'summary' | 'laws' | 'checklist' | null>(null);
+  const [showTeluguOcr, setShowTeluguOcr] = useState(false);
+  const [translatedOcrText, setTranslatedOcrText] = useState('');
+  const [isTranslatingOcr, setIsTranslatingOcr] = useState(false);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
@@ -446,40 +308,138 @@ export default function App() {
     };
   }, []);
 
-  const handleVoiceToggle = () => {
-    const summaryText = displayAnalysis?.summary;
-    if (!summaryText) return;
-
-    if (isPlayingVoice) {
-      window.speechSynthesis.pause();
-      setIsPlayingVoice(false);
-    } else {
-      if (window.speechSynthesis.paused) {
-        window.speechSynthesis.resume();
-        setIsPlayingVoice(true);
+  // Sync editedTemplate state when new analysis data loads or language switches
+  useEffect(() => {
+    if (analysis) {
+      if (language === 'telugu' && translatedAnalysis) {
+        setEditedTemplate(translatedAnalysis.response_template || '');
       } else {
-        window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(summaryText);
-        utteranceRef.current = utterance;
-        
-        const voices = window.speechSynthesis.getVoices();
-        if (language === 'telugu') {
-          const telVoice = voices.find(v => v.lang.includes('te') || v.lang.includes('IN'));
-          if (telVoice) utterance.voice = telVoice;
-          utterance.lang = 'te-IN';
-        } else {
-          const engVoice = voices.find(v => v.lang.includes('en'));
-          if (engVoice) utterance.voice = engVoice;
-          utterance.lang = 'en-US';
-        }
+        setEditedTemplate(analysis.response_template || '');
+      }
+    } else {
+      setEditedTemplate('');
+    }
+  }, [analysis, translatedAnalysis, language]);
 
-        utterance.onend = () => setIsPlayingVoice(false);
-        utterance.onerror = () => setIsPlayingVoice(false);
-
-        window.speechSynthesis.speak(utterance);
-        setIsPlayingVoice(true);
+  const handleVoiceToggle = (type: 'summary' | 'laws' | 'checklist') => {
+    let textToSpeak = '';
+    if (type === 'summary') {
+      textToSpeak = displayAnalysis?.summary || '';
+    } else if (type === 'laws') {
+      if (displayAnalysis?.legal_references) {
+        const prefix = language === 'telugu' ? 'ఇవి నోటీసుకు సంబంధించిన చట్టాలు: ' : 'Here are the relevant legal citations: ';
+        const citations = displayAnalysis.legal_references.map((ref, idx) => {
+          const count = language === 'telugu' ? `${idx + 1}. ` : `Citation ${idx + 1}. `;
+          return `${count}${ref.section}. ${ref.description}`;
+        }).join('. ');
+        textToSpeak = prefix + citations;
+      }
+    } else if (type === 'checklist') {
+      if (displayAnalysis?.checklist) {
+        const prefix = language === 'telugu' ? 'మీరు తీసుకోవలసిన తదుపరి చర్యల జాబితా ఇక్కడ ఉంది: ' : 'Here is your recommended next steps checklist: ';
+        const steps = displayAnalysis.checklist.map((step, idx) => {
+          const count = language === 'telugu' ? `దశ ${idx + 1}: ` : `Step ${idx + 1}: `;
+          return `${count}${step}`;
+        }).join('. ');
+        textToSpeak = prefix + steps;
       }
     }
+
+    if (!textToSpeak.trim()) return;
+
+    if (isPlayingVoice && voiceActiveType === type) {
+      window.speechSynthesis.pause();
+      setIsPlayingVoice(false);
+    } else if (!isPlayingVoice && voiceActiveType === type && window.speechSynthesis.paused) {
+      window.speechSynthesis.resume();
+      setIsPlayingVoice(true);
+    } else {
+      window.speechSynthesis.cancel();
+      setVoiceActiveType(type);
+      
+      const utterance = new SpeechSynthesisUtterance(textToSpeak);
+      utteranceRef.current = utterance;
+      
+      const voices = window.speechSynthesis.getVoices();
+      if (language === 'telugu') {
+        const telVoice = voices.find(v => v.lang.includes('te') || v.lang.includes('IN'));
+        if (telVoice) utterance.voice = telVoice;
+        utterance.lang = 'te-IN';
+      } else {
+        const engVoice = voices.find(v => v.lang.includes('en'));
+        if (engVoice) utterance.voice = engVoice;
+        utterance.lang = 'en-US';
+      }
+
+      utterance.onend = () => {
+        setIsPlayingVoice(false);
+        setVoiceActiveType(null);
+      };
+      utterance.onerror = () => {
+        setIsPlayingVoice(false);
+        setVoiceActiveType(null);
+      };
+
+      window.speechSynthesis.speak(utterance);
+      setIsPlayingVoice(true);
+    }
+  };
+
+  const handleVoiceRestart = (type: 'summary' | 'laws' | 'checklist') => {
+    window.speechSynthesis.cancel();
+    
+    let textToSpeak = '';
+    if (type === 'summary') {
+      textToSpeak = displayAnalysis?.summary || '';
+    } else if (type === 'laws') {
+      if (displayAnalysis?.legal_references) {
+        const prefix = language === 'telugu' ? 'ఇవి నోటీసుకు సంబంధించిన చట్టాలు: ' : 'Here are the relevant legal citations: ';
+        const citations = displayAnalysis.legal_references.map((ref, idx) => {
+          const count = language === 'telugu' ? `${idx + 1}. ` : `Citation ${idx + 1}. `;
+          return `${count}${ref.section}. ${ref.description}`;
+        }).join('. ');
+        textToSpeak = prefix + citations;
+      }
+    } else if (type === 'checklist') {
+      if (displayAnalysis?.checklist) {
+        const prefix = language === 'telugu' ? 'మీరు తీసుకోవలసిన తదుపరి చర్యల జాబితా ఇక్కడ ఉంది: ' : 'Here is your recommended next steps checklist: ';
+        const steps = displayAnalysis.checklist.map((step, idx) => {
+          const count = language === 'telugu' ? `దశ ${idx + 1}: ` : `Step ${idx + 1}: `;
+          return `${count}${step}`;
+        }).join('. ');
+        textToSpeak = prefix + steps;
+      }
+    }
+
+    if (!textToSpeak.trim()) return;
+
+    setVoiceActiveType(type);
+    setIsPlayingVoice(true);
+
+    const utterance = new SpeechSynthesisUtterance(textToSpeak);
+    utteranceRef.current = utterance;
+    
+    const voices = window.speechSynthesis.getVoices();
+    if (language === 'telugu') {
+      const telVoice = voices.find(v => v.lang.includes('te') || v.lang.includes('IN'));
+      if (telVoice) utterance.voice = telVoice;
+      utterance.lang = 'te-IN';
+    } else {
+      const engVoice = voices.find(v => v.lang.includes('en'));
+      if (engVoice) utterance.voice = engVoice;
+      utterance.lang = 'en-US';
+    }
+
+    utterance.onend = () => {
+      setIsPlayingVoice(false);
+      setVoiceActiveType(null);
+    };
+    utterance.onerror = () => {
+      setIsPlayingVoice(false);
+      setVoiceActiveType(null);
+    };
+
+    window.speechSynthesis.speak(utterance);
   };
 
   const triggerTranslation = async () => {
@@ -527,6 +487,123 @@ export default function App() {
       return data.translated_text;
     } catch {
       return `[తెలుగు] ${text}`;
+    }
+  };
+
+  const getSpeechRecognition = (
+    lang: string,
+    onResult: (text: string) => void,
+    onEnd: () => void
+  ) => {
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("Your browser does not support Speech Recognition. Please try Google Chrome or MS Edge.");
+      return null;
+    }
+    const recognition = new SpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = lang === 'telugu' ? 'te-IN' : 'en-US';
+
+    recognition.onresult = (event: any) => {
+      let speechSoFar = '';
+      for (let i = 0; i < event.results.length; i++) {
+        speechSoFar += event.results[i][0].transcript + ' ';
+      }
+      onResult(speechSoFar.trim());
+    };
+
+    recognition.onend = () => {
+      onEnd();
+    };
+
+    recognition.onerror = (event: any) => {
+      console.error("Speech Recognition Error:", event.error);
+    };
+
+    return recognition;
+  };
+
+  const handleToggleVoiceIngestion = () => {
+    if (isIngestionRecording) {
+      recognitionObj?.stop();
+      setIsIngestionRecording(false);
+    } else {
+      setVoiceNoticeText('');
+      const rec = getSpeechRecognition(
+        language,
+        (text) => setVoiceNoticeText(text),
+        () => setIsIngestionRecording(false)
+      );
+      if (rec) {
+        setRecognitionObj(rec);
+        rec.start();
+        setIsIngestionRecording(true);
+        setShowVoiceIngestionModal(true);
+      }
+    }
+  };
+
+  const handleToggleVoiceChat = () => {
+    if (isChatRecording) {
+      recognitionObj?.stop();
+      setIsChatRecording(false);
+    } else {
+      const rec = getSpeechRecognition(
+        language,
+        (text) => setChatInput(text),
+        () => setIsChatRecording(false)
+      );
+      if (rec) {
+        setRecognitionObj(rec);
+        rec.start();
+        setIsChatRecording(true);
+      }
+    }
+  };
+
+  const handleSubmitVoiceNotice = async () => {
+    if (!voiceNoticeText.trim()) return;
+    
+    // Stop recording
+    if (isIngestionRecording) {
+      recognitionObj?.stop();
+      setIsIngestionRecording(false);
+    }
+    
+    setShowVoiceIngestionModal(false);
+    setIsUploading(true);
+    setError(null);
+
+    // Create a mock text file representation for UI state consistency
+    const mockFile = new File([voiceNoticeText], "verbal_notice_description.txt", { type: "text/plain" });
+    setFile(mockFile);
+
+    const formData = new FormData();
+    formData.append("spoken_text", voiceNoticeText);
+
+    try {
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error(`Analysis failed with status ${response.status}`);
+      }
+
+      const data: UploadResponse = await response.json();
+      setDocumentId(data.document_id);
+      setDocType(data.doc_type);
+      setRawText(data.raw_text || '');
+      setAnalysis(data.analysis);
+      setChatMessages([{ role: 'assistant', content: t('chatGreeting') }]);
+      setFileUploaded(true);
+    } catch (err: any) {
+      setError(err.message || "Failed to analyze verbal notice.");
+      setFile(null);
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -597,7 +674,8 @@ export default function App() {
         body: JSON.stringify({
           message: userMessage.content,
           document_id: documentId,
-          history: chatMessages
+          history: chatMessages,
+          language: language
         })
       });
 
@@ -647,6 +725,81 @@ export default function App() {
     }, 2500);
   };
 
+  const handleDownloadPDF = (text: string) => {
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) return;
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>NyayaMitra AI - Draft Response Letter</title>
+          <style>
+            body {
+              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+              line-height: 1.6;
+              color: #333333;
+              padding: 40px;
+              max-width: 800px;
+              margin: 0 auto;
+            }
+            .letter-header {
+              text-align: center;
+              border-bottom: 2px solid #6366f1;
+              padding-bottom: 20px;
+              margin-bottom: 30px;
+            }
+            .letter-title {
+              font-size: 20px;
+              font-weight: bold;
+              color: #1e1b4b;
+              margin: 0;
+              text-transform: uppercase;
+              letter-spacing: 1px;
+            }
+            .letter-meta {
+              font-size: 12px;
+              color: #666666;
+              margin-top: 5px;
+            }
+            .letter-content {
+              white-space: pre-wrap;
+              font-size: 14px;
+              color: #333333;
+            }
+            .letter-footer {
+              margin-top: 50px;
+              border-top: 1px solid #e2e8f0;
+              padding-top: 20px;
+              font-size: 11px;
+              color: #888888;
+              text-align: center;
+            }
+            @media print {
+              body { padding: 0; }
+              .no-print { display: none; }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="letter-header">
+            <h1 class="letter-title">DISPUTE RESPONSE STATEMENT</h1>
+            <div class="letter-meta">Generated via NyayaMitra AI | Case Reference: #${documentId || 'N/A'}</div>
+          </div>
+          <div class="letter-content">${text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</div>
+          <div class="letter-footer">
+            Disclaimer: This is an AI-generated draft response based on public statutes. It is not formal legal advice. Please review with an advocate before formal filing.
+          </div>
+          <script>
+            window.onload = function() {
+              window.print();
+              window.close();
+            };
+          </script>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
+  };
+
   const handleReset = () => {
     window.speechSynthesis.cancel();
     setFile(null);
@@ -660,6 +813,11 @@ export default function App() {
     setActiveTab('summary');
     setIsPlayingVoice(false);
     setChatMessages([]);
+    setEditedTemplate('');
+    setIsTemplateExpanded(false);
+    setShowTeluguOcr(false);
+    setTranslatedOcrText('');
+    setIsTranslatingOcr(false);
   };
 
   const getRemainingDays = (dateStr: string) => {
@@ -787,7 +945,8 @@ export default function App() {
               <button
                 key={item.id}
                 onClick={() => setActiveNav(item.id)}
-                className={isActive ? "nav-btn-active" : ""}
+                className={isActive ? "nav-btn-active" : "sidebar-nav-btn"}
+                title={item.label}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -836,14 +995,50 @@ export default function App() {
           </div>
 
           <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
+            {/* Top Mic button for verbal notice ingestion */}
+            {activeNav === 'dashboard' && !fileUploaded && (
+              <button
+                onClick={handleToggleVoiceIngestion}
+                style={{
+                  background: isIngestionRecording ? 'rgba(239, 68, 68, 0.15)' : 'rgba(255, 255, 255, 0.02)',
+                  border: `1px solid ${isIngestionRecording ? 'var(--color-danger)' : 'var(--color-border)'}`,
+                  borderRadius: '30px',
+                  padding: '8px 18px',
+                  color: isIngestionRecording ? 'var(--color-danger)' : 'var(--color-text-primary)',
+                  fontSize: '11px',
+                  fontWeight: '800',
+                  fontFamily: 'var(--font-header)',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  outline: 'none',
+                  transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
+                }}
+                className={`icon-interactive ${isIngestionRecording ? "recording-pulse" : ""}`}
+                title={language === 'english' ? 'Describe your notice verbally' : 'నోటీసును శబ్ద రూపంలో వివరించండి'}
+              >
+                <span style={{ display: 'flex', alignItems: 'center' }}>
+                  <MicIcon size={14} color={isIngestionRecording ? 'var(--color-danger)' : 'var(--color-text-primary)'} />
+                </span>
+                <span>{language === 'english' ? 'DESCRIBE VERBALLY' : 'నోటీసు వివరించండి'}</span>
+              </button>
+            )}
+
             {/* Language switch */}
-            <div style={{ 
-              display: 'flex', 
-              background: 'rgba(255,255,255,0.02)', 
-              padding: '4px', 
-              borderRadius: '30px', 
-              border: '1px solid var(--color-border)' 
-            }}>
+            <div 
+              style={{ 
+                display: 'flex', 
+                alignItems: 'center',
+                background: 'rgba(255,255,255,0.02)', 
+                padding: '4px 12px 4px 4px', 
+                borderRadius: '30px', 
+                border: '1px solid var(--color-border)',
+                gap: '8px'
+              }}
+              title={language === 'english' ? "Switch interface language" : "భాషను మార్చండి"}
+            >
+              <span style={{ display: 'flex', alignItems: 'center', marginLeft: '8px' }}><LanguagesIcon size={14} color="var(--color-text-secondary)" /></span>
               <button 
                 onClick={() => setLanguage('english')}
                 style={{
@@ -858,6 +1053,7 @@ export default function App() {
                   cursor: 'pointer',
                   transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
                 }}
+                className="icon-interactive"
               >
                 ENGLISH
               </button>
@@ -875,6 +1071,7 @@ export default function App() {
                   cursor: 'pointer',
                   transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
                 }}
+                className="icon-interactive"
               >
                 తెలుగు
               </button>
@@ -899,11 +1096,14 @@ export default function App() {
                 outline: 'none',
                 transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
               }}
+              className="icon-interactive"
+              title={isDarkMode ? (language === 'english' ? "Switch to Light Mode" : "లైట్ మోడ్ కి మారండి") : (language === 'english' ? "Switch to Dark Mode" : "డార్క్ మోడ్ కి మారండి")}
             >
-              <span style={{ display: 'flex', alignItems: 'center' }}>{isDarkMode ? <SunIcon color="var(--color-accent-gold)" /> : <MoonIcon color="var(--color-accent-indigo)" />}</span>
+              <span style={{ display: 'flex', alignItems: 'center' }}>{isDarkMode ? <SunIcon color="var(--color-accent-gold)" size={14} /> : <MoonIcon color="var(--color-accent-indigo)" size={14} />}</span>
               <span>{isDarkMode ? (language === 'english' ? 'LIGHT' : 'లైట్') : (language === 'english' ? 'DARK' : 'డార్క్')}</span>
             </button>
 
+<<<<<<< HEAD
             {/* User Profile Badge & Separate Logout Button */}
             {isLoggedIn ? (
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -972,12 +1172,49 @@ export default function App() {
                 <span>{language === 'english' ? 'SIGN IN / SIGN UP' : 'లాగిన్ / సైన్ అప్'}</span>
               </button>
             )}
+=======
+            {/* User Profile Login/Logout Button */}
+            <button 
+              onClick={() => {
+                if (isLoggedIn) {
+                  setIsLoggedIn(false);
+                } else {
+                  setShowLoginModal(true);
+                }
+              }}
+              style={{
+                background: isLoggedIn ? 'rgba(16, 185, 129, 0.08)' : 'rgba(255, 255, 255, 0.02)',
+                border: `1px solid ${isLoggedIn ? 'var(--color-success)' : 'var(--color-border)'}`,
+                borderRadius: '30px',
+                padding: '8px 18px',
+                color: isLoggedIn ? 'var(--color-success)' : 'var(--color-text-primary)',
+                fontSize: '11px',
+                fontWeight: '800',
+                fontFamily: 'var(--font-header)',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                outline: 'none',
+                transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
+              }}
+              className="icon-interactive"
+              title={isLoggedIn ? (language === 'english' ? "Logout session" : "లాగ్ అవుట్ చేయండి") : (language === 'english' ? "Sign In / Register" : "లాగిన్ అవ్వండి")}
+            >
+              <span style={{ display: 'flex', alignItems: 'center' }}><UserIcon color={isLoggedIn ? 'var(--color-success)' : 'var(--color-text-primary)'} size={14} /></span>
+              <span>
+                {isLoggedIn 
+                  ? (language === 'english' ? 'LOGOUT' : 'లాగ్ అవుట్') 
+                  : (language === 'english' ? 'SIGN IN' : 'లాగిన్')}
+              </span>
+            </button>
+>>>>>>> origin/main
           </div>
         </header>
 
         {/* 3. Render Navigation Views */}
         {activeNav === 'dashboard' ? (
-          <main style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '36px 56px', gap: '28px', overflowY: 'auto' }}>
+          <main style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '36px 56px', gap: '28px', overflowY: 'auto', position: 'relative' }}>
             
             {/* Upper Grid: Ingestion and AI Workspace Side-by-Side */}
             <div style={{ display: 'flex', gap: '36px', flexWrap: 'wrap' }}>
@@ -985,7 +1222,7 @@ export default function App() {
               {/* Left Column: Document Ingestion */}
               <section className="glass-card" style={{ flex: 1, minWidth: '400px', padding: '32px', display: 'flex', flexDirection: 'column', height: '640px', overflow: 'hidden' }}>
               <h2 style={{ margin: '0 0 24px 0', fontSize: '16px', fontWeight: '800', letterSpacing: '-0.01em', color: 'var(--color-text-primary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ display: 'flex', alignItems: 'center' }}><FolderIcon color="var(--color-accent-indigo)" /></span> {t('ingestionTitle')}
+                <span style={{ display: 'flex', alignItems: 'center' }}><FileIcon color="var(--color-accent-indigo)" size={16} /></span> {t('ingestionTitle')}
               </h2>
 
               <input 
@@ -1029,12 +1266,12 @@ export default function App() {
                     </>
                   ) : (
                     <>
-                      <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: 'rgba(99, 102, 241, 0.08)', display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '24px', boxShadow: '0 8px 24px rgba(99,102,241,0.1)' }}>
+                      <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: 'rgba(99, 102, 241, 0.08)', display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '24px', boxShadow: '0 8px 24px rgba(99,102,241,0.1)' }} className="icon-interactive">
                         <span style={{ display: 'flex', alignItems: 'center' }}><UploadIcon color="var(--color-accent-indigo)" size={36} /></span>
                       </div>
                       <p style={{ margin: '0 0 8px 0', fontWeight: '800', color: '#ffffff', fontSize: '15.5px' }}>{t('dragDropText')}</p>
                       <p style={{ margin: '0 0 32px 0', fontSize: '12.5px', color: 'var(--color-text-secondary)', fontWeight: '500' }}>{t('supportText')}</p>
-                      <button className="glow-btn">{t('browseBtn')}</button>
+                      <button className="glow-btn icon-interactive" title={language === 'english' ? "Browse local PDF/image files" : "స్థానిక ఫైళ్ళను ఎంచుకోండి"}>{t('browseBtn')}</button>
                       {error && <p style={{ margin: '20px 0 0 0', color: 'var(--color-danger)', fontSize: '13px', fontWeight: '800' }}>❌ {error}</p>}
                     </>
                   )}
@@ -1103,9 +1340,64 @@ export default function App() {
                     boxSizing: 'border-box'
                   }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                      <span style={{ fontSize: '11px', background: 'rgba(245, 158, 11, 0.1)', color: 'var(--color-accent-gold)', padding: '4px 10px', borderRadius: '8px', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                        UTF-8 Raw OCR Output
-                      </span>
+                      <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
+                        <span style={{ fontSize: '11px', background: 'rgba(245, 158, 11, 0.1)', color: 'var(--color-accent-gold)', padding: '4px 10px', borderRadius: '8px', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.5px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                          <ScrollIcon size={12} color="var(--color-accent-gold)" />
+                          <span>UTF-8 Raw OCR Output</span>
+                        </span>
+                        
+                        {/* Translate raw text toggle option */}
+                        {rawText && (
+                          <button
+                            type="button"
+                            onClick={async () => {
+                              if (!translatedOcrText) {
+                                setIsTranslatingOcr(true);
+                                try {
+                                  const res = await translateText(rawText, 'telugu');
+                                  setTranslatedOcrText(res);
+                                  setShowTeluguOcr(true);
+                                } catch (err) {
+                                  console.error(err);
+                                } finally {
+                                  setIsTranslatingOcr(false);
+                                }
+                              } else {
+                                setShowTeluguOcr(!showTeluguOcr);
+                              }
+                            }}
+                            disabled={isTranslatingOcr}
+                            style={{
+                              background: showTeluguOcr ? 'rgba(99, 102, 241, 0.15)' : 'rgba(255, 255, 255, 0.05)',
+                              border: `1px solid ${showTeluguOcr ? 'var(--color-accent-indigo)' : 'var(--color-border)'}`,
+                              color: showTeluguOcr ? 'var(--color-accent-indigo)' : 'var(--color-text-secondary)',
+                              borderRadius: '8px',
+                              padding: '4px 10px',
+                              fontSize: '10px',
+                              fontWeight: '800',
+                              cursor: 'pointer',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '6px',
+                              outline: 'none',
+                              transition: 'all 0.2s',
+                              fontFamily: 'var(--font-header)'
+                            }}
+                            className="icon-interactive"
+                            title={language === 'english' ? "Translate text to Telugu" : "వచనాన్ని తెలుగులోకి అనువదించండి"}
+                          >
+                            <LanguagesIcon size={12} />
+                            <span>
+                              {isTranslatingOcr 
+                                ? (language === 'english' ? "Translating..." : "అనువదిస్తోంది...")
+                                : showTeluguOcr 
+                                  ? (language === 'english' ? "Show English" : "ఇంగ్లీష్ చూపించు")
+                                  : (language === 'english' ? "Translate Telugu" : "తెలుగులోకి అనువదించు")
+                              }
+                            </span>
+                          </button>
+                        )}
+                      </div>
                       <h3 style={{ margin: 0, fontSize: '12px', fontWeight: '800', textTransform: 'uppercase', color: 'var(--color-text-secondary)', letterSpacing: '1px' }}>
                         {t('previewTitle')}
                       </h3>
@@ -1124,7 +1416,10 @@ export default function App() {
                       color: '#6ee7b7',
                       boxShadow: 'inset 0 0 20px rgba(0,0,0,0.5)'
                     }}>
-                      {rawText || "Reading document bytes..."}
+                      {isTranslatingOcr 
+                        ? (language === 'english' ? "Translating raw document content... ⌛" : "పత్రం కంటెంట్‌ని అనువదిస్తోంది... ⌛") 
+                        : (showTeluguOcr ? (translatedOcrText || "[తెలుగు అనువాదం ఖాళీగా ఉంది]") : (rawText || "Reading document bytes..."))
+                      }
                     </p>
                   </div>
                 </div>
@@ -1135,46 +1430,94 @@ export default function App() {
             <section className="glass-card" style={{ flex: 1.3, minWidth: '450px', padding: '32px', display: 'flex', flexDirection: 'column', height: '640px', overflow: 'hidden' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
                 <h2 style={{ margin: 0, fontSize: '16px', fontWeight: '800', letterSpacing: '-0.01em', color: 'var(--color-text-primary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ display: 'flex', alignItems: 'center' }}><BoltIcon color="var(--color-accent-indigo)" /></span> {t('workspaceTitle')}
+                  <span style={{ display: 'flex', alignItems: 'center' }}><BrainIcon color="var(--color-accent-indigo)" size={16} /></span> {t('workspaceTitle')}
                 </h2>
                 
                 {/* Visualizer tts synthesis button */}
-                {fileUploaded && activeTab !== 'chat' && (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                {fileUploaded && ['summary', 'laws', 'checklist'].includes(activeTab) && (
+                  (() => {
+                    const voiceType = activeTab as 'summary' | 'laws' | 'checklist';
+                    const isActive = voiceActiveType === voiceType;
+                    const isCurrentPlaying = isPlayingVoice && isActive;
                     
-                    {/* Bouncing audio wave */}
-                    {isPlayingVoice && (
-                      <div style={{ display: 'flex', alignItems: 'flex-end', gap: '3px', height: '18px' }}>
-                        <div className="audio-wave-bar" />
-                        <div className="audio-wave-bar" />
-                        <div className="audio-wave-bar" />
-                        <div className="audio-wave-bar" />
-                      </div>
-                    )}
+                    const btnLabel = isCurrentPlaying 
+                      ? t('pauseBtn') 
+                      : voiceType === 'summary' 
+                        ? (language === 'english' ? 'Listen Summary' : 'సారాంశం వినండి')
+                        : voiceType === 'laws'
+                          ? (language === 'english' ? 'Listen Laws' : 'చట్టాలు వినండి')
+                          : (language === 'english' ? 'Listen Checklist' : 'చర్యలు వినండి');
 
-                    <button 
-                      onClick={handleVoiceToggle}
-                      style={{
-                        background: isPlayingVoice ? 'rgba(245, 158, 11, 0.15)' : 'rgba(255, 255, 255, 0.03)',
-                        color: isPlayingVoice ? 'var(--color-accent-gold)' : '#ffffff',
-                        border: isPlayingVoice ? '1px solid rgba(245, 158, 11, 0.3)' : '1px solid var(--color-border)',
-                        borderRadius: '30px',
-                        padding: '8px 18px',
-                        fontSize: '11px',
-                        cursor: 'pointer',
-                        fontWeight: '800',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        outline: 'none',
-                        transition: 'all 0.2s',
-                        fontFamily: 'var(--font-header)'
-                      }}
-                    >
-                      <span style={{ display: 'flex', alignItems: 'center' }}>{isPlayingVoice ? <PauseIcon color="var(--color-accent-gold)" /> : <VolumeIcon color="#ffffff" />}</span>
-                      <span>{isPlayingVoice ? t('pauseBtn') : t('listenBtn')}</span>
-                    </button>
-                  </div>
+                    return (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        
+                        {/* Bouncing audio wave */}
+                        {isCurrentPlaying && (
+                          <div style={{ display: 'flex', alignItems: 'flex-end', gap: '3px', height: '18px', marginRight: '4px' }}>
+                            <div className="audio-wave-bar" />
+                            <div className="audio-wave-bar" />
+                            <div className="audio-wave-bar" />
+                            <div className="audio-wave-bar" />
+                          </div>
+                        )}
+
+                        <button 
+                          onClick={() => handleVoiceToggle(voiceType)}
+                          style={{
+                            background: isCurrentPlaying ? 'rgba(245, 158, 11, 0.15)' : 'rgba(120, 120, 120, 0.08)',
+                            color: isCurrentPlaying ? 'var(--color-accent-gold)' : 'var(--color-text-primary)',
+                            border: isCurrentPlaying ? '1px solid rgba(245, 158, 11, 0.3)' : '1px solid var(--color-border)',
+                            borderRadius: '30px',
+                            padding: '8px 18px',
+                            fontSize: '11px',
+                            cursor: 'pointer',
+                            fontWeight: '800',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            outline: 'none',
+                            transition: 'all 0.2s',
+                            fontFamily: 'var(--font-header)'
+                          }}
+                          className="icon-interactive"
+                          title={isCurrentPlaying ? (language === 'english' ? "Pause playback" : "ఆడియో నిలిపివేయండి") : (language === 'english' ? "Listen readout" : "సారాంశం వినండి")}
+                        >
+                          <span style={{ display: 'flex', alignItems: 'center' }}>
+                            {isCurrentPlaying ? <PauseIcon color="var(--color-accent-gold)" size={14} /> : <VolumeIcon color="var(--color-text-primary)" size={14} />}
+                          </span>
+                          <span>{btnLabel}</span>
+                        </button>
+
+                        {/* Reset / Restart voice button */}
+                        {isActive && (
+                          <button 
+                            onClick={() => handleVoiceRestart(voiceType)}
+                            style={{
+                              background: 'rgba(120, 120, 120, 0.08)',
+                              color: 'var(--color-text-primary)',
+                              border: '1px solid var(--color-border)',
+                              borderRadius: '30px',
+                              padding: '8px 14px',
+                              fontSize: '11px',
+                              cursor: 'pointer',
+                              fontWeight: '800',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '6px',
+                              outline: 'none',
+                              transition: 'all 0.2s',
+                              fontFamily: 'var(--font-header)'
+                            }}
+                            className="icon-interactive"
+                            title={language === 'english' ? "Listen from starting" : "మొదటి నుండి వినండి"}
+                          >
+                            <RotateIcon size={12} color="var(--color-text-primary)" />
+                            <span>{language === 'english' ? 'From Start' : 'మొదటి నుండి'}</span>
+                          </button>
+                        )}
+                      </div>
+                    );
+                  })()
                 )}
               </div>
 
@@ -1204,35 +1547,55 @@ export default function App() {
                     marginBottom: '24px',
                     gap: '8px'
                   }}>
-                    {['summary', 'laws', 'checklist', 'chat'].map((tab) => (
-                      <button 
-                        key={tab}
-                        onClick={() => setActiveTab(tab)}
-                        style={{
-                          background: 'none',
-                          border: 'none',
-                          borderBottom: activeTab === tab ? '2.5px solid var(--color-accent-indigo)' : 'none',
-                          color: activeTab === tab ? 'var(--color-text-primary)' : 'var(--color-text-secondary)',
-                          padding: '12px 20px',
-                          cursor: 'pointer',
-                          fontSize: '13.5px',
-                          fontWeight: '800',
-                          textTransform: 'capitalize',
-                          outline: 'none',
-                          transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-                          fontFamily: 'var(--font-header)'
-                        }}
-                      >
-                        {tab === 'chat' ? (
+                    {['summary', 'laws', 'checklist', 'template', 'chat'].map((tab) => {
+                      let tabIcon = null;
+                      let tabLabel = '';
+                      const iconColor = activeTab === tab ? 'var(--color-text-primary)' : 'var(--color-text-secondary)';
+                      
+                      if (tab === 'summary') {
+                        tabIcon = <FileIcon size={14} color={iconColor} />;
+                        tabLabel = language === 'english' ? 'Summary' : 'సారాంశం';
+                      } else if (tab === 'laws') {
+                        tabIcon = <ScaleIcon size={14} color={iconColor} />;
+                        tabLabel = language === 'english' ? 'Applicable Laws' : 'చట్టాలు';
+                      } else if (tab === 'checklist') {
+                        tabIcon = <ClipboardCheck size={14} color={iconColor} />;
+                        tabLabel = language === 'english' ? 'Checklist' : 'సిఫార్సు చేయబడిన తదుపరి చర్యలు';
+                      } else if (tab === 'template') {
+                        tabIcon = <FileIcon size={14} color={iconColor} />;
+                        tabLabel = language === 'english' ? 'Response Draft' : 'ప్రత్యుత్తర నమూనా';
+                      } else if (tab === 'chat') {
+                        tabIcon = <ChatIcon size={14} color={iconColor} />;
+                        tabLabel = language === 'english' ? 'Nyaya Chat' : 'న్యాయ చాట్';
+                      }
+
+                      return (
+                        <button 
+                          key={tab}
+                          onClick={() => setActiveTab(tab)}
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            borderBottom: activeTab === tab ? '2.5px solid var(--color-accent-indigo)' : 'none',
+                            color: activeTab === tab ? 'var(--color-text-primary)' : 'var(--color-text-secondary)',
+                            padding: '12px 20px',
+                            cursor: 'pointer',
+                            fontSize: '13.5px',
+                            fontWeight: '800',
+                            outline: 'none',
+                            transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                            fontFamily: 'var(--font-header)'
+                          }}
+                          className="icon-interactive"
+                          title={tabLabel}
+                        >
                           <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                            <ChatIcon size={14} color={activeTab === 'chat' ? 'var(--color-text-primary)' : 'var(--color-text-secondary)'} />
-                            {language === 'english' ? 'Nyaya Chat' : 'న్యాయ చాట్'}
+                            {tabIcon}
+                            <span>{tabLabel}</span>
                           </span>
-                        ) : (
-                          language === 'english' ? tab : t(tab + 'Title') || tab
-                        )}
-                      </button>
-                    ))}
+                        </button>
+                      );
+                    })}
                   </div>
 
                   {/* Render Tabs content */}
@@ -1251,8 +1614,9 @@ export default function App() {
                             borderLeftWidth: '4px',
                             boxShadow: '0 8px 24px rgba(239,68,68,0.05)'
                           }}>
-                            <h4 style={{ margin: '0 0 6px 0', fontSize: '13.5px', color: '#f87171', fontWeight: '800', fontFamily: 'var(--font-header)' }}>
-                              ⚠️ ALERT: IMMINENT LEGAL ACTIONS
+                            <h4 style={{ margin: '0 0 6px 0', fontSize: '13.5px', color: '#f87171', fontWeight: '800', fontFamily: 'var(--font-header)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                              <AlertIcon size={14} color="#f87171" className="recording-pulse" />
+                              <span>ALERT: IMMINENT LEGAL ACTIONS</span>
                             </h4>
                             <p style={{ margin: 0, fontSize: '12.5px', lineHeight: '1.7', color: '#fca5a5' }}>
                               {t('warningText')}
@@ -1261,8 +1625,9 @@ export default function App() {
                         )}
 
                         <div className="glass-card" style={{ padding: '28px', background: 'rgba(255,255,255,0.015)' }}>
-                          <h3 style={{ margin: '0 0 16px 0', fontSize: '14.5px', fontWeight: '800', color: 'var(--color-accent-indigo)', letterSpacing: '0.5px', textTransform: 'uppercase' }}>
-                            {t('plainExTitle')}
+                          <h3 style={{ margin: '0 0 16px 0', fontSize: '14.5px', fontWeight: '800', color: 'var(--color-accent-indigo)', letterSpacing: '0.5px', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <FileIcon size={16} color="var(--color-accent-indigo)" />
+                            <span>{t('plainExTitle')}</span>
                           </h3>
                           <p style={{ margin: 0, fontSize: '13.5px', color: 'var(--color-text-secondary)', lineHeight: '1.8' }}>
                             {displayAnalysis.summary}
@@ -1274,13 +1639,17 @@ export default function App() {
                     {/* Laws Tab */}
                     {activeTab === 'laws' && displayAnalysis && (
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', animation: 'fadeIn 0.3s' }}>
-                        <h3 style={{ margin: 0, fontSize: '14.5px', fontWeight: '800', color: '#ffffff', letterSpacing: '0.5px' }}>
-                          {t('legalCitations')}
+                        <h3 style={{ margin: 0, fontSize: '14.5px', fontWeight: '800', color: 'var(--color-text-primary)', letterSpacing: '0.5px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <ScaleIcon size={16} color="var(--color-accent-gold)" />
+                          <span>{t('legalCitations')}</span>
                         </h3>
                         {displayAnalysis.legal_references.map((l, idx) => (
                           <div className="glass-card" style={{ padding: '24px', borderLeft: '4px solid var(--color-accent-indigo)', background: 'rgba(99, 102, 241, 0.02)' }} key={idx}>
-                            <h4 style={{ margin: '0 0 10px 0', fontSize: '14px', fontWeight: '800', color: 'var(--color-accent-gold)', letterSpacing: '0.2px' }}>
-                              {l.section}
+                            <h4 style={{ margin: '0 0 10px 0', fontSize: '14px', fontWeight: '800', color: 'var(--color-accent-gold)', letterSpacing: '0.2px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                              <span title="Bookmark Section" style={{ display: 'flex', alignItems: 'center' }} className="icon-interactive">
+                                <StarIcon size={14} color="var(--color-accent-gold)" />
+                              </span>
+                              <span>{l.section}</span>
                             </h4>
                             <p style={{ margin: 0, fontSize: '13px', color: 'var(--color-text-secondary)', lineHeight: '1.7' }}>
                               {l.description}
@@ -1293,8 +1662,9 @@ export default function App() {
                     {/* Checklist Tab */}
                     {activeTab === 'checklist' && displayAnalysis && (
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', animation: 'fadeIn 0.3s' }}>
-                        <h3 style={{ margin: 0, fontSize: '14.5px', fontWeight: '800', color: '#ffffff' }}>
-                          {t('checklistTitle')}
+                        <h3 style={{ margin: 0, fontSize: '14.5px', fontWeight: '800', color: 'var(--color-text-primary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <ClipboardCheck size={16} color="var(--color-accent-indigo)" />
+                          <span>{t('checklistTitle')}</span>
                         </h3>
                         
                         <div className="glass-card" style={{ padding: '28px', background: 'rgba(255,255,255,0.01)' }}>
@@ -1307,49 +1677,115 @@ export default function App() {
                             ))}
                           </ul>
                         </div>
+                      </div>
+                    )}
 
-                        {/* Copyable Letter Editor */}
-                        <div style={{ marginTop: '8px' }}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                            <h4 style={{ margin: 0, fontSize: '13.5px', fontWeight: '800', color: '#ffffff' }}>
-                              {t('responseDraftTitle')}
-                            </h4>
+                    {/* Response Template Tab */}
+                    {activeTab === 'template' && displayAnalysis && (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', animation: 'fadeIn 0.3s', height: '100%' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <h3 style={{ margin: 0, fontSize: '14.5px', fontWeight: '800', color: 'var(--color-text-primary)' }}>
+                            {language === 'english' ? 'Response Template Editor' : 'ప్రత్యుత్తర లేఖ ఎడిటర్'}
+                          </h3>
+                          <div style={{ display: 'flex', gap: '10px' }}>
+                            {/* Copy Button */}
                             <button 
-                              onClick={() => handleCopyToClipboard(displayAnalysis.response_template)}
+                              onClick={() => handleCopyToClipboard(editedTemplate)}
                               className="glow-btn"
-                              style={{ fontSize: '11px', padding: '8px 18px', borderRadius: '14px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                              style={{ fontSize: '11px', padding: '8px 16px', borderRadius: '14px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
                             >
                               <CopyIcon color="#ffffff" size={14} /> {t('copyBtn')}
                             </button>
-                          </div>
-                          
-                          {/* Code mock layout */}
-                          <div style={{ borderRadius: '16px', overflow: 'hidden', border: '1px solid var(--color-border)', boxShadow: '0 10px 30px rgba(0,0,0,0.5)' }}>
-                            <div style={{ background: '#0b0f19', padding: '10px 20px', borderBottom: '1px solid var(--color-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                              <span style={{ fontFamily: 'monospace', fontSize: '11px', color: 'var(--color-text-secondary)', fontWeight: 'bold' }}>nyaya_response_draft.txt</span>
-                              <span style={{ fontSize: '10px', background: 'rgba(255,255,255,0.05)', color: 'var(--color-text-secondary)', padding: '2px 8px', borderRadius: '6px' }}>UTF-8</span>
-                            </div>
-                            <textarea 
-                              readOnly 
-                              value={displayAnalysis.response_template}
-                              style={{
-                                width: '100%',
-                                height: '140px',
-                                background: '#040711',
-                                border: 'none !important',
-                                padding: '20px',
-                                color: '#a7f3d0',
-                                fontFamily: 'Fira Code, Consolas, Monaco, monospace',
-                                fontSize: '11.5px',
-                                resize: 'none',
-                                outline: 'none',
-                                boxSizing: 'border-box',
-                                lineHeight: '1.7',
-                                display: 'block',
-                                margin: 0
+                            
+                            {/* Download PDF Button */}
+                            <button 
+                              onClick={() => handleDownloadPDF(editedTemplate)}
+                              className="glow-btn"
+                              style={{ 
+                                fontSize: '11px', 
+                                padding: '8px 16px', 
+                                borderRadius: '14px', 
+                                display: 'inline-flex', 
+                                alignItems: 'center', 
+                                gap: '6px',
+                                background: 'linear-gradient(135deg, var(--color-accent-indigo) 0%, var(--color-accent-purple) 100%)'
                               }}
-                            />
+                            >
+                              <FileIcon color="#ffffff" size={14} /> {language === 'english' ? 'Download PDF' : 'PDF డౌన్‌లోడ్'}
+                            </button>
+
+                            {/* Expand/Compress Button */}
+                            <button 
+                              onClick={() => setIsTemplateExpanded(!isTemplateExpanded)}
+                              style={{
+                                background: 'rgba(120, 120, 120, 0.08)',
+                                border: '1px solid var(--color-border)',
+                                padding: '8px 12px',
+                                borderRadius: '14px',
+                                color: 'var(--color-text-primary)',
+                                cursor: 'pointer',
+                                fontSize: '11px',
+                                fontWeight: '800',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '6px',
+                                transition: 'all 0.2s',
+                                outline: 'none'
+                              }}
+                              onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(120, 120, 120, 0.15)'}
+                              onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(120, 120, 120, 0.08)'}
+                            >
+                              {isTemplateExpanded ? (
+                                <>
+                                  <MinimizeIcon color="var(--color-text-primary)" size={14} />
+                                  <span>{language === 'english' ? 'Compress' : 'కుదించు'}</span>
+                                </>
+                              ) : (
+                                <>
+                                  <MaximizeIcon color="var(--color-text-primary)" size={14} />
+                                  <span>{language === 'english' ? 'Expand' : 'విస్తరించు'}</span>
+                                </>
+                              )}
+                            </button>
                           </div>
+                        </div>
+
+                        {/* Editor Textarea container */}
+                        <div style={{
+                          borderRadius: '16px',
+                          overflow: 'hidden',
+                          border: '1px solid var(--color-border)',
+                          boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
+                          flex: 1,
+                          display: 'flex',
+                          flexDirection: 'column',
+                          minHeight: '280px'
+                        }}>
+
+                          <div style={{ background: '#0b0f19', padding: '10px 20px', borderBottom: '1px solid var(--color-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <span style={{ fontFamily: 'monospace', fontSize: '11px', color: 'var(--color-text-secondary)', fontWeight: 'bold' }}>nyaya_response_draft.txt</span>
+                            <span style={{ fontSize: '10px', background: 'rgba(255,255,255,0.05)', color: 'var(--color-text-secondary)', padding: '2px 8px', borderRadius: '6px' }}>Editable</span>
+                          </div>
+                          <textarea 
+                            value={editedTemplate}
+                            onChange={(e) => setEditedTemplate(e.target.value)}
+                            style={{
+                              width: '100%',
+                              flex: 1,
+                              background: '#040711',
+                              border: 'none',
+                              padding: '24px',
+                              color: '#a7f3d0',
+                              fontFamily: 'Fira Code, Consolas, Monaco, monospace',
+                              fontSize: '13px',
+                              resize: 'none',
+                              outline: 'none',
+                              boxSizing: 'border-box',
+                              lineHeight: '1.8',
+                              display: 'block',
+                              margin: 0
+                            }}
+                          />
                         </div>
                       </div>
                     )}
@@ -1436,14 +1872,15 @@ export default function App() {
                             gap: '12px', 
                             padding: '16px 0 0 0', 
                             borderTop: '1px solid var(--color-border)',
-                            marginTop: 'auto'
+                            marginTop: 'auto',
+                            alignItems: 'center'
                           }}
                         >
                           <input 
                             type="text" 
                             value={chatInput}
                             onChange={(e) => setChatInput(e.target.value)}
-                            placeholder={t('chatPlaceholder')}
+                            placeholder={isChatRecording ? (language === 'english' ? 'Listening... Speak your question' : 'వింటున్నాము... మీ ప్రశ్న చెప్పండి') : t('chatPlaceholder')}
                             disabled={isSendingChat}
                             style={{
                               flex: 1,
@@ -1451,17 +1888,43 @@ export default function App() {
                               border: '1px solid var(--color-border)',
                               borderRadius: '30px',
                               padding: '14px 24px',
-                              color: '#ffffff',
+                              color: 'var(--color-text-primary)',
                               fontSize: '13.5px',
                               outline: 'none',
                               transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
                             }}
                           />
+                          
+                          {/* Microphone toggle button */}
+                          <button
+                            type="button"
+                            onClick={handleToggleVoiceChat}
+                            style={{
+                              background: isChatRecording ? 'rgba(239, 68, 68, 0.15)' : 'rgba(120, 120, 120, 0.08)',
+                              border: `1px solid ${isChatRecording ? 'var(--color-danger)' : 'var(--color-border)'}`,
+                              borderRadius: '50%',
+                              width: '46px',
+                              height: '46px',
+                              display: 'flex',
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              color: isChatRecording ? 'var(--color-danger)' : 'var(--color-text-primary)',
+                              cursor: 'pointer',
+                              transition: 'all 0.2s',
+                              outline: 'none',
+                              flexShrink: 0
+                            }}
+                            className={`icon-interactive ${isChatRecording ? "recording-pulse" : ""}`}
+                            title={language === 'english' ? "Speak voice prompt to chat" : "శబ్ద రూపంలో అడగండి"}
+                          >
+                            <MicIcon size={18} />
+                          </button>
+
                           <button 
                             type="submit" 
                             disabled={isSendingChat || !chatInput.trim()}
                             className="glow-btn"
-                            style={{ padding: '8px 28px', opacity: (isSendingChat || !chatInput.trim()) ? 0.5 : 1 }}
+                            style={{ padding: '14px 28px', opacity: (isSendingChat || !chatInput.trim()) ? 0.5 : 1, borderRadius: '30px', fontSize: '13.5px' }}
                           >
                             {t('sendBtn')}
                           </button>
@@ -1551,6 +2014,204 @@ export default function App() {
             </div>
 
           </div>
+
+          {/* Fullscreen Expanded Template Editor Overlay */}
+          {isTemplateExpanded && activeTab === 'template' && displayAnalysis && (
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              background: '#040711',
+              borderRadius: '20px',
+              border: '2px solid var(--color-accent-indigo)',
+              boxShadow: '0 20px 50px rgba(0,0,0,0.8)',
+              zIndex: 99,
+              display: 'flex',
+              flexDirection: 'column',
+              overflow: 'hidden',
+              animation: 'fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1)'
+            }}>
+              <div style={{ background: '#0b0f19', padding: '16px 24px', borderBottom: '1px solid var(--color-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontSize: '14px', fontWeight: '800', color: '#ffffff', fontFamily: 'var(--font-header)' }}>
+                  {language === 'english' ? 'Response Template - Fullscreen Editor' : 'ప్రత్యుత్తర లేఖ - పూర్తి స్క్రీన్ ఎడిటర్'}
+                </span>
+                <div style={{ display: 'flex', gap: '10px' }}>
+                  <button 
+                    onClick={() => handleCopyToClipboard(editedTemplate)}
+                    className="glow-btn"
+                    style={{ fontSize: '11px', padding: '8px 16px', borderRadius: '12px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                  >
+                    <CopyIcon color="#ffffff" size={14} /> {t('copyBtn')}
+                  </button>
+                  <button 
+                    onClick={() => handleDownloadPDF(editedTemplate)}
+                    className="glow-btn"
+                    style={{ 
+                      fontSize: '11px', 
+                      padding: '8px 16px', 
+                      borderRadius: '12px', 
+                      display: 'inline-flex', 
+                      alignItems: 'center', 
+                      gap: '6px',
+                      background: 'linear-gradient(135deg, var(--color-accent-indigo) 0%, var(--color-accent-purple) 100%)'
+                    }}
+                  >
+                    <FileIcon color="#ffffff" size={14} /> {language === 'english' ? 'Download PDF' : 'PDF డౌన్‌లోడ్'}
+                  </button>
+                  <button 
+                    onClick={() => setIsTemplateExpanded(false)}
+                    style={{
+                      background: 'rgba(239, 68, 68, 0.1)',
+                      border: '1px solid rgba(239, 68, 68, 0.2)',
+                      padding: '8px 16px',
+                      borderRadius: '12px',
+                      color: 'var(--color-danger)',
+                      cursor: 'pointer',
+                      fontSize: '11px',
+                      fontWeight: '800',
+                      outline: 'none'
+                    }}
+                  >
+                    ✕ {language === 'english' ? 'Close' : 'మూసివేయి'}
+                  </button>
+                </div>
+              </div>
+              <div style={{ background: '#080c18', padding: '10px 20px', borderBottom: '1px solid var(--color-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontFamily: 'monospace', fontSize: '11px', color: 'var(--color-text-secondary)' }}>nyaya_response_draft.txt</span>
+                <span style={{ fontSize: '10px', background: 'rgba(255,255,255,0.04)', color: 'var(--color-text-secondary)', padding: '2px 8px', borderRadius: '6px' }}>Editable Mode</span>
+              </div>
+              <textarea 
+                value={editedTemplate}
+                onChange={(e) => setEditedTemplate(e.target.value)}
+                style={{
+                  width: '100%',
+                  flex: 1,
+                  background: '#040711',
+                  border: 'none',
+                  padding: '32px',
+                  color: '#a7f3d0',
+                  fontFamily: 'Fira Code, Consolas, Monaco, monospace',
+                  fontSize: '13.5px',
+                  resize: 'none',
+                  outline: 'none',
+                  boxSizing: 'border-box',
+                  lineHeight: '1.8',
+                  display: 'block',
+                  margin: 0
+                }}
+              />
+            </div>
+          )}
+
+          {/* Voice Notice Ingestion Modal/Overlay */}
+          {showVoiceIngestionModal && (
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              background: 'rgba(3, 7, 18, 0.85)',
+              backdropFilter: 'blur(16px)',
+              zIndex: 100,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              animation: 'fadeIn 0.2s ease-out'
+            }}>
+              <div className="glass-card" style={{
+                width: '100%',
+                maxWidth: '600px',
+                padding: '40px',
+                background: 'rgba(15, 23, 42, 0.95)',
+                border: '2px solid var(--color-accent-indigo)',
+                boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)',
+                textAlign: 'center',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '24px',
+                borderRadius: '24px'
+              }}>
+                <h3 style={{ margin: 0, fontSize: '18px', fontWeight: '800', color: '#ffffff' }}>
+                  {language === 'english' ? 'Verbal Notice Description' : 'మౌఖిక నోటీసు వివరణ'}
+                </h3>
+                <p style={{ margin: 0, fontSize: '13px', color: 'var(--color-text-secondary)', lineHeight: '1.6' }}>
+                  {language === 'english' 
+                    ? 'Clearly explain your notice (e.g. eviction warning or cheque bounce notice details) in detail. Our AI will analyze your verbal description.'
+                    : 'మీరు అందుకున్న చట్టపరమైన నోటీసు వివరాలను స్పష్టంగా వివరించండి. మా AI మీ వాయిస్ వివరణను విశ్లేషిస్తుంది.'}
+                </p>
+
+                {/* Animated visualizer wave */}
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', height: '60px' }}>
+                  <div className={`visualizer-bar ${isIngestionRecording ? 'wave-active' : ''}`} style={{ animationDelay: '0.1s' }} />
+                  <div className={`visualizer-bar ${isIngestionRecording ? 'wave-active' : ''}`} style={{ animationDelay: '0.3s' }} />
+                  <div className={`visualizer-bar ${isIngestionRecording ? 'wave-active' : ''}`} style={{ animationDelay: '0.5s' }} />
+                  <div className={`visualizer-bar ${isIngestionRecording ? 'wave-active' : ''}`} style={{ animationDelay: '0.2s' }} />
+                  <div className={`visualizer-bar ${isIngestionRecording ? 'wave-active' : ''}`} style={{ animationDelay: '0.4s' }} />
+                </div>
+
+                {/* Live transcription text box */}
+                <div style={{
+                  background: '#040711',
+                  border: '1px solid var(--color-border)',
+                  borderRadius: '16px',
+                  padding: '20px',
+                  minHeight: '120px',
+                  maxHeight: '200px',
+                  overflowY: 'auto',
+                  textAlign: 'left',
+                  color: '#a7f3d0',
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '13.5px',
+                  lineHeight: '1.7', whiteSpace: 'pre-wrap'
+                }}>
+                  {voiceNoticeText || (
+                    <span style={{ color: 'var(--color-text-secondary)', fontStyle: 'italic' }}>
+                      {language === 'english' ? 'Listening... Start speaking now.' : 'వింటున్నాము... మాట్లాడటం ప్రారంభించండి.'}
+                    </span>
+                  )}
+                </div>
+
+                {/* Modal actions */}
+                <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', marginTop: '12px' }}>
+                  <button 
+                    onClick={handleSubmitVoiceNotice}
+                    className="glow-btn"
+                    disabled={!voiceNoticeText.trim()}
+                    style={{ 
+                      padding: '12px 28px', 
+                      borderRadius: '14px', 
+                      opacity: !voiceNoticeText.trim() ? 0.5 : 1,
+                      cursor: !voiceNoticeText.trim() ? 'not-allowed' : 'pointer'
+                    }}
+                  >
+                    {language === 'english' ? 'Analyze Spoken Notice' : 'మౌఖిక నోటీసు విశ్లేషించు'}
+                  </button>
+                  <button 
+                    onClick={() => {
+                      recognitionObj?.stop();
+                      setIsIngestionRecording(false);
+                      setShowVoiceIngestionModal(false);
+                    }}
+                    style={{
+                      background: 'rgba(239, 68, 68, 0.08)',
+                      border: '1px solid rgba(239, 68, 68, 0.2)',
+                      padding: '12px 28px',
+                      borderRadius: '14px',
+                      color: 'var(--color-danger)',
+                      fontWeight: '800',
+                      cursor: 'pointer',
+                      fontSize: '13.5px'
+                    }}
+                  >
+                    {language === 'english' ? 'Cancel' : 'రద్దు చేయి'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
 
         </main>
       ) : activeNav === 'library' ? (

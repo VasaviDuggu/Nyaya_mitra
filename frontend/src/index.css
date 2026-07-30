@@ -259,3 +259,70 @@ input[type="checkbox"]:checked::after {
   border-color: rgba(99, 102, 241, 0.25);
   box-shadow: 0 10px 30px rgba(99, 102, 241, 0.08);
 }
+
+/* Audio Visualizer Waves */
+.visualizer-bar {
+  width: 6px;
+  height: 24px;
+  background-color: var(--color-accent-indigo);
+  border-radius: 3px;
+  transition: all 0.2s ease;
+}
+
+.visualizer-bar.wave-active {
+  animation: bounce 0.8s ease-in-out infinite alternate;
+  background: linear-gradient(to top, var(--color-accent-indigo) 0%, var(--color-accent-purple) 100%);
+}
+
+@keyframes bounce {
+  0% {
+    height: 8px;
+    transform: translateY(0);
+  }
+  100% {
+    height: 48px;
+    transform: translateY(-8px);
+  }
+}
+
+.recording-pulse {
+  animation: pulse-red 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-red {
+  0% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+  }
+}
+
+/* Premium Hover Transitions & Interactive Scale Animations */
+.icon-interactive {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), color 0.25s ease, background-color 0.25s ease !important;
+}
+
+.icon-interactive:hover {
+  transform: scale(1.1) !important;
+  color: var(--color-accent-purple) !important;
+  border-color: rgba(168, 85, 247, 0.4) !important;
+}
+
+.icon-interactive:active {
+  transform: scale(0.95) !important;
+}
+
+/* Hover style for sidebar navigation button entries */
+.sidebar-nav-btn {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.sidebar-nav-btn:hover {
+  transform: translateX(4px) scale(1.02) !important;
+  background: rgba(255, 255, 255, 0.02) !important;
+  color: var(--color-accent-purple) !important;
+}
