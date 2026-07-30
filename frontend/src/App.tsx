@@ -3,9 +3,9 @@ import React, { useState, useRef, useEffect } from 'react'
 // Premium Lucide Icons Imports
 import {
   Home as DashboardIcon,
-  BookOpen as LibraryIcon,
-  CalendarDays as ScheduleIcon,
-  MessageSquare as ChatIcon,
+  Library as LibraryIcon,
+  CalendarClock as ScheduleIcon,
+  MessageCircle as ChatIcon,
   Menu as MenuIcon,
   Scale as ScaleIcon,
   Zap as BoltIcon,
@@ -19,9 +19,8 @@ import {
   User as UserIcon,
   Settings as SettingsIcon,
   Trash2 as TrashIcon,
-  FolderOpen as FolderIcon,
   Upload as UploadIcon,
-  Sparkles as BrainIcon,
+  Brain as BrainIcon,
   Languages as LanguagesIcon,
   Maximize2 as MaximizeIcon,
   Minimize2 as MinimizeIcon,
@@ -35,7 +34,8 @@ import {
   MapPin,
   Heart,
   Briefcase,
-  ClipboardCheck
+  ClipboardCheck,
+  ScrollText as ScrollIcon
 } from 'lucide-react';
 
 const getCategoryIcon = (cat: string, color: string) => {
@@ -1117,7 +1117,7 @@ export default function App() {
               {/* Left Column: Document Ingestion */}
               <section className="glass-card" style={{ flex: 1, minWidth: '400px', padding: '32px', display: 'flex', flexDirection: 'column', height: '640px', overflow: 'hidden' }}>
               <h2 style={{ margin: '0 0 24px 0', fontSize: '16px', fontWeight: '800', letterSpacing: '-0.01em', color: 'var(--color-text-primary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ display: 'flex', alignItems: 'center' }}><FolderIcon color="var(--color-accent-indigo)" /></span> {t('ingestionTitle')}
+                <span style={{ display: 'flex', alignItems: 'center' }}><FileIcon color="var(--color-accent-indigo)" size={16} /></span> {t('ingestionTitle')}
               </h2>
 
               <input 
@@ -1236,8 +1236,9 @@ export default function App() {
                   }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                       <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
-                        <span style={{ fontSize: '11px', background: 'rgba(245, 158, 11, 0.1)', color: 'var(--color-accent-gold)', padding: '4px 10px', borderRadius: '8px', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                          UTF-8 Raw OCR Output
+                        <span style={{ fontSize: '11px', background: 'rgba(245, 158, 11, 0.1)', color: 'var(--color-accent-gold)', padding: '4px 10px', borderRadius: '8px', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.5px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                          <ScrollIcon size={12} color="var(--color-accent-gold)" />
+                          <span>UTF-8 Raw OCR Output</span>
                         </span>
                         
                         {/* Translate raw text toggle option */}
@@ -1324,7 +1325,7 @@ export default function App() {
             <section className="glass-card" style={{ flex: 1.3, minWidth: '450px', padding: '32px', display: 'flex', flexDirection: 'column', height: '640px', overflow: 'hidden' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
                 <h2 style={{ margin: 0, fontSize: '16px', fontWeight: '800', letterSpacing: '-0.01em', color: 'var(--color-text-primary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ display: 'flex', alignItems: 'center' }}><BoltIcon color="var(--color-accent-indigo)" /></span> {t('workspaceTitle')}
+                  <span style={{ display: 'flex', alignItems: 'center' }}><BrainIcon color="var(--color-accent-indigo)" size={16} /></span> {t('workspaceTitle')}
                 </h2>
                 
                 {/* Visualizer tts synthesis button */}
@@ -1441,37 +1442,55 @@ export default function App() {
                     marginBottom: '24px',
                     gap: '8px'
                   }}>
-                    {['summary', 'laws', 'checklist', 'template', 'chat'].map((tab) => (
-                      <button 
-                        key={tab}
-                        onClick={() => setActiveTab(tab)}
-                        style={{
-                          background: 'none',
-                          border: 'none',
-                          borderBottom: activeTab === tab ? '2.5px solid var(--color-accent-indigo)' : 'none',
-                          color: activeTab === tab ? 'var(--color-text-primary)' : 'var(--color-text-secondary)',
-                          padding: '12px 20px',
-                          cursor: 'pointer',
-                          fontSize: '13.5px',
-                          fontWeight: '800',
-                          textTransform: 'capitalize',
-                          outline: 'none',
-                          transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-                          fontFamily: 'var(--font-header)'
-                        }}
-                      >
-                        {tab === 'chat' ? (
+                    {['summary', 'laws', 'checklist', 'template', 'chat'].map((tab) => {
+                      let tabIcon = null;
+                      let tabLabel = '';
+                      const iconColor = activeTab === tab ? 'var(--color-text-primary)' : 'var(--color-text-secondary)';
+                      
+                      if (tab === 'summary') {
+                        tabIcon = <FileIcon size={14} color={iconColor} />;
+                        tabLabel = language === 'english' ? 'Summary' : 'సారాంశం';
+                      } else if (tab === 'laws') {
+                        tabIcon = <ScaleIcon size={14} color={iconColor} />;
+                        tabLabel = language === 'english' ? 'Applicable Laws' : 'చట్టాలు';
+                      } else if (tab === 'checklist') {
+                        tabIcon = <ClipboardCheck size={14} color={iconColor} />;
+                        tabLabel = language === 'english' ? 'Checklist' : 'సిఫార్సు చేయబడిన తదుపరి చర్యలు';
+                      } else if (tab === 'template') {
+                        tabIcon = <FileIcon size={14} color={iconColor} />;
+                        tabLabel = language === 'english' ? 'Response Draft' : 'ప్రత్యుత్తర నమూనా';
+                      } else if (tab === 'chat') {
+                        tabIcon = <ChatIcon size={14} color={iconColor} />;
+                        tabLabel = language === 'english' ? 'Nyaya Chat' : 'న్యాయ చాట్';
+                      }
+
+                      return (
+                        <button 
+                          key={tab}
+                          onClick={() => setActiveTab(tab)}
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            borderBottom: activeTab === tab ? '2.5px solid var(--color-accent-indigo)' : 'none',
+                            color: activeTab === tab ? 'var(--color-text-primary)' : 'var(--color-text-secondary)',
+                            padding: '12px 20px',
+                            cursor: 'pointer',
+                            fontSize: '13.5px',
+                            fontWeight: '800',
+                            outline: 'none',
+                            transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                            fontFamily: 'var(--font-header)'
+                          }}
+                          className="icon-interactive"
+                          title={tabLabel}
+                        >
                           <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                            <ChatIcon size={14} color={activeTab === 'chat' ? 'var(--color-text-primary)' : 'var(--color-text-secondary)'} />
-                            {language === 'english' ? 'Nyaya Chat' : 'న్యాయ చాట్'}
+                            {tabIcon}
+                            <span>{tabLabel}</span>
                           </span>
-                        ) : tab === 'template' ? (
-                          language === 'english' ? 'Response Draft' : 'ప్రత్యుత్తర నమూనా'
-                        ) : (
-                          language === 'english' ? tab : t(tab + 'Title') || tab
-                        )}
-                      </button>
-                    ))}
+                        </button>
+                      );
+                    })}
                   </div>
 
                   {/* Render Tabs content */}
@@ -1790,13 +1809,10 @@ export default function App() {
                               outline: 'none',
                               flexShrink: 0
                             }}
-                            className={isChatRecording ? "recording-pulse" : ""}
+                            className={`icon-interactive ${isChatRecording ? "recording-pulse" : ""}`}
+                            title={language === 'english' ? "Speak voice prompt to chat" : "శబ్ద రూపంలో అడగండి"}
                           >
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                              <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
-                              <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
-                              <line x1="12" y1="19" x2="12" y2="22" />
-                            </svg>
+                            <MicIcon size={18} />
                           </button>
 
                           <button 
