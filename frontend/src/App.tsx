@@ -1,255 +1,73 @@
 import React, { useState, useRef, useEffect } from 'react'
 
-// Interactive SVG Icon Components
-const DashboardIcon = ({ size = 20, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="3" y="3" width="7" height="9" />
-    <rect x="14" y="3" width="7" height="5" />
-    <rect x="14" y="12" width="7" height="9" />
-    <rect x="3" y="16" width="7" height="5" />
-  </svg>
-);
-
-const LibraryIcon = ({ size = 20, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-    <path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z" />
-  </svg>
-);
-
-const ScheduleIcon = ({ size = 20, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-    <line x1="16" y1="2" x2="16" y2="6" />
-    <line x1="8" y1="2" x2="8" y2="6" />
-    <line x1="3" y1="10" x2="21" y2="10" />
-  </svg>
-);
-
-const ChatIcon = ({ size = 20, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-  </svg>
-);
-
-const MenuIcon = ({ size = 20, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <line x1="3" y1="12" x2="21" y2="12" />
-    <line x1="3" y1="6" x2="21" y2="6" />
-    <line x1="3" y1="18" x2="21" y2="18" />
-  </svg>
-);
-
-const ScaleIcon = ({ size = 32, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <line x1="12" y1="3" x2="12" y2="21" />
-    <line x1="3" y1="7" x2="21" y2="7" />
-    <path d="M6 7c0 4.5 2 8 6 8s6-3.5 6-8" />
-    <path d="M4 21h16" />
-  </svg>
-);
-
-const BoltIcon = ({ size = 18, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-  </svg>
-);
-
-const VolumeIcon = ({ size = 16, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
-    <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" />
-  </svg>
-);
-
-const PauseIcon = ({ size = 16, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="6" y="4" width="4" height="16" />
-    <rect x="14" y="4" width="4" height="16" />
-  </svg>
-);
-
-const CopyIcon = ({ size = 14, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-  </svg>
-);
-
-const FileIcon = ({ size = 32, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-    <polyline points="14 2 14 8 20 8" />
-    <line x1="16" y1="13" x2="8" y2="13" />
-    <line x1="16" y1="17" x2="8" y2="17" />
-    <polyline points="10 9 9 9 8 9" />
-  </svg>
-);
-
-const LockIcon = ({ size = 36, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-  </svg>
-);
-
-const SunIcon = ({ size = 18, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="12" cy="12" r="5" />
-    <line x1="12" y1="1" x2="12" y2="3" />
-    <line x1="12" y1="21" x2="12" y2="23" />
-    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-    <line x1="1" y1="12" x2="3" y2="12" />
-    <line x1="21" y1="12" x2="23" y2="12" />
-    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-  </svg>
-);
-
-const MoonIcon = ({ size = 18, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-  </svg>
-);
-
-const UserIcon = ({ size = 16, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-    <circle cx="12" cy="7" r="4" />
-  </svg>
-);
-
-const SettingsIcon = ({ size = 20, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="12" cy="12" r="3" />
-    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
-  </svg>
-);
-
-const TrashIcon = ({ size = 14, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <polyline points="3 6 5 6 21 6" />
-    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-    <line x1="10" y1="11" x2="10" y2="17" />
-    <line x1="14" y1="11" x2="14" y2="17" />
-  </svg>
-);
-
-const FolderIcon = ({ size = 18, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
-  </svg>
-);
-
-const UploadIcon = ({ size = 36, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12" />
-  </svg>
-);
-
-const MaximizeIcon = ({ size = 14, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <polyline points="15 3 21 3 21 9" />
-    <polyline points="9 21 3 21 3 15" />
-    <line x1="21" y1="3" x2="14" y2="10" />
-    <line x1="3" y1="21" x2="10" y2="14" />
-  </svg>
-);
-
-const MinimizeIcon = ({ size = 14, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <polyline points="4 14 10 14 10 20" />
-    <polyline points="20 10 14 10 14 4" />
-    <line x1="14" y1="10" x2="21" y2="3" />
-    <line x1="10" y1="14" x2="3" y2="21" />
-  </svg>
-);
+// Premium Lucide Icons Imports
+import {
+  Home as DashboardIcon,
+  Library as LibraryIcon,
+  CalendarClock as ScheduleIcon,
+  MessageCircle as ChatIcon,
+  Menu as MenuIcon,
+  Scale as ScaleIcon,
+  Zap as BoltIcon,
+  Volume2 as VolumeIcon,
+  Pause as PauseIcon,
+  Copy as CopyIcon,
+  FileText as FileIcon,
+  Lock as LockIcon,
+  Sun as SunIcon,
+  Moon as MoonIcon,
+  User as UserIcon,
+  Settings as SettingsIcon,
+  Trash2 as TrashIcon,
+  Upload as UploadIcon,
+  Brain as BrainIcon,
+  Languages as LanguagesIcon,
+  Maximize2 as MaximizeIcon,
+  Minimize2 as MinimizeIcon,
+  AlertTriangle as AlertIcon,
+  Mic as MicIcon,
+  RotateCcw as RotateIcon,
+  Star as StarIcon,
+  Landmark,
+  Shield,
+  Globe,
+  MapPin,
+  Heart,
+  Briefcase,
+  ClipboardCheck,
+  ScrollText as ScrollIcon
+} from 'lucide-react';
 
 const getCategoryIcon = (cat: string, color: string) => {
   const normCat = cat.toLowerCase();
   if (normCat.includes('tenancy') || normCat.includes('housing')) {
-    return (
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-        <polyline points="9 22 9 12 15 12 15 22" />
-      </svg>
-    );
+    return <DashboardIcon size={13} color={color} />;
   }
   if (normCat.includes('finance') || normCat.includes('bank')) {
-    return (
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="2" y="6" width="20" height="12" rx="2" />
-        <circle cx="12" cy="12" r="2" />
-        <line x1="6" y1="12" x2="6" y2="12.01" />
-        <line x1="18" y1="12" x2="18" y2="12.01" />
-      </svg>
-    );
+    return <Landmark size={13} color={color} />;
   }
   if (normCat.includes('consumer') || normCat.includes('right')) {
-    return (
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-      </svg>
-    );
+    return <Shield size={13} color={color} />;
   }
   if (normCat.includes('utilit') || normCat.includes('service')) {
-    return (
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-      </svg>
-    );
+    return <BoltIcon size={13} color={color} />;
   }
   if (normCat.includes('civil') || normCat.includes('personal') || normCat.includes('cyber')) {
-    return (
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="12" r="10" />
-        <line x1="2" y1="12" x2="22" y2="12" />
-        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-      </svg>
-    );
+    return <Globe size={13} color={color} />;
   }
   if (normCat.includes('land')) {
-    return (
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-        <circle cx="12" cy="10" r="3" />
-      </svg>
-    );
+    return <MapPin size={13} color={color} />;
   }
   if (normCat.includes('family')) {
-    return (
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-      </svg>
-    );
+    return <Heart size={13} color={color} />;
   }
   if (normCat.includes('employ')) {
-    return (
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
-        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
-      </svg>
-    );
+    return <Briefcase size={13} color={color} />;
   }
   if (normCat.includes('inherit') || normCat.includes('heir')) {
-    return (
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-        <polyline points="14 2 14 8 20 8" />
-        <line x1="16" y1="13" x2="8" y2="13" />
-        <line x1="16" y1="17" x2="8" y2="17" />
-      </svg>
-    );
+    return <FileIcon size={13} color={color} />;
   }
-  return (
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="3" y="3" width="7" height="7" />
-      <rect x="14" y="3" width="7" height="7" />
-      <rect x="14" y="14" width="7" height="7" />
-      <rect x="3" y="14" width="7" height="7" />
-    </svg>
-  );
+  return <BrainIcon size={13} color={color} />;
 };
 
 interface Milestone {
@@ -314,7 +132,9 @@ const UI_TRANSLATIONS: Record<string, Record<string, string>> = {
     warningText: "This document contains high-urgency deadlines. Please review the timeline and checklists immediately.",
     downloadCal: "Sync Calendar (.ics)",
     copyBtn: "Copy Draft",
-    copiedToast: "Response Template Copied!"
+    copiedToast: "Response Template Copied!",
+    summaryTitle: "Summary",
+    lawsTitle: "Applicable Laws"
   },
   telugu: {
     ingestionTitle: "1. పత్రం అప్‌లోడ్ పోర్టల్",
@@ -344,7 +164,9 @@ const UI_TRANSLATIONS: Record<string, Record<string, string>> = {
     warningText: "ఈ పత్రంలో అత్యవసర గడువులు ఉన్నాయి. దయచేసి గడువు తేదీలు మరియు చర్యలను వెంటనే పరిశీలించండి.",
     downloadCal: "క్యాలెండర్ గుర్తు (.ics)",
     copyBtn: "కాపీ చేయండి",
-    copiedToast: "ప్రత్యుత్తర నమూనా కాపీ చేయబడింది!"
+    copiedToast: "ప్రత్యుత్తర నమూనా కాపీ చేయబడింది!",
+    summaryTitle: "సారాంశం",
+    lawsTitle: "చట్టాలు"
   }
 };
 
@@ -428,6 +250,9 @@ export default function App() {
   const [showVoiceIngestionModal, setShowVoiceIngestionModal] = useState(false);
   const [recognitionObj, setRecognitionObj] = useState<any>(null);
   const [voiceActiveType, setVoiceActiveType] = useState<'summary' | 'laws' | 'checklist' | null>(null);
+  const [showTeluguOcr, setShowTeluguOcr] = useState(false);
+  const [translatedOcrText, setTranslatedOcrText] = useState('');
+  const [isTranslatingOcr, setIsTranslatingOcr] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
@@ -814,7 +639,8 @@ export default function App() {
         body: JSON.stringify({
           message: userMessage.content,
           document_id: documentId,
-          history: chatMessages
+          history: chatMessages,
+          language: language
         })
       });
 
@@ -955,6 +781,9 @@ export default function App() {
     setChatMessages([]);
     setEditedTemplate('');
     setIsTemplateExpanded(false);
+    setShowTeluguOcr(false);
+    setTranslatedOcrText('');
+    setIsTranslatingOcr(false);
   };
 
   const getRemainingDays = (dateStr: string) => {
@@ -1082,7 +911,8 @@ export default function App() {
               <button
                 key={item.id}
                 onClick={() => setActiveNav(item.id)}
-                className={isActive ? "nav-btn-active" : ""}
+                className={isActive ? "nav-btn-active" : "sidebar-nav-btn"}
+                title={item.label}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -1151,27 +981,30 @@ export default function App() {
                   outline: 'none',
                   transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
                 }}
-                className={isIngestionRecording ? "recording-pulse" : ""}
+                className={`icon-interactive ${isIngestionRecording ? "recording-pulse" : ""}`}
+                title={language === 'english' ? 'Describe your notice verbally' : 'నోటీసును శబ్ద రూపంలో వివరించండి'}
               >
                 <span style={{ display: 'flex', alignItems: 'center' }}>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
-                    <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
-                    <line x1="12" y1="19" x2="12" y2="22" />
-                  </svg>
+                  <MicIcon size={14} color={isIngestionRecording ? 'var(--color-danger)' : 'var(--color-text-primary)'} />
                 </span>
                 <span>{language === 'english' ? 'DESCRIBE VERBALLY' : 'నోటీసు వివరించండి'}</span>
               </button>
             )}
 
             {/* Language switch */}
-            <div style={{ 
-              display: 'flex', 
-              background: 'rgba(255,255,255,0.02)', 
-              padding: '4px', 
-              borderRadius: '30px', 
-              border: '1px solid var(--color-border)' 
-            }}>
+            <div 
+              style={{ 
+                display: 'flex', 
+                alignItems: 'center',
+                background: 'rgba(255,255,255,0.02)', 
+                padding: '4px 12px 4px 4px', 
+                borderRadius: '30px', 
+                border: '1px solid var(--color-border)',
+                gap: '8px'
+              }}
+              title={language === 'english' ? "Switch interface language" : "భాషను మార్చండి"}
+            >
+              <span style={{ display: 'flex', alignItems: 'center', marginLeft: '8px' }}><LanguagesIcon size={14} color="var(--color-text-secondary)" /></span>
               <button 
                 onClick={() => setLanguage('english')}
                 style={{
@@ -1186,6 +1019,7 @@ export default function App() {
                   cursor: 'pointer',
                   transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
                 }}
+                className="icon-interactive"
               >
                 ENGLISH
               </button>
@@ -1203,6 +1037,7 @@ export default function App() {
                   cursor: 'pointer',
                   transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
                 }}
+                className="icon-interactive"
               >
                 తెలుగు
               </button>
@@ -1227,8 +1062,10 @@ export default function App() {
                 outline: 'none',
                 transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
               }}
+              className="icon-interactive"
+              title={isDarkMode ? (language === 'english' ? "Switch to Light Mode" : "లైట్ మోడ్ కి మారండి") : (language === 'english' ? "Switch to Dark Mode" : "డార్క్ మోడ్ కి మారండి")}
             >
-              <span style={{ display: 'flex', alignItems: 'center' }}>{isDarkMode ? <SunIcon color="var(--color-accent-gold)" /> : <MoonIcon color="var(--color-accent-indigo)" />}</span>
+              <span style={{ display: 'flex', alignItems: 'center' }}>{isDarkMode ? <SunIcon color="var(--color-accent-gold)" size={14} /> : <MoonIcon color="var(--color-accent-indigo)" size={14} />}</span>
               <span>{isDarkMode ? (language === 'english' ? 'LIGHT' : 'లైట్') : (language === 'english' ? 'DARK' : 'డార్క్')}</span>
             </button>
 
@@ -1257,8 +1094,10 @@ export default function App() {
                 outline: 'none',
                 transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
               }}
+              className="icon-interactive"
+              title={isLoggedIn ? (language === 'english' ? "Logout session" : "లాగ్ అవుట్ చేయండి") : (language === 'english' ? "Sign In / Register" : "లాగిన్ అవ్వండి")}
             >
-              <span style={{ display: 'flex', alignItems: 'center' }}><UserIcon color={isLoggedIn ? 'var(--color-success)' : 'var(--color-text-primary)'} /></span>
+              <span style={{ display: 'flex', alignItems: 'center' }}><UserIcon color={isLoggedIn ? 'var(--color-success)' : 'var(--color-text-primary)'} size={14} /></span>
               <span>
                 {isLoggedIn 
                   ? (language === 'english' ? 'LOGOUT' : 'లాగ్ అవుట్') 
@@ -1278,7 +1117,7 @@ export default function App() {
               {/* Left Column: Document Ingestion */}
               <section className="glass-card" style={{ flex: 1, minWidth: '400px', padding: '32px', display: 'flex', flexDirection: 'column', height: '640px', overflow: 'hidden' }}>
               <h2 style={{ margin: '0 0 24px 0', fontSize: '16px', fontWeight: '800', letterSpacing: '-0.01em', color: 'var(--color-text-primary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ display: 'flex', alignItems: 'center' }}><FolderIcon color="var(--color-accent-indigo)" /></span> {t('ingestionTitle')}
+                <span style={{ display: 'flex', alignItems: 'center' }}><FileIcon color="var(--color-accent-indigo)" size={16} /></span> {t('ingestionTitle')}
               </h2>
 
               <input 
@@ -1322,12 +1161,12 @@ export default function App() {
                     </>
                   ) : (
                     <>
-                      <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: 'rgba(99, 102, 241, 0.08)', display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '24px', boxShadow: '0 8px 24px rgba(99,102,241,0.1)' }}>
+                      <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: 'rgba(99, 102, 241, 0.08)', display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '24px', boxShadow: '0 8px 24px rgba(99,102,241,0.1)' }} className="icon-interactive">
                         <span style={{ display: 'flex', alignItems: 'center' }}><UploadIcon color="var(--color-accent-indigo)" size={36} /></span>
                       </div>
                       <p style={{ margin: '0 0 8px 0', fontWeight: '800', color: '#ffffff', fontSize: '15.5px' }}>{t('dragDropText')}</p>
                       <p style={{ margin: '0 0 32px 0', fontSize: '12.5px', color: 'var(--color-text-secondary)', fontWeight: '500' }}>{t('supportText')}</p>
-                      <button className="glow-btn">{t('browseBtn')}</button>
+                      <button className="glow-btn icon-interactive" title={language === 'english' ? "Browse local PDF/image files" : "స్థానిక ఫైళ్ళను ఎంచుకోండి"}>{t('browseBtn')}</button>
                       {error && <p style={{ margin: '20px 0 0 0', color: 'var(--color-danger)', fontSize: '13px', fontWeight: '800' }}>❌ {error}</p>}
                     </>
                   )}
@@ -1396,9 +1235,64 @@ export default function App() {
                     boxSizing: 'border-box'
                   }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                      <span style={{ fontSize: '11px', background: 'rgba(245, 158, 11, 0.1)', color: 'var(--color-accent-gold)', padding: '4px 10px', borderRadius: '8px', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                        UTF-8 Raw OCR Output
-                      </span>
+                      <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
+                        <span style={{ fontSize: '11px', background: 'rgba(245, 158, 11, 0.1)', color: 'var(--color-accent-gold)', padding: '4px 10px', borderRadius: '8px', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.5px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                          <ScrollIcon size={12} color="var(--color-accent-gold)" />
+                          <span>UTF-8 Raw OCR Output</span>
+                        </span>
+                        
+                        {/* Translate raw text toggle option */}
+                        {rawText && (
+                          <button
+                            type="button"
+                            onClick={async () => {
+                              if (!translatedOcrText) {
+                                setIsTranslatingOcr(true);
+                                try {
+                                  const res = await translateText(rawText, 'telugu');
+                                  setTranslatedOcrText(res);
+                                  setShowTeluguOcr(true);
+                                } catch (err) {
+                                  console.error(err);
+                                } finally {
+                                  setIsTranslatingOcr(false);
+                                }
+                              } else {
+                                setShowTeluguOcr(!showTeluguOcr);
+                              }
+                            }}
+                            disabled={isTranslatingOcr}
+                            style={{
+                              background: showTeluguOcr ? 'rgba(99, 102, 241, 0.15)' : 'rgba(255, 255, 255, 0.05)',
+                              border: `1px solid ${showTeluguOcr ? 'var(--color-accent-indigo)' : 'var(--color-border)'}`,
+                              color: showTeluguOcr ? 'var(--color-accent-indigo)' : 'var(--color-text-secondary)',
+                              borderRadius: '8px',
+                              padding: '4px 10px',
+                              fontSize: '10px',
+                              fontWeight: '800',
+                              cursor: 'pointer',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '6px',
+                              outline: 'none',
+                              transition: 'all 0.2s',
+                              fontFamily: 'var(--font-header)'
+                            }}
+                            className="icon-interactive"
+                            title={language === 'english' ? "Translate text to Telugu" : "వచనాన్ని తెలుగులోకి అనువదించండి"}
+                          >
+                            <LanguagesIcon size={12} />
+                            <span>
+                              {isTranslatingOcr 
+                                ? (language === 'english' ? "Translating..." : "అనువదిస్తోంది...")
+                                : showTeluguOcr 
+                                  ? (language === 'english' ? "Show English" : "ఇంగ్లీష్ చూపించు")
+                                  : (language === 'english' ? "Translate Telugu" : "తెలుగులోకి అనువదించు")
+                              }
+                            </span>
+                          </button>
+                        )}
+                      </div>
                       <h3 style={{ margin: 0, fontSize: '12px', fontWeight: '800', textTransform: 'uppercase', color: 'var(--color-text-secondary)', letterSpacing: '1px' }}>
                         {t('previewTitle')}
                       </h3>
@@ -1417,7 +1311,10 @@ export default function App() {
                       color: '#6ee7b7',
                       boxShadow: 'inset 0 0 20px rgba(0,0,0,0.5)'
                     }}>
-                      {rawText || "Reading document bytes..."}
+                      {isTranslatingOcr 
+                        ? (language === 'english' ? "Translating raw document content... ⌛" : "పత్రం కంటెంట్‌ని అనువదిస్తోంది... ⌛") 
+                        : (showTeluguOcr ? (translatedOcrText || "[తెలుగు అనువాదం ఖాళీగా ఉంది]") : (rawText || "Reading document bytes..."))
+                      }
                     </p>
                   </div>
                 </div>
@@ -1428,7 +1325,7 @@ export default function App() {
             <section className="glass-card" style={{ flex: 1.3, minWidth: '450px', padding: '32px', display: 'flex', flexDirection: 'column', height: '640px', overflow: 'hidden' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
                 <h2 style={{ margin: 0, fontSize: '16px', fontWeight: '800', letterSpacing: '-0.01em', color: 'var(--color-text-primary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ display: 'flex', alignItems: 'center' }}><BoltIcon color="var(--color-accent-indigo)" /></span> {t('workspaceTitle')}
+                  <span style={{ display: 'flex', alignItems: 'center' }}><BrainIcon color="var(--color-accent-indigo)" size={16} /></span> {t('workspaceTitle')}
                 </h2>
                 
                 {/* Visualizer tts synthesis button */}
@@ -1477,9 +1374,11 @@ export default function App() {
                             transition: 'all 0.2s',
                             fontFamily: 'var(--font-header)'
                           }}
+                          className="icon-interactive"
+                          title={isCurrentPlaying ? (language === 'english' ? "Pause playback" : "ఆడియో నిలిపివేయండి") : (language === 'english' ? "Listen readout" : "సారాంశం వినండి")}
                         >
                           <span style={{ display: 'flex', alignItems: 'center' }}>
-                            {isCurrentPlaying ? <PauseIcon color="var(--color-accent-gold)" /> : <VolumeIcon color="var(--color-text-primary)" />}
+                            {isCurrentPlaying ? <PauseIcon color="var(--color-accent-gold)" size={14} /> : <VolumeIcon color="var(--color-text-primary)" size={14} />}
                           </span>
                           <span>{btnLabel}</span>
                         </button>
@@ -1504,13 +1403,10 @@ export default function App() {
                               transition: 'all 0.2s',
                               fontFamily: 'var(--font-header)'
                             }}
-                            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(120, 120, 120, 0.15)'}
-                            onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(120, 120, 120, 0.08)'}
-                            title="Listen from starting"
+                            className="icon-interactive"
+                            title={language === 'english' ? "Listen from starting" : "మొదటి నుండి వినండి"}
                           >
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                              <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67" />
-                            </svg>
+                            <RotateIcon size={12} color="var(--color-text-primary)" />
                             <span>{language === 'english' ? 'From Start' : 'మొదటి నుండి'}</span>
                           </button>
                         )}
@@ -1546,37 +1442,55 @@ export default function App() {
                     marginBottom: '24px',
                     gap: '8px'
                   }}>
-                    {['summary', 'laws', 'checklist', 'template', 'chat'].map((tab) => (
-                      <button 
-                        key={tab}
-                        onClick={() => setActiveTab(tab)}
-                        style={{
-                          background: 'none',
-                          border: 'none',
-                          borderBottom: activeTab === tab ? '2.5px solid var(--color-accent-indigo)' : 'none',
-                          color: activeTab === tab ? 'var(--color-text-primary)' : 'var(--color-text-secondary)',
-                          padding: '12px 20px',
-                          cursor: 'pointer',
-                          fontSize: '13.5px',
-                          fontWeight: '800',
-                          textTransform: 'capitalize',
-                          outline: 'none',
-                          transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-                          fontFamily: 'var(--font-header)'
-                        }}
-                      >
-                        {tab === 'chat' ? (
+                    {['summary', 'laws', 'checklist', 'template', 'chat'].map((tab) => {
+                      let tabIcon = null;
+                      let tabLabel = '';
+                      const iconColor = activeTab === tab ? 'var(--color-text-primary)' : 'var(--color-text-secondary)';
+                      
+                      if (tab === 'summary') {
+                        tabIcon = <FileIcon size={14} color={iconColor} />;
+                        tabLabel = language === 'english' ? 'Summary' : 'సారాంశం';
+                      } else if (tab === 'laws') {
+                        tabIcon = <ScaleIcon size={14} color={iconColor} />;
+                        tabLabel = language === 'english' ? 'Applicable Laws' : 'చట్టాలు';
+                      } else if (tab === 'checklist') {
+                        tabIcon = <ClipboardCheck size={14} color={iconColor} />;
+                        tabLabel = language === 'english' ? 'Checklist' : 'సిఫార్సు చేయబడిన తదుపరి చర్యలు';
+                      } else if (tab === 'template') {
+                        tabIcon = <FileIcon size={14} color={iconColor} />;
+                        tabLabel = language === 'english' ? 'Response Draft' : 'ప్రత్యుత్తర నమూనా';
+                      } else if (tab === 'chat') {
+                        tabIcon = <ChatIcon size={14} color={iconColor} />;
+                        tabLabel = language === 'english' ? 'Nyaya Chat' : 'న్యాయ చాట్';
+                      }
+
+                      return (
+                        <button 
+                          key={tab}
+                          onClick={() => setActiveTab(tab)}
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            borderBottom: activeTab === tab ? '2.5px solid var(--color-accent-indigo)' : 'none',
+                            color: activeTab === tab ? 'var(--color-text-primary)' : 'var(--color-text-secondary)',
+                            padding: '12px 20px',
+                            cursor: 'pointer',
+                            fontSize: '13.5px',
+                            fontWeight: '800',
+                            outline: 'none',
+                            transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                            fontFamily: 'var(--font-header)'
+                          }}
+                          className="icon-interactive"
+                          title={tabLabel}
+                        >
                           <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                            <ChatIcon size={14} color={activeTab === 'chat' ? 'var(--color-text-primary)' : 'var(--color-text-secondary)'} />
-                            {language === 'english' ? 'Nyaya Chat' : 'న్యాయ చాట్'}
+                            {tabIcon}
+                            <span>{tabLabel}</span>
                           </span>
-                        ) : tab === 'template' ? (
-                          language === 'english' ? 'Response Draft' : 'ప్రత్యుత్తర నమూనా'
-                        ) : (
-                          language === 'english' ? tab : t(tab + 'Title') || tab
-                        )}
-                      </button>
-                    ))}
+                        </button>
+                      );
+                    })}
                   </div>
 
                   {/* Render Tabs content */}
@@ -1595,8 +1509,9 @@ export default function App() {
                             borderLeftWidth: '4px',
                             boxShadow: '0 8px 24px rgba(239,68,68,0.05)'
                           }}>
-                            <h4 style={{ margin: '0 0 6px 0', fontSize: '13.5px', color: '#f87171', fontWeight: '800', fontFamily: 'var(--font-header)' }}>
-                              ⚠️ ALERT: IMMINENT LEGAL ACTIONS
+                            <h4 style={{ margin: '0 0 6px 0', fontSize: '13.5px', color: '#f87171', fontWeight: '800', fontFamily: 'var(--font-header)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                              <AlertIcon size={14} color="#f87171" className="recording-pulse" />
+                              <span>ALERT: IMMINENT LEGAL ACTIONS</span>
                             </h4>
                             <p style={{ margin: 0, fontSize: '12.5px', lineHeight: '1.7', color: '#fca5a5' }}>
                               {t('warningText')}
@@ -1605,8 +1520,9 @@ export default function App() {
                         )}
 
                         <div className="glass-card" style={{ padding: '28px', background: 'rgba(255,255,255,0.015)' }}>
-                          <h3 style={{ margin: '0 0 16px 0', fontSize: '14.5px', fontWeight: '800', color: 'var(--color-accent-indigo)', letterSpacing: '0.5px', textTransform: 'uppercase' }}>
-                            {t('plainExTitle')}
+                          <h3 style={{ margin: '0 0 16px 0', fontSize: '14.5px', fontWeight: '800', color: 'var(--color-accent-indigo)', letterSpacing: '0.5px', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <FileIcon size={16} color="var(--color-accent-indigo)" />
+                            <span>{t('plainExTitle')}</span>
                           </h3>
                           <p style={{ margin: 0, fontSize: '13.5px', color: 'var(--color-text-secondary)', lineHeight: '1.8' }}>
                             {displayAnalysis.summary}
@@ -1618,13 +1534,17 @@ export default function App() {
                     {/* Laws Tab */}
                     {activeTab === 'laws' && displayAnalysis && (
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', animation: 'fadeIn 0.3s' }}>
-                        <h3 style={{ margin: 0, fontSize: '14.5px', fontWeight: '800', color: 'var(--color-text-primary)', letterSpacing: '0.5px' }}>
-                          {t('legalCitations')}
+                        <h3 style={{ margin: 0, fontSize: '14.5px', fontWeight: '800', color: 'var(--color-text-primary)', letterSpacing: '0.5px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <ScaleIcon size={16} color="var(--color-accent-gold)" />
+                          <span>{t('legalCitations')}</span>
                         </h3>
                         {displayAnalysis.legal_references.map((l, idx) => (
                           <div className="glass-card" style={{ padding: '24px', borderLeft: '4px solid var(--color-accent-indigo)', background: 'rgba(99, 102, 241, 0.02)' }} key={idx}>
-                            <h4 style={{ margin: '0 0 10px 0', fontSize: '14px', fontWeight: '800', color: 'var(--color-accent-gold)', letterSpacing: '0.2px' }}>
-                              {l.section}
+                            <h4 style={{ margin: '0 0 10px 0', fontSize: '14px', fontWeight: '800', color: 'var(--color-accent-gold)', letterSpacing: '0.2px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                              <span title="Bookmark Section" style={{ display: 'flex', alignItems: 'center' }} className="icon-interactive">
+                                <StarIcon size={14} color="var(--color-accent-gold)" />
+                              </span>
+                              <span>{l.section}</span>
                             </h4>
                             <p style={{ margin: 0, fontSize: '13px', color: 'var(--color-text-secondary)', lineHeight: '1.7' }}>
                               {l.description}
@@ -1637,8 +1557,9 @@ export default function App() {
                     {/* Checklist Tab */}
                     {activeTab === 'checklist' && displayAnalysis && (
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', animation: 'fadeIn 0.3s' }}>
-                        <h3 style={{ margin: 0, fontSize: '14.5px', fontWeight: '800', color: 'var(--color-text-primary)' }}>
-                          {t('checklistTitle')}
+                        <h3 style={{ margin: 0, fontSize: '14.5px', fontWeight: '800', color: 'var(--color-text-primary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <ClipboardCheck size={16} color="var(--color-accent-indigo)" />
+                          <span>{t('checklistTitle')}</span>
                         </h3>
                         
                         <div className="glass-card" style={{ padding: '28px', background: 'rgba(255,255,255,0.01)' }}>
@@ -1888,13 +1809,10 @@ export default function App() {
                               outline: 'none',
                               flexShrink: 0
                             }}
-                            className={isChatRecording ? "recording-pulse" : ""}
+                            className={`icon-interactive ${isChatRecording ? "recording-pulse" : ""}`}
+                            title={language === 'english' ? "Speak voice prompt to chat" : "శబ్ద రూపంలో అడగండి"}
                           >
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                              <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
-                              <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
-                              <line x1="12" y1="19" x2="12" y2="22" />
-                            </svg>
+                            <MicIcon size={18} />
                           </button>
 
                           <button 
