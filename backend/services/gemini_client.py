@@ -103,7 +103,7 @@ def analyze_notice_document(file_bytes: bytes, mime_type: str, prompt: str) -> s
                 }
             ],
             "response_format": {"type": "json_object"},
-            "max_tokens": 4000
+            "max_tokens": 1500
         }
 
         try:
